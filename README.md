@@ -7,6 +7,9 @@ cuando no está seguro.
 
 JEV (TypeSafe AI) toma los juicios rápidos; el código toma las decisiones con reglas explícitas.
 
+> **¿Nuevo en el proyecto?** Lee primero [docs/ESTADO_DEL_PROYECTO.md](docs/ESTADO_DEL_PROYECTO.md):
+> qué se ha hecho, decisiones tomadas, resultados, acceso a JEV y pendientes.
+
 ## Cómo funciona
 
 ```
