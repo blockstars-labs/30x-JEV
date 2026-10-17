@@ -5,16 +5,18 @@
     "perfil_valido_min": 0.8,
     "confianza_choice_min": 0.45,
     "listo_ventas_auto": 0.8,
-    "listo_ventas_revision": 0.5
+    "listo_ventas_revision": 0.5,
+    "confianza_rol_ventas": 0.7
   },
 
   "afinidad": {
     "_nota": "Afinidad compuesta en código (patrón composite scoring): cambiar pesos no requiere volver a llamar a JEV.",
-    "pesos": { "intencion": 0.5, "poder_decision": 0.3, "claridad": 0.2 },
+    "pesos": { "intencion": 0.45, "poder_decision": 0.25, "claridad": 0.15, "compromiso": 0.15 },
     "poder_decision_por_rol": {
       "fundador": 1.0, "c_level": 1.0, "lider_comercial": 0.7, "gerente": 0.6,
       "tecnico": 0.4, "sin_dato": 0.3, "otro": 0.1
     },
+    "valor_compromiso": { "alto": 1.0, "medio": 0.5, "bajo": 0.0 },
     "poder_decision_min_ventas": 0.6,
     "bandas": [
       { "id": "baja", "etiqueta": "0-3 (baja)", "desde": 0.0 },
@@ -22,5 +24,13 @@
       { "id": "alta", "etiqueta": "7-8 (alta)", "desde": 0.55 },
       { "id": "muy_alta", "etiqueta": "9-10 (muy alta)", "desde": 0.75 }
     ]
+  },
+
+  "dinamica": {
+    "_nota": "Compromiso observado y vigencia de las inferencias. Fechas y conteos se calculan en código, nunca en JEV.",
+    "ventana_eventos_dias": 90,
+    "compromiso_alto": { "eventos_min": 2, "ultima_interaccion_max_dias": 30 },
+    "compromiso_medio": { "ultima_interaccion_max_dias": 60 },
+    "vigencia_inferencia_dias": 30
   }
 }

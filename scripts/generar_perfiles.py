@@ -5,6 +5,10 @@ Cada perfil trae:
 - `temas`: temas marcados en el formulario (dato exacto, lo usa el código, no JEV).
 - `etiquetas`: la verdad conocida con la que se evalúa a JEV (rol, dolor, objetivo, intención, validez).
 
+Además genera data/eventos_sinteticos.json: líneas de tiempo de eventos posteriores (asistencias,
+respuestas a correos, encuestas, cambios de cargo) con la verdad actualizada después de cada evento,
+para evaluar la reclasificación dinámica.
+
 Las proporciones salen de data/distribuciones.json (agregados de la demo de 30X). Nombres, empresas
 y correos son inventados; los correos usan el dominio reservado example.com.
 
@@ -15,11 +19,13 @@ Uso:
 import json
 import random
 import sys
+from datetime import date, timedelta
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 DISTRIBUCIONES = RAIZ / "data" / "distribuciones.json"
 SALIDA = RAIZ / "data" / "perfiles_sinteticos.json"
+SALIDA_EVENTOS = RAIZ / "data" / "eventos_sinteticos.json"
 
 NOMBRES = ["Valentina", "Santiago", "Camila", "Mateo", "Isabella", "Sebastián", "Mariana", "Nicolás",
            "Daniela", "Alejandro", "Lucía", "Andrés", "Gabriela", "Felipe", "Sofía", "Tomás", "Paula",
@@ -158,6 +164,56 @@ def generar(n: int, semilla: int) -> list[dict]:
     return perfiles
 
 
+EVENTOS_30X = ["Webinar: IA aplicada a ventas", "Taller: automatiza tu operación con IA", "Meetup de fundadores",
+               "Masterclass de prospección B2B", "Sesión abierta: liderar en tiempos de IA"]
+RESPUESTAS_SIN_INTERES = ["Gracias, por ahora no me interesa.", "Por ahora no tengo presupuesto, más adelante."]
+PORCENTAJE_CON_EVENTOS = 0.4
+
+
+def generar_eventos(perfiles: list[dict], semilla: int) -> list[dict]:
+    """Línea de tiempo por persona: cada evento trae `etiquetas_despues`, la verdad tras ese evento."""
+    rng = random.Random(semilla + 1)
+    inicio = date(2026, 7, 1)
+    lineas = []
+    for p in perfiles:
+        if p["trampa"] or rng.random() > PORCENTAJE_CON_EVENTOS:
+            continue
+        etiquetas = dict(p["etiquetas"])
+        fecha = inicio + timedelta(days=rng.randint(0, 45))
+        linea = {"perfil_id": p["id"], "fecha_registro": fecha.isoformat(), "eventos": []}
+        for _ in range(rng.randint(1, 4)):
+            fecha += timedelta(days=rng.randint(3, 40))
+            tipo = rng.choices(["asistio_evento", "respondio_correo", "encuesta_post_evento", "cambio_cargo"],
+                               weights=[0.35, 0.3, 0.2, 0.15])[0]
+            evento = {"tipo": tipo, "fecha": fecha.isoformat()}
+            if tipo == "asistio_evento":
+                evento["evento"] = rng.choice(EVENTOS_30X)
+            elif tipo == "respondio_correo":
+                nivel = rng.choices(range(4), weights=[0.2, 0.25, 0.3, 0.25])[0]
+                textos = RESPUESTAS_SIN_INTERES if nivel == 0 else [t for t in INTENCION_TEXTO[nivel] if t]
+                evento["texto"] = rng.choice(textos)
+                etiquetas["intencion"] = nivel
+                if rng.random() < 0.04:
+                    evento["texto"] += " " + TRAMPAS[2][1]
+                    etiquetas["perfil_valido"] = False
+            elif tipo == "encuesta_post_evento":
+                dolor = rng.choice([d for d in RETOS if d != "ninguno"])
+                evento["texto"] = rng.choice(RETOS[dolor])
+                etiquetas["dolor"] = dolor
+                if rng.random() < 0.5:
+                    objetivo = rng.choice(list(OBJETIVOS_TEXTO))
+                    evento["texto"] += " Lo que más quiero ahora: " + rng.choice(OBJETIVOS_TEXTO[objetivo]).lower()
+                    etiquetas["objetivo"] = objetivo
+            else:
+                rol = rng.choice([r for r in CARGOS if r not in ("otro", etiquetas["rol"])])
+                evento["cargo"] = f"{rng.choice(CARGOS[rol])} en {rng.choice(EMPRESAS)}"
+                etiquetas["rol"] = rol
+            evento["etiquetas_despues"] = dict(etiquetas)
+            linea["eventos"].append(evento)
+        lineas.append(linea)
+    return lineas
+
+
 def construir_entrada(canal, nombre, empresa, cargo, reto, meta, comentario, temas, rng) -> dict | str:
     correo = nombre.lower().replace(" ", ".").translate(str.maketrans("áéíóúñ", "aeioun")) + "@example.com"
     if canal == "formulario_luma":
@@ -186,3 +242,6 @@ if __name__ == "__main__":
     perfiles = generar(cantidad, semilla)
     SALIDA.write_text(json.dumps(perfiles, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Generados {len(perfiles)} perfiles en {SALIDA}")
+    lineas = generar_eventos(perfiles, semilla)
+    SALIDA_EVENTOS.write_text(json.dumps(lineas, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"Generadas {len(lineas)} líneas de tiempo ({sum(len(l['eventos']) for l in lineas)} eventos) en {SALIDA_EVENTOS}")

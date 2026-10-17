@@ -75,16 +75,20 @@ class Decision:
     accion_propuesta: str      # lo que haría si actuara solo
     ruta: str                  # "automatico" o "revision_humana"
     razones: list[str]
+    compromiso: str = "medio"  # señal observada (código), no inferida por JEV
 
 
-def banda_afinidad(rol: str, dolor: str, objetivo: str, intencion_esperada: float, politica: dict) -> tuple[str, float]:
-    """Afinidad compuesta: intención, poder de decisión y claridad de la necesidad, con pesos en config."""
+def banda_afinidad(rol: str, dolor: str, objetivo: str, intencion_esperada: float, politica: dict,
+                   compromiso: str = "medio") -> tuple[str, float]:
+    """Afinidad compuesta: intención y claridad (JEV), poder de decisión (por rol) y compromiso
+    observado (calculado en código a partir de la actividad), con pesos en config."""
     cfg = politica["afinidad"]
     pesos = cfg["pesos"]
     claridad = 0.5 * (dolor != "ninguno") + 0.5 * (objetivo != "otro")
     valor = (pesos["intencion"] * intencion_esperada / 3
              + pesos["poder_decision"] * cfg["poder_decision_por_rol"][rol]
-             + pesos["claridad"] * claridad)
+             + pesos["claridad"] * claridad
+             + pesos["compromiso"] * cfg["valor_compromiso"][compromiso])
     banda = cfg["bandas"][0]["id"]
     for b in cfg["bandas"]:
         if valor >= b["desde"]:
@@ -117,8 +121,8 @@ def asignar_programa(rol: str, dolor: str, objetivo: str, temas: list[str], band
 
 
 def evaluar_combinacion(rol: str, dolor: str, objetivo: str, intencion_esperada: float, p_listo: float,
-                        temas: list[str], politica: dict) -> Resultado:
-    banda, afinidad = banda_afinidad(rol, dolor, objetivo, intencion_esperada, politica)
+                        temas: list[str], politica: dict, compromiso: str = "medio") -> Resultado:
+    banda, afinidad = banda_afinidad(rol, dolor, objetivo, intencion_esperada, politica, compromiso)
     programa, regla = asignar_programa(rol, dolor, objetivo, temas, banda)
     poder = politica["afinidad"]["poder_decision_por_rol"][rol]
     if (programa != "ninguno" and poder >= politica["afinidad"]["poder_decision_min_ventas"]
@@ -131,17 +135,17 @@ def evaluar_combinacion(rol: str, dolor: str, objetivo: str, intencion_esperada:
     return Resultado(programa, regla, banda, afinidad, accion)
 
 
-def decidir(j: Juicios, temas: list[str], politica: dict | None = None) -> Decision:
+def decidir(j: Juicios, temas: list[str], politica: dict | None = None, compromiso: str = "medio") -> Decision:
     politica = politica or cargar_politica()
     u = politica["umbrales"]
     base = evaluar_combinacion(j.rol.valor, j.dolor.valor, j.objetivo.valor,
-                               j.intencion_esperada, j.p_listo, temas, politica)
+                               j.intencion_esperada, j.p_listo, temas, politica, compromiso)
     razones: list[str] = []
 
     def decision(ruta: str) -> Decision:
         accion = base.accion if ruta == "automatico" else "revision_humana"
         return Decision(base.programa, base.regla_programa, base.banda, base.afinidad,
-                        accion, base.accion, ruta, razones)
+                        accion, base.accion, ruta, razones, compromiso)
 
     if j.perfil_valido < u["perfil_valido_min"]:
         razones.append(f"El perfil no parece una inscripción genuina (p={j.perfil_valido:.2f}): "
@@ -159,10 +163,10 @@ def decidir(j: Juicios, temas: list[str], politica: dict | None = None) -> Decis
             continue
         valores = {"rol": j.rol.valor, "dolor": j.dolor.valor, "objetivo": j.objetivo.valor, campo: alternativa}
         otro = evaluar_combinacion(valores["rol"], valores["dolor"], valores["objetivo"],
-                                   j.intencion_esperada, j.p_listo, temas, politica)
+                                   j.intencion_esperada, j.p_listo, temas, politica, compromiso)
         if (otro.programa, otro.accion) != (base.programa, base.accion):
             razones.append(f"Duda en {campo} (confianza {juicio.confianza:.2f}) entre "
-                           f"'{_etiqueta(campo, juicio.valor)}' y '{_etiqueta(campo, alternativa)}', "
+                           f"'{etiqueta(campo, juicio.valor)}' y '{etiqueta(campo, alternativa)}', "
                            "y eso cambia la decisión.")
     if razones:
         return decision("revision_humana")
@@ -172,22 +176,29 @@ def decidir(j: Juicios, temas: list[str], politica: dict | None = None) -> Decis
                        "confirmar antes de pasar a ventas.")
         return decision("revision_humana")
 
+    # Pasar a ventas es la acción con más consecuencias: exige más certeza sobre quién decide.
+    if base.accion == "pasar_a_ventas" and j.rol.confianza < u["confianza_rol_ventas"]:
+        razones.append(f"El rol no es seguro (confianza {j.rol.confianza:.2f}) y define si la persona "
+                       "puede decidir la compra: confirmar antes de pasar a ventas.")
+        return decision("revision_humana")
+
     return decision("automatico")
 
 
-_ETIQUETAS = {"rol": por_id(ROLES), "dolor": por_id(DOLORES), "objetivo": por_id(OBJETIVOS)}
+ETIQUETAS = {"rol": por_id(ROLES), "dolor": por_id(DOLORES), "objetivo": por_id(OBJETIVOS)}
 
 
-def _etiqueta(campo: str, valor: str) -> str:
-    return _ETIQUETAS[campo][valor].etiqueta
+def etiqueta(campo: str, valor: str) -> str:
+    return ETIQUETAS[campo][valor].etiqueta
 
 
 def explicar(j: Juicios, d: Decision) -> str:
     """Explicación legible por cualquier persona, construida solo con datos de la decisión."""
     partes = [
-        f"Rol: {_etiqueta('rol', j.rol.valor)} ({j.rol.confianza:.2f})",
-        f"Dolor: {_etiqueta('dolor', j.dolor.valor)} ({j.dolor.confianza:.2f})",
-        f"Objetivo: {_etiqueta('objetivo', j.objetivo.valor)} ({j.objetivo.confianza:.2f})",
+        f"Rol: {etiqueta('rol', j.rol.valor)} ({j.rol.confianza:.2f})",
+        f"Dolor: {etiqueta('dolor', j.dolor.valor)} ({j.dolor.confianza:.2f})",
+        f"Objetivo: {etiqueta('objetivo', j.objetivo.valor)} ({j.objetivo.confianza:.2f})",
+        f"Compromiso observado: {d.compromiso}",
         f"Afinidad {d.banda} ({d.afinidad:.2f}), probabilidad de estar listo para ventas {j.p_listo:.2f}",
         f"Programa: {PROGRAMAS[d.programa]} — {d.regla_programa}",
     ]

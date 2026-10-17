@@ -20,6 +20,23 @@ Inscripción (formulario de Luma, correo o mensaje)
   → registro con la explicación de cada decisión
 ```
 
+### Clusterización dinámica
+
+El segmento de una persona (programa sugerido + acción) no se calcula una sola vez: se recalcula
+con cada cosa que pasa después de inscribirse (`app/personas.py`).
+
+| Evento | Qué hace el sistema |
+|---|---|
+| Responde un correo, contesta la encuesta post-evento o actualiza su cargo | Vuelve a llamar a JEV con el texto nuevo |
+| Asiste a un evento | Recalcula el compromiso en código (sin llamar a JEV, sin costo) |
+| La última inferencia tiene más de 30 días | Vuelve a llamar a JEV antes de actuar |
+
+- **Observado vs. inferido:** los hechos (eventos, fechas, cargo) se guardan tal cual; lo que infiere JEV
+  guarda su fecha y caduca.
+- **Compromiso:** eventos asistidos en 90 días y días desde la última interacción, calculados en código.
+- **Historial:** cada reevaluación queda registrada con el evento que la causó, qué cambió
+  (por ejemplo, `intención: Evaluando → Listo para conversar; acción: contenido → pasar a ventas`) y la explicación.
+
 Principios, tomados de la documentación de TypeSafe:
 
 - Una pregunta simple por juicio; la combinación va en código.
@@ -33,6 +50,8 @@ Principios, tomados de la documentación de TypeSafe:
 - `data/perfiles_sinteticos.json`: 300 inscripciones **inventadas** (nombres, empresas y correos ficticios
   en `example.com`), con su respuesta correcta para evaluar. Incluyen casos trampa: spam y textos que
   intentan darle instrucciones al sistema.
+- `data/eventos_sinteticos.json`: líneas de tiempo de ~100 de esas personas (asistencias, correos, encuestas,
+  cambios de cargo), con la verdad actualizada después de cada evento.
 - `data/distribuciones.json`: conteos agregados de la muestra de demo de 30X (sin filas ni personas),
   para que los perfiles sintéticos tengan proporciones realistas.
 - El archivo de demo de 30X **no está en el repo** y no debe subirse.
@@ -44,7 +63,8 @@ python -m venv .venv
 .venv/Scripts/python -m pip install -r requirements.txt   # en Linux/Mac: .venv/bin/python
 cp .env.example .env                                      # JEV_MODO=mock o live
 .venv/Scripts/python scripts/generar_perfiles.py          # 300 perfiles, semilla 30
-.venv/Scripts/python scripts/evaluar.py                   # métricas en reportes/
+.venv/Scripts/python scripts/evaluar.py                   # clasificación al inscribirse → reportes/
+.venv/Scripts/python scripts/evaluar_dinamica.py          # reclasificación con eventos → reportes/
 .venv/Scripts/python -m pytest -q
 ```
 
@@ -60,6 +80,12 @@ cp .env.example .env                                      # JEV_MODO=mock o live
 - Pases a ventas indebidos y perfiles inválidos procesados sin revisión (deben ser 0).
 - Calibración: precisión por rango de confianza.
 - Latencia p50/p95 y costo por cada 1.000 decisiones.
+
+`scripts/evaluar_dinamica.py` reporta, después de cada evento:
+
+- Precisión de la decisión y pases a ventas indebidos.
+- Cambios de segmento reales frente a detectados (recall y precisión).
+- Cuántos eventos se resolvieron sin llamar a JEV y el costo total.
 
 ## Pendiente de validar con 30X
 

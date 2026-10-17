@@ -98,14 +98,22 @@ class JEVMock:
         semilla = int(hashlib.sha256(texto.encode()).hexdigest()[:8], 16)
         rng = random.Random(semilla)
         resp = RespuestaJEV(modelo="mock")
+        mensajes = estado.get("mensajes_posteriores") or []
         for p in preguntas:
             if p.tipo == "noul":
                 invalido = any(s in texto for s in self.SENALES_INVALIDO)
                 resp.nouls[p.id] = min(max((0.08 if invalido else 0.92) + rng.gauss(0, 0.06), 0.0), 1.0)
                 continue
+            # Atajo de la simulación para imitar lo que piden las instrucciones: cargo actual para el rol
+            # y último mensaje para la intención.
+            foco = texto
+            if p.id == "rol" and estado.get("cargo_actual"):
+                foco = estado["cargo_actual"].lower()
+            elif p.tipo == "score" and mensajes:
+                foco = mensajes[-1]["texto"].lower()
             puntajes = []
             for o in p.opciones:
-                aciertos = sum(1 for c in o.claves_mock if c in texto)
+                aciertos = sum(1 for c in o.claves_mock if c in foco)
                 base = 0.8 if not o.claves_mock else 0.0   # opciones "sin dato"/"ninguno"/"otro"
                 puntajes.append(2.2 * aciertos + base + rng.gauss(0, 0.5))
             probs = _softmax(puntajes)
