@@ -48,6 +48,7 @@ class Mensaje:
     texto: str
     tokens_entrada: int = 0
     tokens_salida: int = 0
+    guardrail: dict | None = None   # revisión de JEV antes de enviar (app/guardrail.py)
 
     @property
     def costo_usd(self) -> float:

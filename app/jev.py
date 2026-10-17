@@ -91,8 +91,6 @@ class JEVLive:
 class JEVMock:
     """Simulación simple y determinista. No conoce las etiquetas ni las plantillas del generador."""
 
-    SENALES_INVALIDO = ("ignora", "sistema:", "promoción", "seguidores", "asdf", "vip, asígnalo")
-
     def evaluar(self, estado: dict, preguntas: list[Pregunta] = PREGUNTAS) -> RespuestaJEV:
         texto = json.dumps(estado, ensure_ascii=False).lower()
         semilla = int(hashlib.sha256(texto.encode()).hexdigest()[:8], 16)
@@ -101,8 +99,14 @@ class JEVMock:
         mensajes = estado.get("mensajes_posteriores") or []
         for p in preguntas:
             if p.tipo == "noul":
-                invalido = any(s in texto for s in self.SENALES_INVALIDO)
-                resp.nouls[p.id] = min(max((0.08 if invalido else 0.92) + rng.gauss(0, 0.06), 0.0), 1.0)
+                # Si el estado trae un mensaje a revisar (guardrail), se mira solo ese mensaje.
+                foco_noul = estado["mensaje"].lower() if isinstance(estado.get("mensaje"), str) else texto
+                if p.claves_mock:
+                    coincide = any(c in foco_noul for c in p.claves_mock)
+                    base = 0.92 if coincide == p.mock_si_si_coincide else 0.08
+                else:
+                    base = 0.9
+                resp.nouls[p.id] = min(max(base + rng.gauss(0, 0.06), 0.0), 1.0)
                 continue
             # Atajo de la simulación para imitar lo que piden las instrucciones: cargo actual para el rol
             # y último mensaje para la intención.

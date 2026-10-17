@@ -20,9 +20,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from app.jev import RespuestaChoice, RespuestaJEV, RespuestaScore, crear_cliente  # noqa: E402
-from app.motor import juicios_desde_etiquetas, juicios_desde_jev  # noqa: E402
-from app.politica import cargar_politica, decidir  # noqa: E402
+from app.motor import juicios_desde_jev  # noqa: E402
+from app.politica import cargar_politica  # noqa: E402
 from app.preguntas import construir_estado  # noqa: E402
+from app.simulacion import medir  # noqa: E402
 
 RAIZ = Path(__file__).resolve().parent.parent
 REPORTES = RAIZ / "reportes"
@@ -68,34 +69,18 @@ def obtener_respuestas(perfiles: list[dict], modo: str | None) -> tuple[str, dic
     return nombre, respuestas
 
 
-def medir(perfiles, juicios, esperados, politica) -> dict:
-    auto = ok = ventas_indebidas = invalidos = 0
-    for p in perfiles:
-        d = decidir(juicios[p["id"]], p["temas"], politica)
-        if d.ruta != "automatico":
-            continue
-        e = esperados[p["id"]]
-        auto += 1
-        ok += (d.accion, d.programa) == (e.accion, e.programa)
-        ventas_indebidas += d.accion == "pasar_a_ventas" and e.accion != "pasar_a_ventas"
-        invalidos += not p["etiquetas"]["perfil_valido"]
-    return {"automatizacion": auto / len(perfiles), "precision": ok / auto if auto else 0.0,
-            "pases_a_ventas_indebidos": ventas_indebidas, "invalidos_automaticos": invalidos}
-
-
 def main(modo: str | None, objetivo: float) -> None:
     perfiles = json.loads((RAIZ / "data" / "perfiles_sinteticos.json").read_text(encoding="utf-8"))
     nombre, respuestas = obtener_respuestas(perfiles, modo)
     base = cargar_politica()
     juicios = {k: juicios_desde_jev(r) for k, r in respuestas.items()}
-    esperados = {p["id"]: decidir(juicios_desde_etiquetas(p["etiquetas"]), p["temas"], base) for p in perfiles}
 
     resultados = []
     claves = list(REJILLA)
     for valores in itertools.product(*REJILLA.values()):
         politica = copy.deepcopy(base)
         politica["umbrales"].update(dict(zip(claves, valores)))
-        resultados.append({"umbrales": dict(zip(claves, valores)), **medir(perfiles, juicios, esperados, politica)})
+        resultados.append({"umbrales": dict(zip(claves, valores)), **medir(perfiles, juicios, politica)})
 
     seguros = [r for r in resultados if r["pases_a_ventas_indebidos"] == 0 and r["invalidos_automaticos"] == 0]
     cumplen = [r for r in seguros if r["precision"] >= objetivo]

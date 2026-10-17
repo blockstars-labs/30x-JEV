@@ -6,8 +6,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from app.catalogo import DOLORES, OBJETIVOS, PROGRAMAS, ROLES, por_id
+from app.guardrail import revisar_mensaje
 from app.jev import RespuestaJEV
-from app.politica import Decision, Juicio, Juicios, cargar_politica, decidir, explicar
+from app.politica import ACCIONES, Decision, Juicio, Juicios, cargar_politica, decidir, explicar
 from app.preguntas import PREGUNTAS, construir_estado
 
 REGISTRO = Path(__file__).resolve().parent.parent / "data" / "decisiones.jsonl"
@@ -66,11 +67,19 @@ def resolver_con_llm(estado: dict, juicios: Juicios, decision: Decision, temas: 
     return nuevos, replace(nueva, razones=resueltas + nueva.razones), revisiones
 
 
-def redactar_mensaje(estado: dict, decision: Decision, explicacion: str, llm):
-    """Mensaje para la acción decidida. Solo para acciones que se ejecutan sin persona de por medio."""
+def redactar_mensaje(estado: dict, decision: Decision, explicacion: str, llm, cliente=None, politica: dict | None = None):
+    """Mensaje para la acción decidida (solo acciones que se ejecutan sin persona de por medio).
+
+    Si hay cliente de JEV, el mensaje pasa por el guardrail antes de quedar listo para enviarse.
+    """
     if llm is None or decision.ruta == "revision_humana" or decision.accion not in ("pasar_a_ventas", "nutrir_programa"):
         return None
-    return llm.redactar(estado, decision.accion, PROGRAMAS[decision.programa], explicacion)
+    mensaje = llm.redactar(estado, decision.accion, PROGRAMAS[decision.programa], explicacion)
+    if cliente is not None and mensaje.texto:
+        contexto = {"programa": PROGRAMAS[decision.programa], "accion": ACCIONES[decision.accion],
+                    "lo_que_dijo_la_persona": {k: v for k, v in estado.items() if k != "canal"}}
+        mensaje.guardrail = revisar_mensaje(mensaje.texto, contexto, cliente, politica or cargar_politica())
+    return mensaje
 
 
 def procesar(perfil: dict, cliente, politica: dict | None = None, registrar: bool = True,
@@ -82,7 +91,7 @@ def procesar(perfil: dict, cliente, politica: dict | None = None, registrar: boo
     decision: Decision = decidir(juicios, perfil["temas"], politica)
     juicios, decision, revisiones = resolver_con_llm(estado, juicios, decision, perfil["temas"], politica, llm)
     explicacion = explicar(juicios, decision)
-    mensaje = redactar_mensaje(estado, decision, explicacion, llm) if redactar else None
+    mensaje = redactar_mensaje(estado, decision, explicacion, llm, cliente, politica) if redactar else None
     costo_llm = sum(r.costo_usd for r in revisiones) + (mensaje.costo_usd if mensaje else 0.0)
     registro = {
         "perfil_id": perfil["id"],
@@ -99,6 +108,7 @@ def procesar(perfil: dict, cliente, politica: dict | None = None, registrar: boo
         "explicacion": explicacion,
         "revisiones_llm": [vars(r) for r in revisiones],
         "mensaje": mensaje.texto if mensaje else None,
+        "guardrail": mensaje.guardrail if mensaje else None,
         "tokens_entrada": respuesta.tokens_entrada,
         "costo_usd": respuesta.costo_usd,
         "costo_llm_usd": costo_llm,

@@ -248,7 +248,7 @@ function renderPersona(p) {
     <p><b>${esc(c.programas[s.programa])}</b> · ${esc(c.acciones[s.accion_propuesta])}${s.ruta === "revision_humana" ? " <span class='tenue'>(propuesta; la confirma una persona)</span>" : ""}<br>
     <span class="tenue">Afinidad ${esc(s.banda)} (${s.afinidad.toFixed(2)}) · compromiso ${esc(s.compromiso)} · regla: ${esc(s.regla)}</span></p>
     <div class="explicacion">${esc(p.explicacion)}</div>
-    ${p.mensaje ? `<h3>Mensaje sugerido por el LLM</h3><div class="mensaje">${esc(p.mensaje)}</div>` : ""}
+    ${p.mensaje ? `<h3>Mensaje sugerido por el LLM</h3><div class="mensaje">${esc(p.mensaje)}</div>${p.guardrail ? veredicto(p.guardrail) : ""}` : ""}
     <h3>Lo que respondió JEV</h3>
     <p class="tenue">Rol</p>${probabilidades("rol", p.juicios.rol)}
     <p class="tenue">Dolor</p>${probabilidades("dolor", p.juicios.dolor)}
@@ -313,6 +313,137 @@ function prepararPrueba() {
   });
 }
 
+// ---------- Guardrail ----------
+const NOMBRES_GUARDRAIL = {
+  promesas: "¿Promete algo sin respaldo?",
+  tono: "¿Tono adecuado?",
+  coherencia: "¿Habla del programa y de la persona?",
+  instrucciones: "¿Trae instrucciones al sistema?",
+};
+
+function veredicto(g) {
+  const clase = g.estado === "aprobado" ? "estado-bueno" : g.estado === "bloqueado" ? "estado-critico" : "estado-aviso";
+  const filas = Object.entries(g.probabilidades)
+    .map(([k, p]) => `<span>${esc(NOMBRES_GUARDRAIL[k] || k)}</span><span class="pista" data-tip="${esc(`${NOMBRES_GUARDRAIL[k] || k}: sí ${pct(p)}`)}"><span class="relleno" style="width:${(p * 100).toFixed(1)}%"></span></span><span class="num">sí ${pct(p, 0)}</span>`)
+    .join("");
+  return `<p style="margin-top:10px"><b>Guardrail de JEV:</b> <span class="${clase}">${esc(g.estado_texto)}</span> <span class="tenue">(${Math.round(g.latencia_ms)} ms)</span></p>
+    ${g.razones.length ? `<ul class="razones">${g.razones.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
+    <div class="probs">${filas}</div>`;
+}
+
+function prepararGuardrail() {
+  const form = $("#form-guardrail");
+  $("#programa-guardrail").innerHTML = Object.entries(cat().programas).filter(([k]) => k !== "ninguno")
+    .map(([k, v]) => `<option value="${k}" ${k === "sales_machine" ? "selected" : ""}>${esc(v)}</option>`).join("");
+  form.querySelectorAll("[data-mensaje]").forEach((b) => b.addEventListener("click", () => { form.elements.mensaje.value = b.dataset.mensaje; }));
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const err = $("#error-guardrail"), boton = form.querySelector("button[type=submit]");
+    boton.disabled = true; err.hidden = true;
+    try {
+      const g = await enviar("/api/guardrail", { mensaje: form.elements.mensaje.value, programa: form.elements.programa.value });
+      $("#resultado-guardrail").classList.remove("tenue");
+      $("#resultado-guardrail").innerHTML = veredicto(g);
+    } catch (x) { err.textContent = x.message; err.hidden = false; }
+    boton.disabled = false;
+  });
+}
+
+// ---------- Política ----------
+const CONTROLES = [
+  ["umbrales", "perfil_valido_min", "Mínimo para tratar una inscripción como genuina", "Por debajo, siempre la revisa una persona (spam o instrucciones al sistema).", 0.3, 0.99, 0.01],
+  ["umbrales", "confianza_choice_min", "Confianza mínima en rol, dolor u objetivo", "Si JEV duda más que esto y la duda cambia la decisión, no actúa solo.", 0.1, 0.9, 0.01],
+  ["umbrales", "listo_ventas_revision", "Probabilidad de compra para proponer pasar a ventas", "Desde aquí la acción propuesta es pasar a un asesor.", 0.3, 0.9, 0.01],
+  ["umbrales", "listo_ventas_auto", "Probabilidad de compra para pasar a ventas sin persona", "Entre el valor anterior y este, una persona confirma.", 0.5, 0.99, 0.01],
+  ["umbrales", "confianza_rol_ventas", "Confianza en el rol para pasar a ventas", "Pasar a ventas exige saber que la persona puede decidir la compra.", 0.3, 0.99, 0.01],
+  ["pesos", "intencion", "Peso: intención de compra", "Afinidad compuesta. Los pesos no necesitan sumar 1.", 0, 1, 0.05],
+  ["pesos", "poder_decision", "Peso: poder de decisión (rol)", "", 0, 1, 0.05],
+  ["pesos", "claridad", "Peso: claridad de la necesidad", "", 0, 1, 0.05],
+  ["pesos", "compromiso", "Peso: compromiso observado", "", 0, 1, 0.05],
+];
+
+function valorActual(grupo, clave) {
+  const p = estado.datos.politica;
+  return grupo === "umbrales" ? p.umbrales[clave] : p.afinidad.pesos[clave];
+}
+
+function delta(nuevo, viejo, subeEsBueno = true) {
+  const d = (nuevo - viejo) * 100;
+  if (Math.abs(d) < 0.05) return `<span class="delta tenue">igual que la política actual</span>`;
+  const bueno = (d > 0) === subeEsBueno;
+  return `<span class="delta ${d > 0 ? "sube" : "baja"} ${bueno ? "estado-bueno-texto" : "tenue"}">${d > 0 ? "+" : ""}${d.toLocaleString("es-CO", { maximumFractionDigits: 1 })} pts frente a la actual${bueno ? " (mejor)" : " (peor)"}</span>`;
+}
+
+function seguridad(n) {
+  return `<span class="${n === 0 ? "estado-bueno" : "estado-critico"}">${n}</span>`;
+}
+
+function resultadosPolitica(r) {
+  const a = r.actual, s = r.simulada;
+  return `
+    <div class="rejilla-tiles">
+      ${tile("Decisiones automáticas de JEV", pct(s.automatizacion, 1), delta(s.automatizacion, a.automatizacion))}
+      ${tile("Precisión cuando actúa solo", pct(s.precision, 1), delta(s.precision, a.precision))}
+      ${tile("Pases a ventas indebidos", seguridad(s.pases_a_ventas_indebidos), `política actual: ${a.pases_a_ventas_indebidos}`)}
+      ${tile("Perfiles trampa procesados solos", seguridad(s.invalidos_automaticos), `política actual: ${a.invalidos_automaticos}`)}
+    </div>
+    <h3>Quién decide cada caso</h3>
+    <p class="tenue">Política actual</p>${barraRutas(a.rutas, a.perfiles)}
+    <p class="tenue">Con estos valores</p>${barraRutas(s.rutas, s.perfiles)}
+    <p class="tenue">El panel mide JEV + reglas, sin el LLM: en producción, el LLM resolvería parte de los casos que aquí van a revisión humana.</p>`;
+}
+
+let temporizador = null;
+async function simularPolitica() {
+  const cuerpo = { umbrales: {}, pesos: {} };
+  document.querySelectorAll("#vista-politica input[type=range]").forEach((i) => {
+    cuerpo[i.dataset.grupo][i.name] = Number(i.value);
+    i.nextElementSibling.value = Number(i.value).toFixed(2);
+  });
+  try {
+    const r = await enviar("/api/simular", cuerpo);
+    estado.politicaSimulada = r.politica;
+    $("#resultado-politica").innerHTML = resultadosPolitica(r);
+  } catch (x) {
+    $("#resultado-politica").innerHTML = `<p class="error">${esc(x.message)}</p>`;
+  }
+}
+
+function renderPolitica() {
+  const v = $("#vista-politica");
+  v.innerHTML = `
+    <p class="tenue">Mueve umbrales y pesos y mira el efecto sobre las ${estado.datos.metricas?.perfiles ?? ""} inscripciones evaluadas. Todo se recalcula en código con las respuestas que JEV ya dio: no hay llamadas nuevas al modelo ni costo.</p>
+    <div class="dos-columnas">
+      <div class="tarjeta">
+        <h2>Umbrales y pesos</h2>
+        ${CONTROLES.map(([grupo, clave, etiqueta, ayuda, min, max, paso]) => `
+          <div class="control">
+            <label for="ctl-${clave}">${esc(etiqueta)}</label><span></span>
+            <input id="ctl-${clave}" type="range" name="${clave}" data-grupo="${grupo}" min="${min}" max="${max}" step="${paso}" value="${valorActual(grupo, clave)}">
+            <output>${Number(valorActual(grupo, clave)).toFixed(2)}</output>
+            ${ayuda ? `<span class="ayuda">${esc(ayuda)}</span>` : ""}
+          </div>`).join("")}
+        <div class="botones">
+          <button type="button" id="restablecer">Volver a la política actual</button>
+          <button type="button" id="descargar">Descargar configuración</button>
+        </div>
+      </div>
+      <div class="tarjeta" id="resultado-politica"><p class="tenue">Calculando…</p></div>
+    </div>`;
+  v.querySelectorAll("input[type=range]").forEach((i) => i.addEventListener("input", () => {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(simularPolitica, 120);
+  }));
+  $("#restablecer").addEventListener("click", renderPolitica);
+  $("#descargar").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(estado.politicaSimulada || estado.datos.politica, null, 2)], { type: "application/json" });
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "politica_propuesta.json" });
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  simularPolitica();
+}
+
 // ---------- Inicio ----------
 async function iniciar() {
   try {
@@ -328,6 +459,8 @@ async function iniciar() {
   renderResumen();
   renderDecisiones();
   renderReclasificacion();
+  renderPolitica();
   prepararPrueba();
+  prepararGuardrail();
 }
 iniciar();

@@ -4,7 +4,7 @@ Actualizado: 17 de octubre de 2026
 
 ## Resumen
 
-El prototipo ya clasifica y reclasifica personas de punta a punta, con un LLM que resuelve las dudas de JEV y una calibración automática de umbrales, pero todo en modo simulado: falta conectar el JEV real (y el LLM real) para tener métricas válidas. El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 15 tests pasan.
+El prototipo ya clasifica y reclasifica personas de punta a punta, con un LLM que resuelve las dudas de JEV y una calibración automática de umbrales, pero todo en modo simulado: falta conectar el JEV real (y el LLM real) para tener métricas válidas. El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 22 tests pasan.
 
 El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el modelo de decisión de TypeSafe AI) miles de veces al día, en milisegundos y por fracciones de centavo. Elegimos la idea de **clusterización dinámica** del área Comercial: cada persona que se inscribe a un evento queda en un segmento (programa sugerido + siguiente acción), y ese segmento se recalcula cuando su situación cambia.
 
@@ -16,6 +16,8 @@ El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el mode
 | Calibración de umbrales | Hecha (script); falta correrla con JEV real |
 | Métricas con JEV real | Pendiente: falta la llave de JEV |
 | Vista visual del prototipo | Hecha (`python -m app.servidor`) |
+| Panel de política (umbrales y pesos en vivo) | Hecho |
+| Guardrail de JEV sobre los mensajes del LLM | Hecho, en modo simulado |
 | Playbook (máx. 5 páginas u 8 slides) | Pendiente |
 | Repositorio público | Pendiente: hoy es privado |
 
@@ -38,6 +40,9 @@ Todo el trabajo es del 17 de octubre de 2026. Las decisiones importantes están 
 | 11 | Ruta hacia un LLM: revisor de dudas y redactor de mensajes | El enunciado pide definir cuándo pasa a una persona **o a un LLM** |
 | 12 | Script de calibración de umbrales | Elegir umbrales con datos, sin volver a llamar a JEV |
 | 13 | Vista del prototipo: resumen, decisiones, reclasificación y prueba en vivo | Mostrar a JEV decidiendo, para la demo y el playbook |
+| 14 | Playbook de 8 slides (presentación aparte, con espacios para las métricas reales) | Entregable obligatorio |
+| 15 | Panel de política en la vista | Mostrar que 30X controla las reglas: mover umbrales y ver el efecto sin llamar a JEV |
+| 16 | Guardrail: JEV revisa los mensajes del LLM antes de enviarlos | Cierra el ciclo (JEV decide, el LLM escribe, JEV vigila) y cubre la idea de guardrails de 30X |
 
 ## Cómo funciona
 
@@ -152,7 +157,9 @@ Con Python 3.10 o superior, el proyecto corre en local en unos minutos y no nece
 | `app/motor.py` | Flujo de una inscripción: estado → JEV → política → registro |
 | `app/personas.py` | Reclasificación dinámica: historial, eventos, compromiso, vigencia |
 | `app/llm.py` | LLM (System Two): revisor de dudas y redactor de mensajes, modos `live`, `mock` y `off` |
-| `app/servidor.py` | Servidor local de la vista (solo librería estándar): datos de las evaluaciones y prueba en vivo |
+| `app/servidor.py` | Servidor local de la vista (solo librería estándar): datos, prueba en vivo, simulación de política y guardrail |
+| `app/simulacion.py` | Recalcula decisiones con otra política sobre respuestas ya guardadas (calibración y panel) |
+| `app/guardrail.py` | JEV revisa los mensajes del LLM: promesas, tono, coherencia, instrucciones; correos y teléfonos en código |
 | `web/` | La vista: Resumen, Decisiones, Reclasificación y Pruébalo |
 | `config/politica.json` | Umbrales y pesos editables |
 | `scripts/generar_perfiles.py` | Genera los perfiles y eventos sintéticos |
@@ -160,7 +167,8 @@ Con Python 3.10 o superior, el proyecto corre en local en unos minutos y no nece
 | `scripts/evaluar.py` | Métricas de la clasificación al inscribirse |
 | `scripts/evaluar_dinamica.py` | Métricas de la reclasificación con eventos |
 | `scripts/calibrar.py` | Prueba 180 combinaciones de umbrales y sugiere la mejor sin errores de seguridad |
-| `tests/` | 15 pruebas de la política, la dinámica y el LLM |
+| `scripts/evaluar_guardrail.py` | Mide el guardrail sobre 20 mensajes etiquetados: fugas y falsas alarmas |
+| `tests/` | 22 pruebas de la política, la dinámica, el LLM, la simulación y el guardrail |
 
 **Pasos** (en Windows; en Mac o Linux cambia `.venv/Scripts/python` por `.venv/bin/python`):
 
@@ -240,9 +248,9 @@ Falta probar que el SDK de TypeSafe funcione contra la URL de DigitalOcean; si n
 | Criterio (peso) | Qué lo respalda |
 | --- | --- |
 | Impacto en el reto (30 %) | Resuelve lo que 30X pidió primero: segmentos que cambian con la persona. Usa sus programas y categorías reales, y se mide contra su clasificación actual (81 / 55 / 55 %) |
-| Innovación (20 %) | División System One / System Two: JEV decide en milisegundos y el LLM solo entra en las dudas que cambian la decisión. Reclasificación por eventos, separando hechos observados de inferencias que caducan |
+| Innovación (20 %) | División System One / System Two: JEV decide en milisegundos, el LLM solo entra en las dudas que cambian la decisión y JEV vuelve a vigilar lo que escribe el LLM (guardrail). Reclasificación por eventos, separando hechos observados de inferencias que caducan |
 | Viabilidad técnica (20 %) | Código funcionando de punta a punta, 15 tests, métricas reproducibles con perfiles etiquetados y calibración de umbrales con datos |
-| Viabilidad de implementación (20 %) | Costo por decisión de fracciones de centavo, umbrales y pesos editables sin programar, cola de revisión humana con motivo, cero pases a ventas indebidos como regla, corre fuera de los sistemas de 30X |
+| Viabilidad de implementación (20 %) | Costo por decisión de fracciones de centavo, umbrales y pesos editables sin programar (con un panel que muestra el efecto antes de aplicarlos), cola de revisión humana con motivo, cero pases a ventas indebidos como regla, corre fuera de los sistemas de 30X |
 | Presentación (10 %) | Vista del prototipo lista para la demo (incluye un caso trampa y la reclasificación en vivo). Falta el playbook de 8 slides |
 
 ## Pendientes y preguntas abiertas

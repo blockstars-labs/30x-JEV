@@ -4,6 +4,8 @@ Sirve la página (web/) y una API pequeña:
 - GET  /api/datos      métricas, decisiones y líneas de tiempo de las evaluaciones (reportes/)
 - POST /api/inscribir  procesa una inscripción escrita en la página, en vivo
 - POST /api/evento     agrega un evento a esa persona y la reclasifica
+- POST /api/simular    recalcula todas las decisiones con otros umbrales y pesos, sin llamar a JEV
+- POST /api/guardrail  JEV revisa un mensaje antes de enviarlo
 
 Las llaves de JEV y del LLM se quedan en el servidor (.env); el navegador nunca las ve.
 
@@ -11,6 +13,7 @@ Uso:
     python -m app.servidor            # http://localhost:8030
 """
 
+import copy
 import itertools
 import json
 import os
@@ -24,10 +27,12 @@ from pathlib import Path
 from app.catalogo import DOLORES, INTENCION, OBJETIVOS, PROGRAMAS, ROLES, TEMAS, por_id
 from app.jev import crear_cliente
 from app.llm import crear_llm
+from app.guardrail import revisar_mensaje
 from app.motor import redactar_mensaje
 from app.personas import aplicar_evento, crear_persona, reevaluar
-from app.politica import ACCIONES, cargar_politica, explicar
+from app.politica import ACCIONES, Juicio, Juicios, cargar_politica, explicar
 from app.preguntas import construir_estado
+from app.simulacion import medir
 
 RAIZ = Path(__file__).resolve().parent.parent
 WEB = RAIZ / "web"
@@ -74,7 +79,54 @@ def datos() -> dict:
         "historiales": leer_json(f"historiales_{NOMBRE}.json") or [],
         "decisiones": decisiones,
         "catalogo": catalogo(),
+        "politica": politica,
     }
+
+
+_simulacion: dict = {}
+
+
+def base_simulacion() -> tuple[list[dict], dict]:
+    """Perfiles y juicios de JEV guardados en la última evaluación (se leen una vez)."""
+    if not _simulacion:
+        perfiles, juicios = [], {}
+        ruta = REPORTES / f"decisiones_{NOMBRE}.jsonl"
+        for linea in ruta.read_text(encoding="utf-8").splitlines():
+            r = json.loads(linea)
+            c, sc = r["respuestas_jev"]["choices"], r["respuestas_jev"]["scores"]["intencion"]
+            perfiles.append({"id": r["perfil_id"], "temas": r["temas"], "etiquetas": r["etiquetas"]})
+            juicios[r["perfil_id"]] = Juicios(
+                rol=Juicio(**c["rol"]), dolor=Juicio(**c["dolor"]), objetivo=Juicio(**c["objetivo"]),
+                intencion_esperada=sc["score"], intencion_probabilidades={int(k): v for k, v in sc["probabilidades"].items()},
+                perfil_valido=r["respuestas_jev"]["nouls"]["perfil_valido"])
+        _simulacion.update(perfiles=perfiles, juicios=juicios, actual=medir(perfiles, juicios, politica))
+    return _simulacion["perfiles"], _simulacion["juicios"]
+
+
+def simular(cuerpo: dict) -> dict:
+    """Aplica los umbrales y pesos de la página sobre las respuestas ya guardadas de JEV."""
+    perfiles, juicios = base_simulacion()
+    nueva = copy.deepcopy(politica)
+    for grupo, destino in (("umbrales", nueva["umbrales"]), ("pesos", nueva["afinidad"]["pesos"])):
+        for clave, valor in (cuerpo.get(grupo) or {}).items():
+            if clave not in destino:
+                raise ValueError(f"Parámetro desconocido: {clave}")
+            valor = float(valor)
+            if not 0.0 <= valor <= 1.0:
+                raise ValueError(f"{clave} debe estar entre 0 y 1")
+            destino[clave] = valor
+    return {"actual": _simulacion["actual"], "simulada": medir(perfiles, juicios, nueva), "politica": nueva}
+
+
+def guardrail(cuerpo: dict) -> dict:
+    mensaje = str(cuerpo.get("mensaje", "")).strip()
+    programa = cuerpo.get("programa")
+    if not mensaje:
+        raise ValueError("Escribe el mensaje a revisar.")
+    if programa not in PROGRAMAS:
+        raise ValueError("Programa desconocido.")
+    contexto = {"programa": PROGRAMAS[programa], "lo_que_dijo_la_persona": str(cuerpo.get("contexto", "")).strip() or "(sin datos)"}
+    return revisar_mensaje(mensaje, contexto, cliente, politica)
 
 
 def catalogo() -> dict:
@@ -102,13 +154,14 @@ def vista_persona(p, mensaje=None) -> dict:
         "perfil_valido": j.perfil_valido,
         "explicacion": explicar(j, d),
         "mensaje": mensaje.texto if mensaje else None,
+        "guardrail": mensaje.guardrail if mensaje else None,
         "historial": p.historial,
     }
 
 
 def mensaje_para(p):
     estado = construir_estado(p.perfil, p.cargo_actual, p.mensajes)
-    return redactar_mensaje(estado, p.decision, explicar(p.juicios, p.decision), llm)
+    return redactar_mensaje(estado, p.decision, explicar(p.juicios, p.decision), llm, cliente, politica)
 
 
 def inscribir(cuerpo: dict) -> dict:
@@ -180,6 +233,10 @@ class Manejador(SimpleHTTPRequestHandler):
                 return self._json(inscribir(cuerpo))
             if self.path == "/api/evento":
                 return self._json(agregar_evento(cuerpo))
+            if self.path == "/api/simular":
+                return self._json(simular(cuerpo))
+            if self.path == "/api/guardrail":
+                return self._json(guardrail(cuerpo))
             return self._json({"error": "Ruta desconocida"}, 404)
         except ValueError as e:
             return self._json({"error": str(e)}, 400)

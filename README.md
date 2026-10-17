@@ -26,6 +26,11 @@ Inscripción (formulario de Luma, correo o mensaje)
   → registro con la explicación de cada decisión
 ```
 
+Guardrail (`app/guardrail.py`): antes de enviar un mensaje del LLM, JEV lo revisa con cuatro preguntas sí/no
+(promesas sin respaldo, tono, coherencia con el programa, instrucciones coladas) y el código busca correos y
+teléfonos. Resultado: aprobado, revisión humana o bloqueado. `scripts/evaluar_guardrail.py` lo mide sobre
+20 mensajes etiquetados a mano (`data/mensajes_guardrail.json`).
+
 Límites del LLM: nunca revisa perfiles marcados como no genuinos y nunca autoriza por su cuenta
 pasar a alguien a ventas; esos casos siempre los confirma una persona. Modelo: Claude Opus 5.5,
 con reintento automático en otro modelo si declina (`fallbacks`).
@@ -69,7 +74,8 @@ evaluaciones al arrancar. Las llaves se quedan en el servidor; el navegador nunc
 | Resumen | Decisiones sin intervención humana, precisión frente a la clasificación actual de 30X, quién decide cada caso (JEV, LLM o persona) y costo frente a hacerlo todo con un LLM |
 | Decisiones | Las 300 inscripciones con filtro por ruta; al elegir una: lo que llegó, las probabilidades de JEV, la decisión, la explicación, la revisión del LLM y la respuesta conocida |
 | Reclasificación | Líneas de tiempo por persona con cada evento y lo que cambió en su segmento |
-| Pruébalo | Escribir una inscripción en vivo (con ejemplos, incluido un caso trampa) y agregarle eventos para ver cómo se reclasifica |
+| Política | Controles de umbrales y pesos: recalcula las 300 decisiones al instante, sin llamar a JEV, y muestra el efecto en automatización, precisión y seguridad. Descarga la configuración propuesta |
+| Pruébalo | Escribir una inscripción en vivo (con ejemplos, incluido un caso trampa), agregarle eventos para ver cómo se reclasifica y probar el guardrail de JEV sobre mensajes |
 
 ## Datos
 
@@ -92,6 +98,7 @@ cp .env.example .env                                      # JEV_MODO=mock o live
 .venv/Scripts/python scripts/evaluar.py                   # clasificación al inscribirse → reportes/
 .venv/Scripts/python scripts/evaluar_dinamica.py          # reclasificación con eventos → reportes/
 .venv/Scripts/python scripts/calibrar.py live 0.9         # umbrales sugeridos → config/politica_calibrada.json
+.venv/Scripts/python scripts/evaluar_guardrail.py        # guardrail sobre mensajes etiquetados
 .venv/Scripts/python -m pytest -q
 ```
 

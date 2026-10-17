@@ -26,6 +26,14 @@
     ]
   },
 
+  "guardrail": {
+    "_nota": "Revisión de JEV sobre los mensajes que redacta el LLM. Por encima de *_max se bloquea; por debajo de *_min va a revisión humana.",
+    "promesas_max": 0.3,
+    "instrucciones_max": 0.3,
+    "tono_min": 0.6,
+    "coherencia_min": 0.5
+  },
+
   "dinamica": {
     "_nota": "Compromiso observado y vigencia de las inferencias. Fechas y conteos se calculan en código, nunca en JEV.",
     "ventana_eventos_dias": 90,

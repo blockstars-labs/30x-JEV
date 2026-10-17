@@ -144,3 +144,19 @@ button.principal:disabled { opacity: .6; cursor: wait; }
   .dos-columnas { grid-template-columns: 1fr; }
   .evento-form { grid-template-columns: 1fr; }
 }
+
+/* Panel de política */
+.control { display: grid; grid-template-columns: 1fr 64px; gap: 4px 12px; align-items: center; margin: 12px 0; }
+.control label { font-size: 13.5px; color: var(--texto); margin: 0; }
+.control .ayuda { grid-column: 1 / -1; font-size: 12.5px; color: var(--texto-2); }
+.control input[type=range] { grid-column: 1 / 2; width: 100%; accent-color: var(--serie-1); }
+.control output { font-variant-numeric: tabular-nums; text-align: right; font-weight: 600; }
+.delta { font-size: 12.5px; }
+.delta.sube::before { content: "▲ "; }
+.delta.baja::before { content: "▼ "; }
+.botones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.botones button { border: 1px solid var(--eje); background: var(--superficie); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+.estado-bueno-texto { color: var(--bueno-texto); }
+.estado-aviso { color: var(--texto); }
+.estado-aviso::before { content: "⚠ "; color: var(--aviso); }
+.razones { margin: 6px 0 10px; padding-left: 20px; font-size: 13.5px; }
