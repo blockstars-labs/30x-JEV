@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JEV Router 30X</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div>
+      <h1>JEV Router <span class="tenue">· 30X</span></h1>
+      <p class="tenue">JEV clasifica cada inscripción en milisegundos; el código decide, un LLM revisa las dudas y una persona confirma lo delicado.</p>
+    </div>
+    <div id="modo" class="modo"></div>
+  </header>
+
+  <nav class="pestanas" role="tablist">
+    <button role="tab" data-vista="resumen" aria-selected="true">Resumen</button>
+    <button role="tab" data-vista="decisiones" aria-selected="false">Decisiones</button>
+    <button role="tab" data-vista="reclasificacion" aria-selected="false">Reclasificación</button>
+    <button role="tab" data-vista="prueba" aria-selected="false">Pruébalo</button>
+  </nav>
+
+  <main>
+    <section id="vista-resumen" class="vista"></section>
+    <section id="vista-decisiones" class="vista" hidden></section>
+    <section id="vista-reclasificacion" class="vista" hidden></section>
+    <section id="vista-prueba" class="vista" hidden>
+      <div class="dos-columnas">
+        <form id="form-inscripcion" class="tarjeta">
+          <h2>Nueva inscripción</h2>
+          <p class="tenue">Escribe como lo haría alguien al inscribirse a un evento de 30X. Nada se guarda fuera de este computador.</p>
+          <div class="ejemplos">
+            <span class="tenue">Ejemplos:</span>
+            <button type="button" data-ejemplo="fundadora">Fundadora sin proceso comercial</button>
+            <button type="button" data-ejemplo="curioso">Solo curiosidad</button>
+            <button type="button" data-ejemplo="trampa">Texto con instrucciones al sistema</button>
+          </div>
+          <label>Canal
+            <select name="canal">
+              <option value="formulario_luma">Formulario de Luma</option>
+              <option value="correo">Correo</option>
+              <option value="mensaje">Mensaje</option>
+            </select>
+          </label>
+          <label>Cargo <input name="cargo" placeholder="Ej. CEO y fundadora"></label>
+          <label>¿Qué te gustaría lograr? <input name="que_te_gustaria_lograr"></label>
+          <label>¿Cuál es tu mayor reto hoy? <input name="mayor_reto_hoy"></label>
+          <label>Comentario <textarea name="comentario" rows="2"></textarea></label>
+          <fieldset><legend>Temas de interés</legend><div id="temas" class="temas"></div></fieldset>
+          <button type="submit" class="principal">Clasificar con JEV</button>
+          <p id="error-inscripcion" class="error" hidden></p>
+        </form>
+        <div id="resultado-prueba" class="resultado-vacio tarjeta">
+          <p class="tenue">El resultado aparece aquí: lo que respondió JEV, la decisión, por qué y el mensaje sugerido.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip" role="status" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@ El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el mode
 | Ruta hacia un LLM (System Two) | Hecho, en modo simulado |
 | Calibración de umbrales | Hecha (script); falta correrla con JEV real |
 | Métricas con JEV real | Pendiente: falta la llave de JEV |
-| Vista visual del prototipo | Pendiente |
+| Vista visual del prototipo | Hecha (`python -m app.servidor`) |
 | Playbook (máx. 5 páginas u 8 slides) | Pendiente |
 | Repositorio público | Pendiente: hoy es privado |
 
@@ -37,6 +37,7 @@ Todo el trabajo es del 17 de octubre de 2026. Las decisiones importantes están 
 | 10 | Commit `b82c3e3`: reclasificación dinámica | Historial por persona, eventos y cambios de segmento |
 | 11 | Ruta hacia un LLM: revisor de dudas y redactor de mensajes | El enunciado pide definir cuándo pasa a una persona **o a un LLM** |
 | 12 | Script de calibración de umbrales | Elegir umbrales con datos, sin volver a llamar a JEV |
+| 13 | Vista del prototipo: resumen, decisiones, reclasificación y prueba en vivo | Mostrar a JEV decidiendo, para la demo y el playbook |
 
 ## Cómo funciona
 
@@ -151,6 +152,8 @@ Con Python 3.10 o superior, el proyecto corre en local en unos minutos y no nece
 | `app/motor.py` | Flujo de una inscripción: estado → JEV → política → registro |
 | `app/personas.py` | Reclasificación dinámica: historial, eventos, compromiso, vigencia |
 | `app/llm.py` | LLM (System Two): revisor de dudas y redactor de mensajes, modos `live`, `mock` y `off` |
+| `app/servidor.py` | Servidor local de la vista (solo librería estándar): datos de las evaluaciones y prueba en vivo |
+| `web/` | La vista: Resumen, Decisiones, Reclasificación y Pruébalo |
 | `config/politica.json` | Umbrales y pesos editables |
 | `scripts/generar_perfiles.py` | Genera los perfiles y eventos sintéticos |
 | `scripts/construir_distribuciones.py` | Saca los conteos agregados del archivo de 30X (solo en local) |
@@ -172,6 +175,7 @@ cp .env.example .env
 .venv/Scripts/python scripts/evaluar_dinamica.py
 .venv/Scripts/python scripts/calibrar.py
 .venv/Scripts/python -m pytest -q
+.venv/Scripts/python -m app.servidor   # vista en http://localhost:8030
 ```
 
 Los reportes quedan en `reportes/` (no se suben al repo). En el `.env`, `JEV_MODO=mock` usa el simulador y `JEV_MODO=live` el JEV real; `LLM_MODO` acepta `mock`, `live` (requiere `ANTHROPIC_API_KEY`) u `off`.
@@ -239,7 +243,7 @@ Falta probar que el SDK de TypeSafe funcione contra la URL de DigitalOcean; si n
 | Innovación (20 %) | División System One / System Two: JEV decide en milisegundos y el LLM solo entra en las dudas que cambian la decisión. Reclasificación por eventos, separando hechos observados de inferencias que caducan |
 | Viabilidad técnica (20 %) | Código funcionando de punta a punta, 15 tests, métricas reproducibles con perfiles etiquetados y calibración de umbrales con datos |
 | Viabilidad de implementación (20 %) | Costo por decisión de fracciones de centavo, umbrales y pesos editables sin programar, cola de revisión humana con motivo, cero pases a ventas indebidos como regla, corre fuera de los sistemas de 30X |
-| Presentación (10 %) | Pendiente: playbook de 8 slides y vista del prototipo |
+| Presentación (10 %) | Vista del prototipo lista para la demo (incluye un caso trampa y la reclasificación en vivo). Falta el playbook de 8 slides |
 
 ## Pendientes y preguntas abiertas
 
@@ -255,7 +259,7 @@ Lo más urgente es conseguir la llave de JEV: sin ella no hay métricas reales n
 - [ ] Correr `scripts/calibrar.py live`, revisar `config/politica_calibrada.json` y aplicar los umbrales
 - [ ] Probar el sesgo por orden de opciones
 - [ ] Escribir el playbook (8 slides: problema, qué decide JEV, preguntas, política y umbrales, quién opera, resultados vs. línea base, costo y latencia, riesgos)
-- [ ] Vista sencilla del prototipo: lista de decisiones, detalle con probabilidades y explicación, métricas
+- [x] Vista del prototipo: resumen, decisiones con detalle, reclasificación y prueba en vivo
 - [ ] Revisar el repo (sin llaves ni datos de 30X) y hacerlo público
 
 **Preguntas para el equipo**

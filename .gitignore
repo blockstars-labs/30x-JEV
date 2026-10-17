@@ -25,3 +25,6 @@ __pycache__/
 
 # Sugerencia generada por scripts/calibrar.py (se revisa antes de aplicarla)
 config/politica_calibrada.json
+
+# Configuración local de Claude Code
+.claude/

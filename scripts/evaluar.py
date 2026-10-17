@@ -47,6 +47,7 @@ def main(modo: str | None) -> None:
         filas.append((p, reg, esperado))
 
     modelo = filas[0][1]["modelo"]
+    nombre = "mock" if modelo == "mock" else "live"  # nombre de archivo estable, igual que evaluar_dinamica
     n = len(filas)
     aciertos = Counter()
     calibracion = [[0, 0] for _ in range(5)]  # buckets de confianza 0-0.2, ..., 0.8-1
@@ -103,8 +104,8 @@ def main(modo: str | None) -> None:
     }
 
     REPORTES.mkdir(exist_ok=True)
-    (REPORTES / f"metricas_{modelo}.json").write_text(json.dumps(metricas, ensure_ascii=False, indent=1), encoding="utf-8")
-    with (REPORTES / f"decisiones_{modelo}.jsonl").open("w", encoding="utf-8") as f:
+    (REPORTES / f"metricas_{nombre}.json").write_text(json.dumps(metricas, ensure_ascii=False, indent=1), encoding="utf-8")
+    with (REPORTES / f"decisiones_{nombre}.jsonl").open("w", encoding="utf-8") as f:
         for p, reg, esp in filas:
             f.write(json.dumps({**reg, "esperado": {"accion": esp.accion, "programa": esp.programa},
                                 "etiquetas": p["etiquetas"]}, ensure_ascii=False) + "\n")
@@ -130,7 +131,7 @@ def main(modo: str | None) -> None:
     print(f"Costo LLM ({revisiones} revisiones): USD {costo_llm_total:.4f}")
     print(f"Si todo se clasificara con el LLM (supuesto: misma entrada, {SALIDA_LLM_SUPUESTA} tokens de salida): "
           f"USD {costo_todo_llm:.4f}")
-    print(f"\nReporte: {REPORTES / f'metricas_{modelo}.json'}")
+    print(f"\nReporte: {REPORTES / f'metricas_{nombre}.json'}")
 
 
 if __name__ == "__main__":

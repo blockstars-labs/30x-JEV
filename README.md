@@ -55,6 +55,22 @@ Principios, tomados de la documentación de TypeSafe:
 - Solo importa la duda que cambia la decisión: si la segunda opción de JEV lleva a la misma acción, no se frena.
 - Los umbrales se calibran con datos etiquetados (`scripts/evaluar.py`), no se inventan.
 
+## Vista del prototipo
+
+```bash
+.venv/Scripts/python -m app.servidor   # abre http://localhost:8030
+```
+
+Servidor local sin dependencias extra (`app/servidor.py` + `web/`). Si faltan los reportes, corre las
+evaluaciones al arrancar. Las llaves se quedan en el servidor; el navegador nunca las ve.
+
+| Pestaña | Qué muestra |
+| --- | --- |
+| Resumen | Decisiones sin intervención humana, precisión frente a la clasificación actual de 30X, quién decide cada caso (JEV, LLM o persona) y costo frente a hacerlo todo con un LLM |
+| Decisiones | Las 300 inscripciones con filtro por ruta; al elegir una: lo que llegó, las probabilidades de JEV, la decisión, la explicación, la revisión del LLM y la respuesta conocida |
+| Reclasificación | Líneas de tiempo por persona con cada evento y lo que cambió en su segmento |
+| Pruébalo | Escribir una inscripción en vivo (con ejemplos, incluido un caso trampa) y agregarle eventos para ver cómo se reclasifica |
+
 ## Datos
 
 - `data/perfiles_sinteticos.json`: 300 inscripciones **inventadas** (nombres, empresas y correos ficticios
