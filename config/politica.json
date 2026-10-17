@@ -1,0 +1,26 @@
+{
+  "_nota": "Umbrales iniciales. Hay que calibrarlos con el set etiquetado (scripts/evaluar.py) antes de confiar en ellos.",
+
+  "umbrales": {
+    "perfil_valido_min": 0.8,
+    "confianza_choice_min": 0.45,
+    "listo_ventas_auto": 0.8,
+    "listo_ventas_revision": 0.5
+  },
+
+  "afinidad": {
+    "_nota": "Afinidad compuesta en código (patrón composite scoring): cambiar pesos no requiere volver a llamar a JEV.",
+    "pesos": { "intencion": 0.5, "poder_decision": 0.3, "claridad": 0.2 },
+    "poder_decision_por_rol": {
+      "fundador": 1.0, "c_level": 1.0, "lider_comercial": 0.7, "gerente": 0.6,
+      "tecnico": 0.4, "sin_dato": 0.3, "otro": 0.1
+    },
+    "poder_decision_min_ventas": 0.6,
+    "bandas": [
+      { "id": "baja", "etiqueta": "0-3 (baja)", "desde": 0.0 },
+      { "id": "media", "etiqueta": "4-6 (media)", "desde": 0.35 },
+      { "id": "alta", "etiqueta": "7-8 (alta)", "desde": 0.55 },
+      { "id": "muy_alta", "etiqueta": "9-10 (muy alta)", "desde": 0.75 }
+    ]
+  }
+}

@@ -1,0 +1,333 @@
+{
+ "_nota": "Conteos agregados derivados de la muestra de demo de 30X. No contiene filas ni datos de personas.",
+ "programa_sugerido": {
+  "ai_sales": 211,
+  "inmersion_ejecutiva": 133,
+  "sales_machine": 100,
+  "hardcore_ai": 35,
+  "achievers": 21,
+  "ninguno": 197
+ },
+ "por_programa": {
+  "ai_sales": {
+   "rol": {
+    "fundador": 24,
+    "c_level": 5,
+    "gerente": 3,
+    "lider_comercial": 19,
+    "sin_dato": 156,
+    "tecnico": 4
+   },
+   "dolor": {
+    "ninguno": 186,
+    "referidos": 6,
+    "procesos_manuales": 9,
+    "claridad_estrategica": 5,
+    "sin_proceso_comercial": 4,
+    "ventas_estancadas": 1
+   },
+   "objetivo": {
+    "automatizar_ia": 128,
+    "expandirse": 12,
+    "vender_mas": 39,
+    "red_pares": 1,
+    "liderazgo": 2,
+    "formarse_ia": 24,
+    "maquina_ventas": 2,
+    "delegar": 2,
+    "levantar_capital": 1
+   },
+   "banda": {
+    "muy_alta": 44,
+    "alta": 70,
+    "media": 71,
+    "baja": 26
+   },
+   "n_temas": {
+    "4": 26,
+    "3": 66,
+    "5": 14,
+    "2": 102,
+    "6": 2,
+    "7": 1
+   },
+   "temas": {
+    "sales": 209,
+    "ai": 207,
+    "gtm": 51,
+    "pricing": 5,
+    "ops": 58,
+    "leadership": 29,
+    "marketing": 18,
+    "fundraising": 8,
+    "product": 2,
+    "negotiation": 7,
+    "hiring": 1
+   }
+  },
+  "inmersion_ejecutiva": {
+   "rol": {
+    "fundador": 31,
+    "sin_dato": 97,
+    "c_level": 5
+   },
+   "dolor": {
+    "ninguno": 103,
+    "dueno_cuello_botella": 5,
+    "claridad_estrategica": 5,
+    "procesos_manuales": 3,
+    "capital": 4,
+    "referidos": 3,
+    "ventas_estancadas": 2,
+    "equipo": 4,
+    "expansion_sin_metodo": 4
+   },
+   "objetivo": {
+    "liderazgo": 2,
+    "vender_mas": 29,
+    "automatizar_ia": 35,
+    "delegar": 4,
+    "expandirse": 21,
+    "transformar_modelo": 3,
+    "levantar_capital": 9,
+    "red_pares": 7,
+    "formarse_ia": 21,
+    "maquina_ventas": 2
+   },
+   "banda": {
+    "muy_alta": 62,
+    "alta": 40,
+    "media": 24,
+    "baja": 7
+   },
+   "n_temas": {
+    "6": 18,
+    "5": 14,
+    "3": 26,
+    "8": 2,
+    "4": 12,
+    "7": 7,
+    "2": 28,
+    "0": 21,
+    "1": 4,
+    "9": 1
+   },
+   "temas": {
+    "leadership": 105,
+    "ops": 60,
+    "sales": 51,
+    "marketing": 12,
+    "pricing": 9,
+    "gtm": 70,
+    "hiring": 16,
+    "finance": 21,
+    "ai": 65,
+    "fundraising": 14,
+    "product": 12,
+    "retention": 1,
+    "negotiation": 2
+   }
+  },
+  "sales_machine": {
+   "rol": {
+    "c_level": 1,
+    "fundador": 16,
+    "sin_dato": 79,
+    "lider_comercial": 4
+   },
+   "dolor": {
+    "sin_proceso_comercial": 10,
+    "ninguno": 72,
+    "claridad_estrategica": 6,
+    "procesos_manuales": 5,
+    "dueno_cuello_botella": 2,
+    "ventas_estancadas": 3,
+    "referidos": 2
+   },
+   "objetivo": {
+    "expandirse": 1,
+    "maquina_ventas": 18,
+    "formarse_ia": 20,
+    "vender_mas": 37,
+    "automatizar_ia": 20,
+    "delegar": 1,
+    "red_pares": 1,
+    "liderazgo": 1,
+    "transformar_modelo": 1
+   },
+   "banda": {
+    "muy_alta": 34,
+    "alta": 39,
+    "media": 26,
+    "baja": 1
+   },
+   "n_temas": {
+    "4": 19,
+    "5": 6,
+    "3": 36,
+    "2": 26,
+    "1": 9,
+    "6": 2,
+    "7": 2
+   },
+   "temas": {
+    "sales": 100,
+    "ops": 65,
+    "gtm": 46,
+    "fundraising": 1,
+    "marketing": 14,
+    "retention": 1,
+    "ai": 39,
+    "leadership": 20,
+    "negotiation": 5,
+    "hiring": 4,
+    "pricing": 6
+   }
+  },
+  "hardcore_ai": {
+   "rol": {
+    "fundador": 6,
+    "tecnico": 5,
+    "c_level": 1,
+    "gerente": 2,
+    "sin_dato": 21
+   },
+   "dolor": {
+    "ninguno": 29,
+    "sin_proceso_comercial": 1,
+    "dueno_cuello_botella": 1,
+    "procesos_manuales": 3,
+    "claridad_estrategica": 1
+   },
+   "objetivo": {
+    "automatizar_ia": 28,
+    "formarse_ia": 1,
+    "vender_mas": 2,
+    "expandirse": 3,
+    "levantar_capital": 1
+   },
+   "banda": {
+    "muy_alta": 9,
+    "alta": 13,
+    "media": 7,
+    "baja": 6
+   },
+   "n_temas": {
+    "2": 11,
+    "1": 14,
+    "4": 4,
+    "3": 5,
+    "6": 1
+   },
+   "temas": {
+    "ai": 35,
+    "product": 6,
+    "sales": 7,
+    "leadership": 6,
+    "gtm": 2,
+    "ops": 12,
+    "hiring": 1,
+    "fundraising": 2,
+    "finance": 1,
+    "negotiation": 1
+   }
+  },
+  "achievers": {
+   "rol": {
+    "gerente": 1,
+    "fundador": 3,
+    "sin_dato": 17
+   },
+   "dolor": {
+    "claridad_estrategica": 1,
+    "ninguno": 15,
+    "sin_proceso_comercial": 2,
+    "ventas_estancadas": 1,
+    "capital": 1,
+    "procesos_manuales": 1
+   },
+   "objetivo": {
+    "transformar_modelo": 1,
+    "vender_mas": 6,
+    "red_pares": 1,
+    "automatizar_ia": 5,
+    "maquina_ventas": 1,
+    "levantar_capital": 2,
+    "formarse_ia": 3,
+    "expandirse": 2
+   },
+   "banda": {
+    "alta": 10,
+    "media": 10,
+    "muy_alta": 1
+   },
+   "n_temas": {
+    "4": 8,
+    "2": 1,
+    "3": 5,
+    "6": 2,
+    "5": 4,
+    "7": 1
+   },
+   "temas": {
+    "sales": 14,
+    "marketing": 6,
+    "gtm": 19,
+    "ops": 14,
+    "leadership": 14,
+    "ai": 14,
+    "product": 2,
+    "fundraising": 4,
+    "pricing": 1
+   }
+  },
+  "ninguno": {
+   "rol": {
+    "fundador": 27,
+    "gerente": 17,
+    "sin_dato": 139,
+    "c_level": 3,
+    "lider_comercial": 7,
+    "tecnico": 4
+   },
+   "dolor": {
+    "ninguno": 190,
+    "procesos_manuales": 5,
+    "claridad_estrategica": 1,
+    "dueno_cuello_botella": 1
+   },
+   "objetivo": {
+    "formarse_ia": 63,
+    "automatizar_ia": 90,
+    "vender_mas": 30,
+    "expandirse": 11,
+    "liderazgo": 2,
+    "levantar_capital": 1
+   },
+   "banda": {
+    "baja": 197
+   },
+   "n_temas": {
+    "0": 46,
+    "3": 29,
+    "1": 47,
+    "2": 62,
+    "5": 2,
+    "4": 11
+   },
+   "temas": {
+    "sales": 67,
+    "ai": 128,
+    "gtm": 23,
+    "marketing": 9,
+    "leadership": 26,
+    "fundraising": 7,
+    "ops": 43,
+    "finance": 3,
+    "pricing": 2,
+    "negotiation": 2,
+    "product": 2
+   }
+  }
+ }
+}

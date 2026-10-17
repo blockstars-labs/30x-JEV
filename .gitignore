@@ -1,0 +1,24 @@
+# Secretos: la llave de TypeSafe va en .env, nunca en el repo
+.env
+.env.*
+!.env.example
+
+# Datos de 30X: solo se usan en local, nunca se publican
+*.xlsx
+*.xls
+*.csv.private
+data/privado/
+
+# Salidas generadas al correr el sistema
+data/decisiones.jsonl
+reportes/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
