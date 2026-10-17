@@ -17,6 +17,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from app.jev import crear_cliente  # noqa: E402
+from app.llm import crear_llm  # noqa: E402
 from app.motor import juicios_desde_etiquetas  # noqa: E402
 from app.personas import aplicar_evento, compromiso, crear_persona, reevaluar  # noqa: E402
 from app.politica import cargar_politica, decidir  # noqa: E402
@@ -33,6 +34,7 @@ def main(modo: str | None) -> None:
     perfiles = {p["id"]: p for p in json.loads((RAIZ / "data" / "perfiles_sinteticos.json").read_text(encoding="utf-8"))}
     lineas = json.loads((RAIZ / "data" / "eventos_sinteticos.json").read_text(encoding="utf-8"))
     cliente = crear_cliente(modo)
+    llm = crear_llm()
     politica = cargar_politica()
 
     pasos, historiales = [], []
@@ -47,7 +49,7 @@ def main(modo: str | None) -> None:
         for evento, etiquetas in secuencia:
             if evento["tipo"] != "inscripcion":
                 aplicar_evento(persona, evento)
-            r = reevaluar(persona, evento["fecha"], cliente, evento, politica)
+            r = reevaluar(persona, evento["fecha"], cliente, evento, politica, llm)
             nivel, _ = compromiso(persona, evento["fecha"], politica)
             esperado = decidir(juicios_desde_etiquetas(etiquetas), perfil["temas"], politica, nivel)
             seg_esperado = (esperado.programa, esperado.accion_propuesta)
@@ -60,14 +62,15 @@ def main(modo: str | None) -> None:
                 "cambio_real": esperado_previo is not None and seg_esperado != esperado_previo,
                 "cambio_detectado": r["cambio_segmento"],
                 "llamo_jev": r["llamo_jev"],
-                "costo_usd": r["costo_usd"],
+                "costo_usd": r["costo_usd"] + r["costo_llm_usd"],
+                "revisiones_llm": len(r["revisiones_llm"]),
             })
             esperado_previo = seg_esperado
         historiales.append({"perfil_id": persona.id, "historial": persona.historial})
 
     modelo = getattr(cliente, "__class__").__name__.replace("JEV", "").lower()
     eventos = [p for p in pasos if p["evento"] != "inscripcion"]
-    auto = [p for p in pasos if p["ruta"] == "automatico"]
+    auto = [p for p in pasos if p["ruta"] in ("automatico", "llm")]
     reales = [p for p in eventos if p["cambio_real"]]
     detectados = [p for p in eventos if p["cambio_detectado"]]
     acierto_cambio = [p for p in detectados if p["cambio_real"]]
@@ -86,6 +89,8 @@ def main(modo: str | None) -> None:
         "recall_cambios": len(acierto_cambio) / len(reales) if reales else None,
         "precision_cambios": len(acierto_cambio) / len(detectados) if detectados else None,
         "eventos_sin_llamar_a_jev": sum(not p["llamo_jev"] for p in eventos),
+        "rutas": dict(Counter(p["ruta"] for p in pasos)),
+        "revisiones_llm": sum(p["revisiones_llm"] for p in pasos),
         "costo_usd_total": costo,
     }
 
@@ -98,7 +103,7 @@ def main(modo: str | None) -> None:
     if modelo == "mock":
         print("AVISO: JEV simulado. Estas cifras prueban el flujo, no miden a JEV.")
     print(f"Eventos por tipo: {metricas['eventos_por_tipo']}")
-    print(f"\nAutomatización:            {pct(metricas['tasa_automatizacion'])}")
+    print(f"\nAutomatización:            {pct(metricas['tasa_automatizacion'])}  rutas: {metricas['rutas']}")
     if auto:
         print(f"Precisión al actuar solo:  {pct(metricas['precision_al_actuar_solo'])}")
     print(f"Pases a ventas indebidos:  {metricas['pases_a_ventas_indebidos']}")

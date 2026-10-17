@@ -4,7 +4,7 @@ Actualizado: 17 de octubre de 2026
 
 ## Resumen
 
-El prototipo ya clasifica y reclasifica personas de punta a punta, pero en modo simulado: falta conectar el JEV real para tener métricas válidas. El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 10 tests pasan.
+El prototipo ya clasifica y reclasifica personas de punta a punta, con un LLM que resuelve las dudas de JEV y una calibración automática de umbrales, pero todo en modo simulado: falta conectar el JEV real (y el LLM real) para tener métricas válidas. El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 15 tests pasan.
 
 El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el modelo de decisión de TypeSafe AI) miles de veces al día, en milisegundos y por fracciones de centavo. Elegimos la idea de **clusterización dinámica** del área Comercial: cada persona que se inscribe a un evento queda en un segmento (programa sugerido + siguiente acción), y ese segmento se recalcula cuando su situación cambia.
 
@@ -12,6 +12,8 @@ El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el mode
 | --- | --- |
 | Prototipo: clasificación al inscribirse | Hecho, en modo simulado |
 | Prototipo: reclasificación dinámica | Hecho, en modo simulado |
+| Ruta hacia un LLM (System Two) | Hecho, en modo simulado |
+| Calibración de umbrales | Hecha (script); falta correrla con JEV real |
 | Métricas con JEV real | Pendiente: falta la llave de JEV |
 | Vista visual del prototipo | Pendiente |
 | Playbook (máx. 5 páginas u 8 slides) | Pendiente |
@@ -33,6 +35,8 @@ Todo el trabajo es del 17 de octubre de 2026. Las decisiones importantes están 
 | 8 | **Python + SDK oficial de TypeSafe** | El SDK de Python es el más completo |
 | 9 | Commit `a51f6a6`: base del sistema | Perfiles sintéticos, preguntas, política, evaluación |
 | 10 | Commit `b82c3e3`: reclasificación dinámica | Historial por persona, eventos y cambios de segmento |
+| 11 | Ruta hacia un LLM: revisor de dudas y redactor de mensajes | El enunciado pide definir cuándo pasa a una persona **o a un LLM** |
+| 12 | Script de calibración de umbrales | Elegir umbrales con datos, sin volver a llamar a JEV |
 
 ## Cómo funciona
 
@@ -45,7 +49,10 @@ flowchart LR
     E["Asistió a un evento<br/>sin texto nuevo"] -- "recalcula sin llamar a JEV" --> C
     C --> D{"¿Confianza<br/>suficiente?"}
     D -- sí --> F["Actúa solo<br/>ventas o envío de contenido"]
-    D -- no --> G["Revisión humana<br/>con el motivo de la duda"]
+    D -- "duda que cambia la decisión" --> L["LLM revisa la duda<br/>elige o dice «no seguro»"]
+    L -- resuelta --> F
+    L -- "no seguro o pasar a ventas" --> G["Revisión humana<br/>con el motivo de la duda"]
+    D -- "perfil no genuino" --> G
 ```
 
 Cada texto nuevo pasa por JEV; una asistencia sin texto solo se recalcula en código. Todo resultado queda registrado con su explicación.
@@ -79,6 +86,17 @@ Las instrucciones van en inglés (JEV rinde mejor así) y los datos de la person
 | Rol incierto antes de pasar a ventas | confianza < 0,7 | Revisión antes de pasar a ventas |
 
 Solo frena la duda que cambiaría la decisión: si la segunda opción de JEV lleva al mismo programa y acción, el sistema actúa solo. Los umbrales están en `config/politica.json` y hay que calibrarlos con el JEV real.
+
+### Cuándo entra el LLM (System Two)
+
+JEV resuelve rápido y barato la mayoría de los casos; el LLM (Claude Opus 5.5) solo entra en dos momentos:
+
+| Momento | Qué hace | Límite |
+| --- | --- | --- |
+| JEV duda en rol, dolor u objetivo y esa duda cambia la decisión | Lee el texto y elige entre las 3 opciones más probables según JEV, o responde «no seguro» | «No seguro» → persona. Si el resultado es pasar a ventas, igual confirma una persona |
+| La acción ya está decidida | Redacta la nota para el asesor o el correo de contenido | No inventa precios, fechas ni beneficios |
+
+El LLM nunca revisa perfiles marcados como no genuinos (spam o texto con instrucciones al sistema): esos van directo a una persona. Con `LLM_MODO=off` el sistema funciona igual y todas las dudas van a personas.
 
 ### Reclasificación dinámica
 
@@ -132,12 +150,14 @@ Con Python 3.10 o superior, el proyecto corre en local en unos minutos y no nece
 | `app/politica.py` | Afinidad, reglas de programa, umbrales, revisión humana y explicaciones |
 | `app/motor.py` | Flujo de una inscripción: estado → JEV → política → registro |
 | `app/personas.py` | Reclasificación dinámica: historial, eventos, compromiso, vigencia |
+| `app/llm.py` | LLM (System Two): revisor de dudas y redactor de mensajes, modos `live`, `mock` y `off` |
 | `config/politica.json` | Umbrales y pesos editables |
 | `scripts/generar_perfiles.py` | Genera los perfiles y eventos sintéticos |
 | `scripts/construir_distribuciones.py` | Saca los conteos agregados del archivo de 30X (solo en local) |
 | `scripts/evaluar.py` | Métricas de la clasificación al inscribirse |
 | `scripts/evaluar_dinamica.py` | Métricas de la reclasificación con eventos |
-| `tests/` | 10 pruebas de la política y la dinámica |
+| `scripts/calibrar.py` | Prueba 180 combinaciones de umbrales y sugiere la mejor sin errores de seguridad |
+| `tests/` | 15 pruebas de la política, la dinámica y el LLM |
 
 **Pasos** (en Windows; en Mac o Linux cambia `.venv/Scripts/python` por `.venv/bin/python`):
 
@@ -150,25 +170,28 @@ cp .env.example .env
 .venv/Scripts/python scripts/generar_perfiles.py
 .venv/Scripts/python scripts/evaluar.py
 .venv/Scripts/python scripts/evaluar_dinamica.py
+.venv/Scripts/python scripts/calibrar.py
 .venv/Scripts/python -m pytest -q
 ```
 
-Los reportes quedan en `reportes/` (no se suben al repo). En el `.env`, `JEV_MODO=mock` usa el simulador y `JEV_MODO=live` el JEV real.
+Los reportes quedan en `reportes/` (no se suben al repo). En el `.env`, `JEV_MODO=mock` usa el simulador y `JEV_MODO=live` el JEV real; `LLM_MODO` acepta `mock`, `live` (requiere `ANTHROPIC_API_KEY`) u `off`.
 
 ## Resultados hasta ahora
 
 Todo funciona de punta a punta, pero estas cifras salen del JEV **simulado** y no miden a JEV: sirven para probar el flujo. Las métricas reales llegan cuando tengamos la llave.
 
-| Métrica | Clasificación al inscribirse (300 perfiles) | Reclasificación (257 eventos) |
+| Métrica | Clasificación al inscribirse (300 perfiles) | Reclasificación (361 decisiones) |
 | --- | --- | --- |
-| Decisiones automáticas | 25,0 % | 30,5 % |
-| Precisión al actuar solo | 53,3 % | 48,2 % |
+| Decisiones sin persona (JEV solo + resueltas por el LLM) | 69,3 % (75 + 133) | 69,5 % (136 + 115) |
+| Precisión de esas decisiones | 53,4 % | 56,6 % |
 | Pases a ventas indebidos | 0 | 1 |
 | Perfiles trampa procesados sin revisión | 0 | — |
-| Cambios de segmento detectados | — | 99 (58 reales; recall 58,6 %, precisión 34,3 %) |
+| Cambios de segmento detectados | — | 82 (58 reales; recall 56,9 %, precisión 40,2 %) |
 | Eventos resueltos sin llamar a JEV | — | 60 de 257 |
 
-La precisión por pregunta del simulador (rol 61,7 %, dolor 46,0 %, objetivo 69,0 %) no se compara con la línea base de 30X: es un sustituto por palabras clave.
+La precisión por pregunta del simulador (rol 61,7 %, dolor 46,0 %, objetivo 69,0 %) no se compara con la línea base de 30X: tanto JEV como el LLM simulados son sustitutos por palabras clave.
+
+**Costo (300 perfiles, simulado):** JEV cuesta unos USD 0,003 en total. Revisar las dudas con el LLM cuesta unos USD 0,49. Clasificar todo con el LLM en vez de JEV costaría unos USD 2,12 (supuesto: misma entrada y 300 tokens de salida por perfil). JEV hace el trabajo de volumen por una fracción del costo y el LLM se reserva para las dudas.
 
 **Qué vamos a reportar con JEV real** (va directo al playbook):
 
@@ -179,6 +202,8 @@ La precisión por pregunta del simulador (rol 61,7 %, dolor 46,0 %, objetivo 69,
 - Detección de cambios de segmento (recall y precisión).
 - Latencia (p50/p95) y costo por cada 1.000 decisiones.
 - Robustez al orden de opciones: JEV tiende a preferir la primera opción, así que reordenaremos y compararemos.
+- Precisión de los casos que resolvió el LLM y su costo real.
+- La frontera automatización ↔ precisión de `scripts/calibrar.py` y los umbrales recomendados.
 
 ## Acceso a JEV
 
@@ -206,15 +231,28 @@ TYPESAFE_DEFAULT_MODEL=typesafe-jev-1.13.0
 
 Falta probar que el SDK de TypeSafe funcione contra la URL de DigitalOcean; si no, se agrega un cliente HTTP directo. Antes de pagar vale la pena preguntar por créditos del hackathon (community@30x.com) y desactivar la recarga automática.
 
+## Cómo responde a los criterios de evaluación
+
+| Criterio (peso) | Qué lo respalda |
+| --- | --- |
+| Impacto en el reto (30 %) | Resuelve lo que 30X pidió primero: segmentos que cambian con la persona. Usa sus programas y categorías reales, y se mide contra su clasificación actual (81 / 55 / 55 %) |
+| Innovación (20 %) | División System One / System Two: JEV decide en milisegundos y el LLM solo entra en las dudas que cambian la decisión. Reclasificación por eventos, separando hechos observados de inferencias que caducan |
+| Viabilidad técnica (20 %) | Código funcionando de punta a punta, 15 tests, métricas reproducibles con perfiles etiquetados y calibración de umbrales con datos |
+| Viabilidad de implementación (20 %) | Costo por decisión de fracciones de centavo, umbrales y pesos editables sin programar, cola de revisión humana con motivo, cero pases a ventas indebidos como regla, corre fuera de los sistemas de 30X |
+| Presentación (10 %) | Pendiente: playbook de 8 slides y vista del prototipo |
+
 ## Pendientes y preguntas abiertas
 
 Lo más urgente es conseguir la llave de JEV: sin ella no hay métricas reales ni umbrales calibrados para el playbook.
 
 **Próximos pasos, en orden**
 
+- [x] Ruta hacia un LLM (revisor de dudas y redactor de mensajes)
+- [x] Script de calibración de umbrales
 - [ ] Conseguir créditos y llave de JEV (TypeSafe o DigitalOcean)
+- [ ] Conseguir llave de Anthropic para el LLM real (o correr con `LLM_MODO=off`)
 - [ ] Hacer una llamada de prueba y correr ambas evaluaciones con JEV real
-- [ ] Calibrar umbrales con los resultados y dejar los pases a ventas indebidos en 0
+- [ ] Correr `scripts/calibrar.py live`, revisar `config/politica_calibrada.json` y aplicar los umbrales
 - [ ] Probar el sesgo por orden de opciones
 - [ ] Escribir el playbook (8 slides: problema, qué decide JEV, preguntas, política y umbrales, quién opera, resultados vs. línea base, costo y latencia, riesgos)
 - [ ] Vista sencilla del prototipo: lista de decisiones, detalle con probabilidades y explicación, métricas

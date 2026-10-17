@@ -73,9 +73,10 @@ class Decision:
     afinidad: float
     accion: str                # acción final (revision_humana si no actúa solo)
     accion_propuesta: str      # lo que haría si actuara solo
-    ruta: str                  # "automatico" o "revision_humana"
+    ruta: str                  # "automatico", "llm" (resuelto por el LLM) o "revision_humana"
     razones: list[str]
     compromiso: str = "medio"  # señal observada (código), no inferida por JEV
+    dudas: list[str] = field(default_factory=list)  # campos cuya duda cambia la decisión
 
 
 def banda_afinidad(rol: str, dolor: str, objetivo: str, intencion_esperada: float, politica: dict,
@@ -141,11 +142,12 @@ def decidir(j: Juicios, temas: list[str], politica: dict | None = None, compromi
     base = evaluar_combinacion(j.rol.valor, j.dolor.valor, j.objetivo.valor,
                                j.intencion_esperada, j.p_listo, temas, politica, compromiso)
     razones: list[str] = []
+    dudas: list[str] = []
 
     def decision(ruta: str) -> Decision:
         accion = base.accion if ruta == "automatico" else "revision_humana"
         return Decision(base.programa, base.regla_programa, base.banda, base.afinidad,
-                        accion, base.accion, ruta, razones, compromiso)
+                        accion, base.accion, ruta, razones, compromiso, dudas)
 
     if j.perfil_valido < u["perfil_valido_min"]:
         razones.append(f"El perfil no parece una inscripción genuina (p={j.perfil_valido:.2f}): "
@@ -165,6 +167,7 @@ def decidir(j: Juicios, temas: list[str], politica: dict | None = None, compromi
         otro = evaluar_combinacion(valores["rol"], valores["dolor"], valores["objetivo"],
                                    j.intencion_esperada, j.p_listo, temas, politica, compromiso)
         if (otro.programa, otro.accion) != (base.programa, base.accion):
+            dudas.append(campo)
             razones.append(f"Duda en {campo} (confianza {juicio.confianza:.2f}) entre "
                            f"'{etiqueta(campo, juicio.valor)}' y '{etiqueta(campo, alternativa)}', "
                            "y eso cambia la decisión.")
@@ -204,6 +207,8 @@ def explicar(j: Juicios, d: Decision) -> str:
     ]
     if d.ruta == "automatico":
         partes.append(f"Acción automática: {ACCIONES[d.accion]}")
+    elif d.ruta == "llm":
+        partes.append(f"Acción automática tras revisión del LLM: {ACCIONES[d.accion]}. " + " ".join(d.razones))
     else:
         partes.append(f"Va a revisión humana (propuesta: {ACCIONES[d.accion_propuesta]}). " + " ".join(d.razones))
     return ". ".join(partes).rstrip(".") + "."

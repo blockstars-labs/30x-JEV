@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from datetime import date
 
 from app.catalogo import INTENCION, PROGRAMAS
-from app.motor import juicios_desde_jev
+from app.motor import juicios_desde_jev, resolver_con_llm
 from app.politica import ACCIONES, Decision, Juicios, cargar_politica, decidir, explicar, etiqueta
 from app.preguntas import construir_estado
 
@@ -89,7 +89,7 @@ def describir_evento(evento: dict) -> str:
     return tipo
 
 
-def reevaluar(p: Persona, hoy: date, cliente, motivo: dict, politica: dict | None = None) -> dict:
+def reevaluar(p: Persona, hoy: date, cliente, motivo: dict, politica: dict | None = None, llm=None) -> dict:
     """Recalcula el segmento de la persona y registra si cambió y por qué."""
     politica = politica or cargar_politica()
     vigencia = politica["dinamica"]["vigencia_inferencia_dias"]
@@ -107,6 +107,10 @@ def reevaluar(p: Persona, hoy: date, cliente, motivo: dict, politica: dict | Non
     nivel, resumen = compromiso(p, hoy, politica)
     anterior = p.decision
     p.decision = decidir(p.juicios, p.perfil["temas"], politica, nivel)
+    # Si el LLM resuelve una duda, el juicio resuelto se guarda: el siguiente evento no la vuelve a revisar.
+    estado = construir_estado(p.perfil, p.cargo_actual, p.mensajes)
+    p.juicios, p.decision, revisiones = resolver_con_llm(estado, p.juicios, p.decision, p.perfil["temas"],
+                                                         politica, llm, nivel)
 
     cambios = _diferencias(juicios_previos, p.juicios, anterior, p.decision)
     entrada = {
@@ -122,8 +126,10 @@ def reevaluar(p: Persona, hoy: date, cliente, motivo: dict, politica: dict | Non
         "cambio_segmento": anterior is not None and p.segmento != (anterior.programa, anterior.accion_propuesta),
         "cambios": cambios,
         "explicacion": explicar(p.juicios, p.decision),
+        "revisiones_llm": [vars(r) for r in revisiones],
         "tokens_entrada": tokens,
         "costo_usd": costo,
+        "costo_llm_usd": sum(r.costo_usd for r in revisiones),
         "latencia_ms": round(latencia, 1),
     }
     p.historial.append(entrada)

@@ -19,9 +19,16 @@ Inscripción (formulario de Luma, correo o mensaje)
   → app/politica.py combina las respuestas
       afinidad compuesta (pesos en config) → programa sugerido (reglas) → acción
   → umbrales de confianza
-      actúa solo | revisión humana (con el motivo)
+      actúa solo | duda que cambia la decisión → LLM | revisión humana (con el motivo)
+  → LLM (System Two, app/llm.py), solo donde JEV no alcanza
+      revisa la duda y elige entre las opciones que dejó JEV, o dice "no seguro" → persona
+      redacta el mensaje de la acción (nota al asesor o correo)
   → registro con la explicación de cada decisión
 ```
+
+Límites del LLM: nunca revisa perfiles marcados como no genuinos y nunca autoriza por su cuenta
+pasar a alguien a ventas; esos casos siempre los confirma una persona. Modelo: Claude Opus 5.5,
+con reintento automático en otro modelo si declina (`fallbacks`).
 
 ### Clusterización dinámica
 
@@ -68,11 +75,14 @@ cp .env.example .env                                      # JEV_MODO=mock o live
 .venv/Scripts/python scripts/generar_perfiles.py          # 300 perfiles, semilla 30
 .venv/Scripts/python scripts/evaluar.py                   # clasificación al inscribirse → reportes/
 .venv/Scripts/python scripts/evaluar_dinamica.py          # reclasificación con eventos → reportes/
+.venv/Scripts/python scripts/calibrar.py live 0.9         # umbrales sugeridos → config/politica_calibrada.json
 .venv/Scripts/python -m pytest -q
 ```
 
 - `JEV_MODO=mock`: JEV simulado, sin llave ni costo. Sirve para probar el flujo; **sus métricas no miden a JEV**.
 - `JEV_MODO=live`: JEV real. Requiere `TYPESAFE_API_KEY` en `.env` (nunca en el código).
+- `LLM_MODO=mock | live | off`: el revisor y redactor. `live` usa Claude y requiere `ANTHROPIC_API_KEY`;
+  `off` desactiva el LLM y todas las dudas van a personas.
 
 ## Métricas
 
@@ -83,12 +93,19 @@ cp .env.example .env                                      # JEV_MODO=mock o live
 - Pases a ventas indebidos y perfiles inválidos procesados sin revisión (deben ser 0).
 - Calibración: precisión por rango de confianza.
 - Latencia p50/p95 y costo por cada 1.000 decisiones.
+- Rutas (automático / resuelto por el LLM / revisión humana), precisión de los casos que resolvió el LLM,
+  costo del LLM y cuánto costaría clasificar todo con un LLM en vez de JEV.
 
 `scripts/evaluar_dinamica.py` reporta, después de cada evento:
 
 - Precisión de la decisión y pases a ventas indebidos.
 - Cambios de segmento reales frente a detectados (recall y precisión).
 - Cuántos eventos se resolvieron sin llamar a JEV y el costo total.
+
+`scripts/calibrar.py` pide a JEV las respuestas una sola vez y prueba 180 combinaciones de umbrales
+sin volver a llamarlo. Descarta las que pasan a ventas a alguien indebidamente o dejan pasar perfiles
+no genuinos, muestra la frontera automatización ↔ precisión y deja la combinación recomendada en
+`config/politica_calibrada.json` para que una persona la revise antes de aplicarla.
 
 ## Pendiente de validar con 30X
 

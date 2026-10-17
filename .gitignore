@@ -22,3 +22,6 @@ __pycache__/
 # IDE
 .idea/
 .vscode/
+
+# Sugerencia generada por scripts/calibrar.py (se revisa antes de aplicarla)
+config/politica_calibrada.json
