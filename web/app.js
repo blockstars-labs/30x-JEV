@@ -184,13 +184,14 @@ function badgeRuta(ruta) {
   return `<span class="badge"><span class="punto" style="background:${r.color}"></span>${esc(r.corto)}</span>`;
 }
 
-function barraRutas(rutas, total) {
+function barraRutas(rutas, total, nombres = {}) {
   const orden = ["automatico", "llm", "revision_humana"].filter((r) => rutas[r]);
+  const nombre = (r) => nombres[r] || RUTAS[r].nombre;
   const segmentos = orden
-    .map((r) => `<div style="flex:${rutas[r]};background:${RUTAS[r].color}" data-tip="${esc(`<b>${RUTAS[r].nombre}</b><br>${rutas[r]} de ${total}`)}"></div>`)
+    .map((r) => `<div style="flex:${rutas[r]};background:${RUTAS[r].color}" data-tip="${esc(`<b>${nombre(r)}</b><br>${rutas[r]} de ${total}`)}"></div>`)
     .join("");
   const leyenda = orden
-    .map((r) => `<li><span class="punto" style="background:${RUTAS[r].color}"></span>${RUTAS[r].nombre}<b>${pct(rutas[r] / total, 0)}</b></li>`)
+    .map((r) => `<li><span class="punto" style="background:${RUTAS[r].color}"></span>${nombre(r)}<b>${pct(rutas[r] / total, 0)}</b></li>`)
     .join("");
   return `<div class="rutas-barra" role="img" aria-label="Quién decide cada caso">${segmentos}</div><ul class="leyenda">${leyenda}</ul>`;
 }
@@ -923,6 +924,9 @@ function seguridad(n) {
   return `<span class="${n === 0 ? "ok" : "mal"}">${n}</span>`;
 }
 
+// Este panel mide JEV + reglas sin el LLM: lo que no decide solo pide ayuda, al LLM o a una persona.
+const AYUDA = { revision_humana: "Pide ayuda (LLM o persona)" };
+
 function resultadosPolitica(r) {
   const a = r.actual, s = r.simulada;
   return `
@@ -933,8 +937,8 @@ function resultadosPolitica(r) {
       ${stat("Pases indebidos a ventas", seguridad(s.pases_a_ventas_indebidos), `Política actual: ${a.pases_a_ventas_indebidos}`)}
       ${stat("Perfiles trampa procesados solos", seguridad(s.invalidos_automaticos), `Política actual: ${a.invalidos_automaticos}`)}
     </div>
-    <div class="seccion"><h4>Política actual</h4>${barraRutas(a.rutas, a.perfiles)}</div>
-    <div class="seccion"><h4>Con estos valores</h4>${barraRutas(s.rutas, s.perfiles)}</div>`;
+    <div class="seccion"><h4>Política actual</h4>${barraRutas(a.rutas, a.perfiles, AYUDA)}</div>
+    <div class="seccion"><h4>Con estos valores</h4>${barraRutas(s.rutas, s.perfiles, AYUDA)}</div>`;
 }
 
 let temporizador = null;
