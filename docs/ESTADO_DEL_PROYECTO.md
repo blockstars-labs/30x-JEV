@@ -1,10 +1,10 @@
-# 30X · JEV Router: estado del proyecto
+# Pálpito para 30X: estado del proyecto
 
 Actualizado: 18 de octubre de 2026
 
 ## Resumen
 
-El prototipo ya funciona con **JEV real** (jev-1.13.0): en 300 inscripciones sintéticas acierta 99–100 % en rol, dolor y objetivo (30X hoy: 81 / 55 / 55 %), decide solo el 94 % de los casos con 96 % de precisión y no tuvo ningún pase a ventas indebido. El LLM sigue simulado (falta llave de Anthropic). El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 22 tests pasan.
+El prototipo ya funciona con **JEV real** (jev-1.13.0): en 300 inscripciones sintéticas acierta 99–100 % en rol, dolor y objetivo (30X hoy: 81 / 55 / 55 %), decide solo el 94 % de los casos con 96 % de precisión y no tuvo ningún pase a ventas indebido. El LLM sigue simulado (falta llave de Anthropic). El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 59 tests pasan. Además del flujo de inscripción, ya existen los segmentos que se descubren solos y las alertas de riesgo en programas, probados con el motor local y datos sintéticos.
 
 El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el modelo de decisión de TypeSafe AI) miles de veces al día, en milisegundos y por fracciones de centavo. Elegimos la idea de **clusterización dinámica** del área Comercial: cada persona que se inscribe a un evento queda en un segmento (programa sugerido + siguiente acción), y ese segmento se recalcula cuando su situación cambia.
 
@@ -18,7 +18,9 @@ El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el mode
 | Vista visual del prototipo | Hecha (`python -m app.servidor`) |
 | Panel de política (umbrales y pesos en vivo) | Hecho |
 | Guardrail de JEV sobre los mensajes del LLM | Hecho, en modo simulado |
-| Playbook (máx. 5 páginas u 8 slides) | Hecho, con los resultados reales: [docs/PLAYBOOK.md](PLAYBOOK.md) y versión en 8 slides |
+| Segmentos que se descubren solos | Hecho con el motor local; falta correrlo con JEV real ([PUESTA_EN_MARCHA.md](PUESTA_EN_MARCHA.md), paso 6) |
+| Alertas de riesgo en programas | Hecho con el motor local y alumnos sintéticos |
+| Playbook (máx. 5 páginas u 8 slides) | Hecho: [PDF de 5 páginas con pantallas](PLAYBOOK.pdf) y [versión en texto](PLAYBOOK.md) |
 | Repositorio público | Pendiente: hoy es privado |
 
 ## Qué se ha hecho
@@ -147,47 +149,11 @@ Nombres, empresas y correos son ficticios; los correos usan el dominio reservado
 
 ## Estructura del repo y cómo correrlo
 
-Con Python 3.10 o superior, el proyecto corre en local en unos minutos y no necesita llave en modo simulado.
+Para no duplicar información que cambia, la estructura vive en un solo lugar:
 
-| Ruta | Para qué sirve |
-| --- | --- |
-| `app/catalogo.py` | Categorías de 30X (rol, dolor, objetivo, programas, intención) y su descripción para JEV |
-| `app/preguntas.py` | Las 5 preguntas a JEV y qué datos de la persona se le envían |
-| `app/jev.py` | Cliente de JEV: modo `live` (SDK de TypeSafe) y `mock` (simulado) |
-| `app/politica.py` | Afinidad, reglas de programa, umbrales, revisión humana y explicaciones |
-| `app/motor.py` | Flujo de una inscripción: estado → JEV → política → registro |
-| `app/personas.py` | Reclasificación dinámica: historial, eventos, compromiso, vigencia |
-| `app/llm.py` | LLM (System Two): revisor de dudas y redactor de mensajes, modos `live`, `mock` y `off` |
-| `app/servidor.py` | Servidor local de la vista (solo librería estándar): datos, prueba en vivo, simulación de política y guardrail |
-| `app/simulacion.py` | Recalcula decisiones con otra política sobre respuestas ya guardadas (calibración y panel) |
-| `app/guardrail.py` | JEV revisa los mensajes del LLM: promesas, tono, coherencia, instrucciones; correos y teléfonos en código |
-| `web/` | La vista: Resumen, Decisiones, Reclasificación y Pruébalo |
-| `config/politica.json` | Umbrales y pesos editables |
-| `scripts/generar_perfiles.py` | Genera los perfiles y eventos sintéticos |
-| `scripts/construir_distribuciones.py` | Saca los conteos agregados del archivo de 30X (solo en local) |
-| `scripts/evaluar.py` | Métricas de la clasificación al inscribirse |
-| `scripts/evaluar_dinamica.py` | Métricas de la reclasificación con eventos |
-| `scripts/calibrar.py` | Prueba 180 combinaciones de umbrales y sugiere la mejor sin errores de seguridad |
-| `scripts/evaluar_guardrail.py` | Mide el guardrail sobre 20 mensajes etiquetados: fugas y falsas alarmas |
-| `tests/` | 22 pruebas de la política, la dinámica, el LLM, la simulación y el guardrail |
-
-**Pasos** (en Windows; en Mac o Linux cambia `.venv/Scripts/python` por `.venv/bin/python`):
-
-```bash
-git clone https://github.com/blockstars-labs/30x-JEV.git
-cd 30x-JEV
-python -m venv .venv
-.venv/Scripts/python -m pip install -r requirements.txt
-cp .env.example .env
-.venv/Scripts/python scripts/generar_perfiles.py
-.venv/Scripts/python scripts/evaluar.py
-.venv/Scripts/python scripts/evaluar_dinamica.py
-.venv/Scripts/python scripts/calibrar.py
-.venv/Scripts/python -m pytest -q
-.venv/Scripts/python -m app.servidor   # vista en http://localhost:8030
-```
-
-Los reportes quedan en `reportes/` (no se suben al repo). En el `.env`, `JEV_MODO=mock` usa el simulador y `JEV_MODO=live` el JEV real; `LLM_MODO` acepta `mock`, `live` (requiere `ANTHROPIC_API_KEY`) u `off`.
+- [README](../README.md): qué hace, vistas, mapa del repositorio, puesta en marcha y evaluación.
+- [ARQUITECTURA.md](ARQUITECTURA.md): módulos, motor de descubrimiento, API, modos y costos.
+- [PUESTA_EN_MARCHA.md](PUESTA_EN_MARCHA.md): pasos con JEV conectado.
 
 ## Resultados con JEV real
 
@@ -229,15 +195,15 @@ Todas las evaluaciones con JEV real costaron menos de USD 0,10. También se pued
 
 | Criterio (peso) | Qué lo respalda |
 | --- | --- |
-| Impacto en el reto (30 %) | Resuelve lo que 30X pidió primero: segmentos que cambian con la persona. Usa sus programas y categorías reales, y se mide contra su clasificación actual (81 / 55 / 55 %) |
+| Impacto en el reto (30 %) | Resuelve las dos necesidades que 30X planteó: segmentos que cambian con la persona y alertas de riesgo de abandono en programas. Usa sus programas y categorías reales, y se mide contra su clasificación actual (81 / 55 / 55 %) |
 | Innovación (20 %) | División System One / System Two: JEV decide en milisegundos, el LLM solo entra en las dudas que cambian la decisión y JEV vuelve a vigilar lo que escribe el LLM (guardrail). Reclasificación por eventos, separando hechos observados de inferencias que caducan |
-| Viabilidad técnica (20 %) | Código funcionando de punta a punta, 15 tests, métricas reproducibles con perfiles etiquetados y calibración de umbrales con datos |
+| Viabilidad técnica (20 %) | Código funcionando de punta a punta, 59 tests, métricas reproducibles con perfiles etiquetados y calibración de umbrales con datos |
 | Viabilidad de implementación (20 %) | Costo por decisión de fracciones de centavo, umbrales y pesos editables sin programar (con un panel que muestra el efecto antes de aplicarlos), cola de revisión humana con motivo, cero pases a ventas indebidos como regla, corre fuera de los sistemas de 30X |
-| Presentación (10 %) | Vista del prototipo lista para la demo (incluye un caso trampa y la reclasificación en vivo). Falta el playbook de 8 slides |
+| Presentación (10 %) | Prototipo listo para la demo (decisiones, reglas, segmentos y alertas) y playbook en PDF de 5 páginas con pantallas |
 
 ## Pendientes y preguntas abiertas
 
-Lo más urgente es conseguir la llave de JEV: sin ella no hay métricas reales ni umbrales calibrados para el playbook.
+Lo más urgente ahora es correr segmentos y alertas con JEV real y conseguir una muestra real etiquetada por 30X.
 
 **Próximos pasos, en orden**
 
@@ -248,7 +214,9 @@ Lo más urgente es conseguir la llave de JEV: sin ella no hay métricas reales n
 - [x] Correr todas las evaluaciones con JEV real
 - [x] Calibrar con JEV real y aplicar el umbral de perfil genuino
 - [ ] Probar el sesgo por orden de opciones
-- [ ] Escribir el playbook (8 slides: problema, qué decide JEV, preguntas, política y umbrales, quién opera, resultados vs. línea base, costo y latencia, riesgos)
+- [x] Escribir el playbook ([PDF de 5 páginas](PLAYBOOK.pdf))
+- [x] Segmentos que se descubren solos y alertas de riesgo (motor local)
+- [ ] Correr segmentos y alertas con JEV real
 - [x] Vista del prototipo: resumen, decisiones con detalle, reclasificación y prueba en vivo
 - [ ] Revisar el repo (sin llaves ni datos de 30X) y hacerlo público
 
@@ -258,5 +226,5 @@ Lo más urgente es conseguir la llave de JEV: sin ella no hay métricas reales n
 - ¿Cómo nos repartimos el trabajo: playbook, vista del prototipo, evaluación con JEV real?
 - ¿Commit directo a `main` o ramas con Pull Request? Hasta ahora se ha subido directo a `main`.
 - ¿Podemos publicar `data/distribuciones.json` (conteos agregados del archivo de 30X) o lo quitamos?
-- ¿Quién opera el sistema en 30X (quién revisa la cola humana, quién ajusta reglas)? Lo pide el playbook.
+- ¿Quién opera el sistema en 30X? El playbook propone roles (sección 6); falta validarlos con 30X.
 - Las descripciones de los programas y sus reglas son inferidas de los datos. ¿Las validamos con 30X? Achievers no tiene regla.

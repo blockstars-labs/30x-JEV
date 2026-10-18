@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Playbook · Pálpito para 30X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --bg: #fafaf9; --ink: #121211; --muted: #5f5e57; --line: #e4e2d9; --card: #ffffff;
+    --lime: #e9ff7b; --olive: #4f5c00; --lav: #c4b5fd; --amber: #fcc94f; --dark: #0f0f0e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 9.4pt; line-height: 1.42; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; padding: 13mm 15mm 12mm; position: relative; overflow: hidden;
+    page-break-after: always; display: flex; flex-direction: column; gap: 4.2mm; }
+  .page:last-child { page-break-after: auto; }
+  .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 7.4pt; letter-spacing: .14em; text-transform: uppercase; color: var(--olive); }
+  h1 { font-size: 25pt; line-height: 1.04; letter-spacing: -.03em; font-weight: 600; }
+  h2 { font-size: 15pt; line-height: 1.12; letter-spacing: -.02em; font-weight: 600; }
+  h3 { font-size: 10.5pt; font-weight: 600; letter-spacing: -.01em; }
+  p.lead { font-size: 10.6pt; color: #33322d; }
+  .muted { color: var(--muted); }
+  .small { font-size: 7.8pt; color: var(--muted); }
+  .row { display: flex; gap: 4mm; }
+  .col { display: flex; flex-direction: column; gap: 2.4mm; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 3.2mm; padding: 3.6mm 4mm; }
+  .card.dark { background: var(--dark); color: #f3f2ec; border-color: var(--dark); }
+  .card.lime { background: #f6ffc9; border-color: #c9dc5a; }
+  .num { font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: -.04em; font-size: 20pt; line-height: 1; }
+  table { width: 100%; border-collapse: collapse; font-size: 8.6pt; }
+  th { text-align: left; font-weight: 600; font-size: 7.6pt; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding: 1.4mm 2mm; border-bottom: 1.2px solid var(--ink); }
+  td { padding: 1.6mm 2mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  .tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 6.8pt; padding: .5mm 1.6mm; border-radius: 99px; white-space: nowrap; }
+  .tag.real { background: var(--lime); color: var(--ink); }
+  .tag.demo { background: #ece9ff; color: #3b2f86; }
+  .shot { border-radius: 3mm; overflow: hidden; background: var(--dark); border: 1px solid #1f1f1c; }
+  .shot img { display: block; width: 100%; }
+  .shot.fit img { height: 100%; object-fit: cover; object-position: top; }
+  .cap { font-size: 7.6pt; color: var(--muted); margin-top: 1.2mm; }
+  .cap b { color: var(--ink); }
+  .head { display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 2.2mm; font-weight: 700; font-size: 11pt; letter-spacing: -.03em; }
+  .foot { position: absolute; left: 15mm; right: 15mm; bottom: 6.5mm; display: flex; justify-content: space-between; font-size: 7pt; color: var(--muted); }
+  .steps { counter-reset: s; display: flex; flex-direction: column; gap: 1.6mm; }
+  .steps li { list-style: none; display: flex; gap: 2.4mm; align-items: baseline; }
+  .steps li::before { counter-increment: s; content: counter(s); font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 7.6pt;
+    background: var(--ink); color: var(--lime); border-radius: 99px; min-width: 4.4mm; height: 4.4mm; display: inline-flex; align-items: center; justify-content: center; }
+  .quote { font-size: 13pt; font-weight: 600; letter-spacing: -.02em; }
+  .flow { display: flex; align-items: stretch; gap: 1.6mm; }
+  .flow .n { flex: 1; border: 1px solid var(--line); background: var(--card); border-radius: 2.6mm; padding: 2.4mm; font-size: 8pt; }
+  .flow .n b { display: block; font-size: 8.6pt; margin-bottom: .6mm; }
+  .flow .n.k { background: #f6ffc9; border-color: #c9dc5a; }
+  .flow .a { align-self: center; color: var(--muted); font-size: 11pt; }
+  .route { display: flex; gap: 2mm; }
+  .route div { flex: 1; border-radius: 2.6mm; padding: 2.2mm 2.6mm; font-size: 8pt; border: 1.4px solid; }
+  .dot { display: inline-block; width: 2.2mm; height: 2.2mm; border-radius: 99px; margin-right: 1.2mm; vertical-align: middle; }
+  .divider { height: 1px; background: var(--line); }
+</style>
+</head>
+<body>
+
+<!-- ============ PÁGINA 1 ============ -->
+<section class="page">
+  <div class="head">
+    <div class="brand">
+      <svg width="22" height="22" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#0a0a0a"/><path d="M9 36h10l5-15 8 27 6-17" fill="none" stroke="#e9ff7b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="31" r="5" fill="#e9ff7b"/></svg>
+      pálpito <span class="mono muted" style="font-size:7pt;letter-spacing:.2em;font-weight:400">PARA 30X</span>
+    </div>
+    <span class="small mono">PLAYBOOK · RETO 30X: JEV · OCTUBRE 2026</span>
+  </div>
+
+  <div class="col" style="gap:3mm">
+    <h1>Cada persona, en su lugar.<br><span style="color:#8a8980">Cada alumno, a tiempo.</span></h1>
+    <p class="lead">Pálpito ubica a cada persona que llega a 30X según su perfil y el momento de su empresa, la reubica cuando su situación cambia, dice qué contenido o propuesta debe recibir y avisa qué alumno está en riesgo de abandonar un programa. <b>JEV</b> (TypeSafe AI) toma los juicios rápidos, <b>las reglas de 30X</b> deciden y <b>una persona</b> confirma lo delicado.</p>
+  </div>
+
+  <div class="eyebrow">1 · Lo que 30X pidió</div>
+  <div class="row">
+    <div class="card" style="flex:1">
+      <h3>Clusterización dinámica</h3>
+      <p class="muted" style="margin-top:1mm">Que cualquier persona que entra, por ejemplo al inscribirse a un evento en Luma, quede en un segmento según su perfil y el momento de su empresa; que el segmento se recalcule cada vez que su situación cambia, y que el sistema diga qué contenido o propuesta debería recibir.</p>
+    </div>
+    <div class="card" style="flex:1">
+      <h3>Alertas de riesgo en programas</h3>
+      <p class="muted" style="margin-top:1mm">Que con la asistencia, las entregas y la actividad de cada alumno, JEV estime quién está en riesgo de abandonar un programa, para que el equipo lo contacte a tiempo.</p>
+    </div>
+  </div>
+
+  <div class="card dark" style="display:flex;align-items:center;gap:5mm;padding:4mm 5mm">
+    <p class="quote" style="flex:1">«Hoy nuestros segmentos son estáticos.»</p>
+    <span class="small" style="color:#a3a29a;max-width:62mm">Y eso cuesta en cuatro lugares:</span>
+  </div>
+
+  <div class="row">
+    <div class="card" style="flex:1"><div class="num">55%</div><h3 style="margin-top:1.6mm">Mal ubicada</h3><p class="small">acierta la clasificación actual en qué le duele y qué busca cada persona (81 % en rol)</p></div>
+    <div class="card" style="flex:1"><div class="num">85%</div><h3 style="margin-top:1.6mm">Sin datos</h3><p class="small">no declara qué le duele; 73 % no dice su rol</p></div>
+    <div class="card" style="flex:1"><div class="num">Día 0</div><h3 style="margin-top:1.6mm">Congelada</h3><p class="small">recibe lo del día que se inscribió, aunque su empresa ya cambió</p></div>
+    <div class="card" style="flex:1;border-color:#e7c35a;background:#fff9e6"><div class="num" style="color:#9a6a00">Tarde</div><h3 style="margin-top:1.6mm">Se va en silencio</h3><p class="small">cuando alguien nota que el alumno dejó de asistir, ya decidió irse</p></div>
+  </div>
+
+  <div class="eyebrow" style="margin-top:1mm">2 · Lo que 30X gana</div>
+  <table>
+    <tr><th style="width:24%">Trabajo</th><th>Resultado</th><th style="width:12%">Fuente</th></tr>
+    <tr><td><b>Clasificar bien</b></td><td><span class="mono"><b>99 / 100 / 99 %</b></span> de acierto en rol, dolor y objetivo. Hoy: 81 / 55 / 55 %</td><td><span class="tag real">JEV real</span></td></tr>
+    <tr><td><b>El contenido correcto</b></td><td>Detecta el <span class="mono"><b>86 %</b></span> de los cambios de segmento (precisión 74 %) y cambia la propuesta con ellos</td><td><span class="tag real">JEV real</span></td></tr>
+    <tr><td><b>Llegar a tiempo</b></td><td>Cada semana, a qué alumno llamar, por qué y con qué mensaje. El grupo de riesgo alto abandonó el <span class="mono"><b>63 %</b></span> frente al 23 % de la base</td><td><span class="tag demo">Demo</span></td></tr>
+    <tr><td><b>Liberar al equipo</b></td><td><span class="mono"><b>94 %</b></span> de las decisiones sin intervención humana (281 de 300), 96,4 % correctas</td><td><span class="tag real">JEV real</span></td></tr>
+    <tr><td><b>Cero errores graves</b></td><td><span class="mono"><b>0</b></span> personas a ventas sin estar listas · <span class="mono"><b>0</b></span> inscripciones trampa procesadas solas</td><td><span class="tag real">JEV real</span></td></tr>
+    <tr><td><b>Costo</b></td><td><span class="mono"><b>USD 0,07</b></span> por 1.000 decisiones, <span class="mono">268 ms</span> por persona: ~180 veces más barato que un LLM</td><td><span class="tag real">JEV real</span></td></tr>
+  </table>
+
+  <p class="small"><span class="tag real">JEV real</span> medido con <span class="mono">jev-1.13.0</span> sobre 300 inscripciones sintéticas con las proporciones de 30X. <span class="tag demo">Demo</span> motor local con datos sintéticos: muestra la mecánica. Todo se confirma en el piloto con una muestra real. Fuente del diagnóstico: 697 perfiles anonimizados de 30X, proporcionales a una base de ~32.300 personas.</p>
+
+  <div class="foot"><span>Pálpito · Corazonadas, pero calibradas.</span><span class="mono">1 / 5</span></div>
+</section>
+
+<!-- ============ PÁGINA 2 ============ -->
+<section class="page">
+  <div class="eyebrow">3 · Cómo funciona: clusterización dinámica</div>
+  <h2>El segmento se mueve con cada cosa que la persona dice o hace.</h2>
+
+  <table>
+    <tr><th style="width:21%">Momento</th><th style="width:27%">Lo que escribe o hace</th><th style="width:22%">Hoy</th><th>Con Pálpito</th></tr>
+    <tr><td><b>Día 0</b> · se inscribe en Luma</td><td><i>«No tenemos proceso de ventas, todo depende de referidos»</i></td><td class="muted">Queda en un segmento, para siempre</td><td>Sales Machine · recibe contenido del programa</td></tr>
+    <tr><td><b>Día 7</b> · responde un correo</td><td><i>«¿Cuánto cuesta? ¿Hablamos esta semana?»</i></td><td class="muted">Nadie lo nota</td><td><b>Lista para conversar</b> · pasa a un asesor con la nota escrita</td></tr>
+    <tr><td><b>Día 20</b> · asiste a un taller</td><td class="muted">Sin escribir nada</td><td class="muted">No cuenta</td><td><b>Compromiso alto</b> · sube su prioridad (en código, sin costo)</td></tr>
+    <tr><td><b>Día 45</b> · cambia de cargo</td><td><i>«Ahora soy la CEO de la compañía»</i></td><td class="muted">Le siguen ofreciendo lo mismo</td><td><b>Decisora</b> · Inmersión Ejecutiva</td></tr>
+  </table>
+
+  <div class="row" style="align-items:flex-start">
+    <div class="col" style="flex:1">
+      <h3>Seis preguntas a JEV, una sola llamada (~0,3 s)</h3>
+      <table>
+        <tr><th>Pregunta</th><th>Respuesta</th></tr>
+        <tr><td>¿Qué rol tiene?</td><td>Una de 7 (fundador/CEO, C-level, líder comercial…)</td></tr>
+        <tr><td>¿Describe un problema?</td><td>Sí / no, con probabilidad</td></tr>
+        <tr><td>¿Cuál es su problema?</td><td>Uno de los 9 dolores de 30X, o ninguno</td></tr>
+        <tr><td>¿Qué quiere lograr?</td><td>Uno de los 10 objetivos de 30X, u otro</td></tr>
+        <tr><td>¿Qué tan lista está?</td><td>Sin intención · explorando · evaluando · lista</td></tr>
+        <tr><td>¿Es una inscripción real?</td><td>Sí / no (frena spam e instrucciones coladas)</td></tr>
+      </table>
+      <p class="small">Las reglas de 30X convierten las respuestas en afinidad, programa (Inmersión Ejecutiva, Sales Machine, Hardcore AI, AI Sales o ninguno) y acción: asesor, contenido del programa, contenido general o revisión.</p>
+    </div>
+    <div class="col" style="flex:1">
+      <h3>Qué recalcula el segmento</h3>
+      <table>
+        <tr><th>Evento</th><th>Qué hace</th><th>Costo</th></tr>
+        <tr><td>Correo, encuesta o cargo nuevo</td><td>JEV vuelve a leer</td><td class="mono">≈ USD 0,00007</td></tr>
+        <tr><td>Asiste a un evento</td><td>Recalcula en código</td><td class="mono">USD 0</td></tr>
+        <tr><td>Dato de más de 30 días</td><td>Caduca y se vuelve a preguntar</td><td class="mono">≈ USD 0,00007</td></tr>
+      </table>
+      <p class="small">Los hechos se guardan tal cual; lo que infiere JEV lleva fecha y vence. Cada cambio queda en el historial con el evento que lo causó.</p>
+      <div class="card lime" style="padding:3mm 3.6mm">
+        <h3>Solo frena la duda que importa</h3>
+        <p class="small" style="color:#3d3c36">Si JEV duda entre «gerente» y «director» pero ambas opciones llevan al mismo programa y acción, actúa solo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="shot fit" style="height:80mm"><img src="../img/playbook/decision.jpg" alt="Pantalla Decisiones del prototipo"></div>
+    <p class="cap"><b>Pantalla · Decisiones.</b> Cada persona con su programa, el siguiente paso, el porqué en frases cortas, lo que escribió y la respuesta de JEV con su latencia (247 ms). Prototipo con datos sintéticos.</p>
+  </div>
+
+  <div class="foot"><span>Pálpito · Playbook para 30X</span><span class="mono">2 / 5</span></div>
+</section>
+
+<!-- ============ PÁGINA 3 ============ -->
+<section class="page">
+  <div class="eyebrow">3 · Cómo funciona: segmentos que se descubren solos</div>
+  <h2>Nadie los define. Salen de los datos y se mueven con ellos.</h2>
+
+  <div class="row" style="align-items:flex-start">
+    <ol class="steps" style="flex:1.1">
+      <li><span>Un <b>LLM propone preguntas</b> sobre las columnas de texto (1 a 3 llamadas por descubrimiento, nunca por persona).</span></li>
+      <li><span><b>JEV las responde</b>, persona por persona.</span></li>
+      <li><span>El <b>código se queda</b> con las que predicen el resultado (conversión o programa).</span></li>
+      <li><span><b>Agrupa en segmentos</b> y aprende, fuera de muestra, desde qué confianza actuar.</span></li>
+      <li><span>Un <b>monitor de deriva</b> detecta cuando la gente nueva ya no encaja y redescubre.</span></li>
+    </ol>
+    <div class="card dark" style="flex:1">
+      <span class="tag" style="background:var(--lime);color:var(--ink)">APARECIÓ UN GRUPO NUEVO</span>
+      <p style="margin-top:2mm;font-size:10.4pt;font-weight:600;line-height:1.3">Personas que hablan de cumplir con la Superintendencia. Nadie lo buscaba.</p>
+      <p class="small" style="color:#a3a29a;margin-top:1.4mm">34 % de la base · 64 % llegó en el último lote · 81 de 240 personas nuevas cambiaron de segmento, cada una con su porqué. Para 30X: una señal temprana de contenido, campaña o programa.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="shot fit" style="height:92mm"><img src="../img/playbook/segmentos-cambio.jpg" alt="Pantalla Segmentos: versión 1, lote nuevo, versión 2, flujo de personas y qué cambió"></div>
+    <p class="cap"><b>Pantalla · Segmentos.</b> Versión 1 con 6 segmentos, llega un lote de 240 personas, el monitor detecta deriva y la versión 2 queda con 5. El diagrama muestra cómo se movió la gente y, a la derecha, qué cambió en palabras.</p>
+  </div>
+  <div>
+    <div class="shot fit" style="height:58mm"><img src="../img/playbook/segmentos-vigentes.jpg" alt="Pantalla Segmentos vigentes con tamaño, conversión y acción de cada segmento"></div>
+    <p class="cap"><b>Pantalla · Segmentos vigentes.</b> Cada segmento con su tamaño, cuánto convierte y qué recibe (por ejemplo, «Pasar a un asesor · AI Sales» para el que convierte el doble). 30X elige el nivel de riesgo: conservador, normal o agresivo, y puede vetar un segmento.</p>
+  </div>
+
+  <p class="small"><span class="tag demo">Demo</span> 600 inscripciones sintéticas más un lote de 240, con el motor local. Costo estimado con JEV real: ≈ USD 0,06 por descubrimiento y ≈ USD 0,71 por cada 10.000 personas asignadas.</p>
+
+  <div class="foot"><span>Pálpito · Playbook para 30X</span><span class="mono">3 / 5</span></div>
+</section>
+
+<!-- ============ PÁGINA 4 ============ -->
+<section class="page">
+  <div class="eyebrow">3 · Cómo funciona: alertas de riesgo en programas</div>
+  <h2>Llama antes de que se vaya.</h2>
+
+  <div class="row" style="align-items:flex-start">
+    <ol class="steps" style="flex:1">
+      <li><span>El <b>código cuenta</b> asistencia, faltas seguidas, entregas pendientes o tarde y días sin actividad, al corte de la semana 5.</span></li>
+      <li><span><b>JEV lee</b> lo que escribe el alumno: <i>«Me cuesta ver cómo llevar esto a mi realidad»</i>.</span></li>
+      <li><span>El código <b>aprende de las cohortes terminadas</b> quién abandonó y desde qué riesgo conviene contactar.</span></li>
+    </ol>
+    <ol class="steps" style="flex:1;counter-reset:s 3">
+      <li><span>Cada alerta trae <b>nivel, razones, acción y mensaje</b>.</span></li>
+      <li><span>El <b>guardrail de JEV</b> revisa el mensaje antes de que el equipo lo envíe.</span></li>
+      <li><span>El mentor marca «contactado» y el caso queda registrado.</span></li>
+    </ol>
+  </div>
+
+  <div>
+    <div class="shot"><img src="../img/playbook/alertas.jpg" alt="Pantalla Alertas: alumnos en riesgo alto con razones, acción y mensaje revisado por JEV"></div>
+    <p class="cap"><b>Pantalla · Alertas.</b> 34 alumnos en riesgo alto y 24 en medio en una cohorte de 150. Del grupo de riesgo alto, en cohortes anteriores abandonó el 63 % (base: 23 %). Modelo con AUC 0,874 fuera de muestra, entrenado con 390 alumnos. Costo de JEV: USD 0,0077. <span class="tag demo">Demo</span></p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="eyebrow">4 · El control es de 30X: cuándo pasa a una persona</div>
+  <div class="row" style="align-items:flex-start">
+    <div class="col" style="flex:1.35">
+      <table>
+        <tr><th>Situación</th><th style="width:22%">Umbral</th><th style="width:32%">Qué pasa</th></tr>
+        <tr><td>La inscripción no parece real</td><td class="mono">p &lt; 0,35</td><td>Una persona revisa; el LLM no la toca</td></tr>
+        <tr><td>Duda en rol, dolor u objetivo que cambia la decisión</td><td class="mono">certeza &lt; 0,45</td><td>Revisa el LLM; si duda, una persona</td></tr>
+        <tr><td>Intención de compra no concluyente</td><td class="mono">0,5 a 0,8</td><td>Una persona confirma antes de ventas</td></tr>
+        <tr><td>Rol incierto antes de ventas</td><td class="mono">certeza &lt; 0,7</td><td>Una persona confirma</td></tr>
+        <tr><td>Mensaje con precios, fechas o promesas inventadas</td><td>Guardrail</td><td>Bloqueado o a revisión</td></tr>
+        <tr><td>Todo lo demás</td><td></td><td>Actúa solo y lo registra</td></tr>
+      </table>
+      <p class="small">El umbral de perfil real se calibró con JEV real: las trampas nunca pasan de 0,10 y las inscripciones reales están sobre 0,52. Guardrail: 0 fugas en 12 mensajes riesgosos y 0 falsas alarmas en 8 buenos. El LLM nunca pasa a nadie a ventas por su cuenta.</p>
+    </div>
+    <div style="flex:1">
+      <div class="shot"><img src="../img/playbook/reglas.jpg" alt="Pantalla Reglas: controles deslizantes de los umbrales"></div>
+      <p class="cap"><b>Pantalla · Reglas.</b> Se mueve un umbral y todas las decisiones se recalculan al instante, sin volver a llamar a JEV.</p>
+    </div>
+  </div>
+
+  <div class="foot"><span>Pálpito · Playbook para 30X</span><span class="mono">4 / 5</span></div>
+</section>
+
+<!-- ============ PÁGINA 5 ============ -->
+<section class="page">
+  <div class="eyebrow">5 · Arquitectura</div>
+  <h2>Rápido donde se puede. Humano donde importa.</h2>
+
+  <div class="flow">
+    <div class="n"><b>Entrada</b>Luma, correo, encuesta, cargo nuevo</div><span class="a">→</span>
+    <div class="n k"><b>JEV</b>6 preguntas cerradas, una llamada, ~0,3 s</div><span class="a">→</span>
+    <div class="n"><b>Reglas de 30X</b>Afinidad, programa y acción, en código</div><span class="a">→</span>
+    <div class="n"><b>Umbrales</b>¿La duda cambia la decisión?</div><span class="a">→</span>
+    <div class="n"><b>Guardrail + registro</b>JEV revisa el mensaje; todo queda explicado</div>
+  </div>
+  <div class="route">
+    <div style="border-color:#b8cc3a;background:#f6ffc9"><span class="dot" style="background:#9fb51f"></span><b>Actúa solo · 94 %</b><br>Asesor, contenido del programa o general</div>
+    <div style="border-color:var(--lav);background:#f4f1ff"><span class="dot" style="background:#8b78f0"></span><b>Un LLM revisa la duda</b><br>Claude elige entre las opciones de JEV o dice «no seguro»</div>
+    <div style="border-color:var(--amber);background:#fff9e6"><span class="dot" style="background:#e0a800"></span><b>Una persona confirma</b><br>Ventas, perfiles sospechosos y lo no resuelto</div>
+  </div>
+  <p class="small"><b>Alertas:</b> asistencia, entregas y actividad → el código cuenta y JEV lee → riesgo aprendido de cohortes terminadas → alerta con razones y mensaje → guardrail. <b>Principios:</b> conteos y fechas en código, nunca en JEV; opción «sin dato» u «otro» en cada pregunta; nombre y correo nunca se envían a JEV; corre fuera de los sistemas de 30X.</p>
+
+  <div class="row" style="align-items:flex-start">
+    <div class="col" style="flex:1">
+      <div class="eyebrow">6 · Quién lo opera</div>
+      <table>
+        <tr><td style="width:38%"><b>Comercial</b></td><td>Cola de dudas y pases a ventas</td></tr>
+        <tr><td><b>Académico y mentores</b></td><td>Alertas de la semana y contacto</td></tr>
+        <tr><td><b>Growth</b></td><td>Umbrales, pesos y nivel de riesgo</td></tr>
+        <tr><td><b>Contenido</b></td><td>Qué recibe cada programa y segmento</td></tr>
+        <tr><td><b>Datos</b></td><td>Evaluación y calibración mensual</td></tr>
+      </table>
+      <div class="eyebrow" style="margin-top:2mm">8 · Costo</div>
+      <table>
+        <tr><td>1.000 decisiones</td><td class="mono">USD 0,07</td></tr>
+        <tr><td>Toda la base (~32.300)</td><td class="mono">≈ USD 2,3</td></tr>
+        <tr><td>Toda la base, a diario, un año</td><td class="mono">≈ USD 825 <span class="muted">vs ≈ 151.000 con un LLM*</span></td></tr>
+        <tr><td>Alertas, cohorte de 150</td><td class="mono">≈ USD 0,008</td></tr>
+      </table>
+      <p class="small">*Estimado con la misma entrada y ~300 palabras de respuesta por persona.</p>
+    </div>
+    <div class="col" style="flex:1.15">
+      <div class="eyebrow">7 · Cómo se mide</div>
+      <table>
+        <tr><th>Métrica</th><th>Meta</th><th>Hoy</th></tr>
+        <tr><td>Acierto rol / dolor / objetivo</td><td>&gt; 81 / 55 / 55 %</td><td class="mono">99 / 100 / 99 %</td></tr>
+        <tr><td>Pases a ventas indebidos</td><td class="mono">0</td><td class="mono">0</td></tr>
+        <tr><td>Trampas procesadas solas</td><td class="mono">0</td><td class="mono">0</td></tr>
+        <tr><td>Decisiones sin intervención</td><td>Con 30X</td><td class="mono">94 %</td></tr>
+        <tr><td>Cambios de segmento detectados</td><td>Con 30X</td><td class="mono">86 %</td></tr>
+        <tr><td>Alumnos en riesgo contactados a tiempo</td><td>Con 30X</td><td>En el piloto</td></tr>
+        <tr><td>Abandono con alertas vs. sin alertas</td><td>Menor</td><td>En el piloto</td></tr>
+        <tr><td>Latencia p95</td><td class="mono">&lt; 500 ms</td><td class="mono">358 ms</td></tr>
+        <tr><td>Costo por 1.000</td><td class="mono">&lt; USD 0,10</td><td class="mono">USD 0,07</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="eyebrow">9 · Cómo lo adopta 30X</div>
+  <div class="row">
+    <div class="card" style="flex:1"><span class="mono" style="color:var(--olive);font-weight:600">01</span><h3>Validar reglas</h3><p class="small">Programas y reglas con el equipo comercial (Achievers aún sin regla).</p></div>
+    <div class="card" style="flex:1"><span class="mono" style="color:var(--olive);font-weight:600">02</span><h3>Piloto en sombra</h3><p class="small">Con una muestra real, clasifica y marca alertas sin escribirle a nadie; se compara con el equipo.</p></div>
+    <div class="card" style="flex:1"><span class="mono" style="color:var(--olive);font-weight:600">03</span><h3>Activar lo seguro</h3><p class="small">Contenido y alertas al equipo académico. Ventas sigue con confirmación humana.</p></div>
+    <div class="card dark" style="flex:1"><span class="mono" style="color:var(--lime);font-weight:600">04</span><h3>Medir cada mes</h3><p class="small" style="color:#a3a29a">Con las métricas de la sección 7, y ajustar.</p></div>
+  </div>
+
+  <p class="small"><b>Límites.</b> Las cifras de JEV real usan inscripciones sintéticas; el texto real es más variado y, con 300 casos y cero errores graves, la tasa real podría llegar hasta 1 %. Segmentos descubiertos y alertas son demo con el motor local. Las descripciones de los programas se infirieron de los datos y deben validarse con 30X.</p>
+
+  <div class="foot"><span>Pálpito · Corazonadas, pero calibradas.</span><span class="mono">5 / 5</span></div>
+</section>
+
+</body>
+</html>

@@ -8,6 +8,10 @@ día y controlado con reglas que el equipo ajusta sin tocar código.
 centavo; el código combina esas respuestas con reglas explícitas y umbrales aprendidos de los datos. Un LLM entra
 solo donde JEV no alcanza.
 
+> **📘 Playbook (entregable del reto): [PDF de 5 páginas con pantallas](docs/PLAYBOOK.pdf) · [versión en texto](docs/PLAYBOOK.md)**
+> Clusterización dinámica y alertas de riesgo en programas: lo que 30X gana, cómo decide, arquitectura,
+> cuándo pasa a una persona, quién lo opera, cómo se mide, costo y cómo se adopta.
+
 ## Qué hace
 
 | Capacidad | Resultado |
@@ -80,9 +84,25 @@ el repositorio (`*.xlsx` y `data/privado/` están ignorados).
 
 Los resultados quedan en `reportes/`.
 
+## Estructura del repositorio
+
+| Carpeta | Qué hay |
+|---|---|
+| `app/` | El sistema: cliente de JEV, preguntas, política, LLM, guardrail, reclasificación, alertas y servidor |
+| `app/descubrimiento/` | Motor de segmentos que se descubren solos (perfilar, proponer, medir, seleccionar, segmentar, aprender, asignar, versionar) |
+| `web/` | Interfaz sin build: `index.html`, `app.js`, `estilos.css`, logo |
+| `config/` | `politica.json` (reglas y umbrales) y `descubrimiento.json` (motor de segmentos y nivel de riesgo) |
+| `data/` | Datos sintéticos para probar y evaluar (ver «Datos incluidos») |
+| `scripts/` | Generación de datos, evaluación y calibración |
+| `tests/` | Pruebas unitarias (`pytest`) |
+| `docs/` | Playbook, arquitectura, puesta en marcha, estado del proyecto y marca |
+| `docs/playbook/` | Fuente HTML del PDF del playbook |
+| `reportes/` | Salidas de las evaluaciones (se generan al correr; no se suben) |
+
 ## Documentación
 
-- [docs/PLAYBOOK.md](docs/PLAYBOOK.md): la propuesta para 30X, cómo decide, quién lo opera y cómo se mide.
+- [docs/PLAYBOOK.pdf](docs/PLAYBOOK.pdf): el playbook para 30X en 5 páginas, con pantallas del prototipo.
+- [docs/PLAYBOOK.md](docs/PLAYBOOK.md): el mismo playbook en texto (clusterización dinámica, alertas de riesgo, arquitectura, operación, métricas y adopción).
 - [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md): módulos, motor de descubrimiento, API, modos y costos.
 - [docs/PUESTA_EN_MARCHA.md](docs/PUESTA_EN_MARCHA.md): llaves y ejecución con JEV conectado.
 - [docs/ESTADO_DEL_PROYECTO.md](docs/ESTADO_DEL_PROYECTO.md): historia del proyecto y decisiones tomadas.
