@@ -6,7 +6,7 @@ Pálpito ubica a cada persona que llega a 30X según su perfil y el momento de s
 situación cambia, dice qué contenido o propuesta debe recibir y avisa qué alumno está en riesgo de abandonar un
 programa. JEV (TypeSafe AI) toma los juicios rápidos; las reglas de 30X deciden; una persona confirma lo delicado.
 
-Octubre de 2026 · **[PDF de 5 páginas con pantallas](PLAYBOOK.pdf)** · Presentación: [Pálpito para 30X](https://claude.ai/artifact/SA32o8uhYqd2pYWYnnGFxD) · Prototipo: [README](../README.md)
+Octubre de 2026 · **[PDF de 5 páginas con pantallas](PLAYBOOK.pdf)** · Presentación: [Pálpito para 30X](https://docs.google.com/presentation/d/1hSXl41bbRzoTCLeOBF-vFDM0fKhTflXv/edit?usp=sharing) · Prototipo: [README](../README.md)
 
 > **Cómo leer las cifras.** Las marcadas *JEV real* se midieron con `jev-1.13.0` sobre 300 inscripciones
 > sintéticas con las proporciones de 30X. Las marcadas *demo* salen del motor local con datos sintéticos y muestran

@@ -8,9 +8,11 @@ día y controlado con reglas que el equipo ajusta sin tocar código.
 centavo; el código combina esas respuestas con reglas explícitas y umbrales aprendidos de los datos. Un LLM entra
 solo donde JEV no alcanza.
 
-> **📘 Playbook (entregable del reto): [PDF de 5 páginas con pantallas](docs/PLAYBOOK.pdf) · [versión en texto](docs/PLAYBOOK.md)**
+> **📘 Playbook (entregable del reto): [PDF de 5 páginas con pantallas](docs/PLAYBOOK.pdf) · [versión en texto](docs/PLAYBOOK.md)**<br>
 > Clusterización dinámica y alertas de riesgo en programas: lo que 30X gana, cómo decide, arquitectura,
 > cuándo pasa a una persona, quién lo opera, cómo se mide, costo y cómo se adopta.
+>
+> **🎤 Presentación: [Pálpito para 30X (Google Slides)](https://docs.google.com/presentation/d/1hSXl41bbRzoTCLeOBF-vFDM0fKhTflXv/edit?usp=sharing)**
 
 ## Qué hace
 
@@ -101,6 +103,7 @@ Los resultados quedan en `reportes/`.
 
 ## Documentación
 
+- [Presentación (Google Slides)](https://docs.google.com/presentation/d/1hSXl41bbRzoTCLeOBF-vFDM0fKhTflXv/edit?usp=sharing): el pitch para 30X.
 - [docs/PLAYBOOK.pdf](docs/PLAYBOOK.pdf): el playbook para 30X en 5 páginas, con pantallas del prototipo.
 - [docs/PLAYBOOK.md](docs/PLAYBOOK.md): el mismo playbook en texto (clusterización dinámica, alertas de riesgo, arquitectura, operación, métricas y adopción).
 - [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md): módulos, motor de descubrimiento, API, modos y costos.
