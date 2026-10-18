@@ -25,12 +25,12 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from app.catalogo import DOLORES, INTENCION, OBJETIVOS, PROGRAMAS, ROLES, TEMAS, por_id
-from app.jev import crear_cliente
+from app.jev import crear_cliente, respuesta_desde_registro
 from app.llm import crear_llm
 from app.guardrail import revisar_mensaje
-from app.motor import redactar_mensaje
+from app.motor import juicios_desde_jev, redactar_mensaje
 from app.personas import aplicar_evento, crear_persona, reevaluar
-from app.politica import ACCIONES, Juicio, Juicios, cargar_politica, explicar
+from app.politica import ACCIONES, cargar_politica, explicar
 from app.preguntas import construir_estado
 from app.simulacion import medir
 
@@ -93,12 +93,9 @@ def base_simulacion() -> tuple[list[dict], dict]:
         ruta = REPORTES / f"decisiones_{NOMBRE}.jsonl"
         for linea in ruta.read_text(encoding="utf-8").splitlines():
             r = json.loads(linea)
-            c, sc = r["respuestas_jev"]["choices"], r["respuestas_jev"]["scores"]["intencion"]
             perfiles.append({"id": r["perfil_id"], "temas": r["temas"], "etiquetas": r["etiquetas"]})
-            juicios[r["perfil_id"]] = Juicios(
-                rol=Juicio(**c["rol"]), dolor=Juicio(**c["dolor"]), objetivo=Juicio(**c["objetivo"]),
-                intencion_esperada=sc["score"], intencion_probabilidades={int(k): v for k, v in sc["probabilidades"].items()},
-                perfil_valido=r["respuestas_jev"]["nouls"]["perfil_valido"])
+            # Misma conversión que el flujo real (incluye combinar el dolor con su pregunta de presencia).
+            juicios[r["perfil_id"]] = juicios_desde_jev(respuesta_desde_registro(r["respuestas_jev"]))
         _simulacion.update(perfiles=perfiles, juicios=juicios, actual=medir(perfiles, juicios, politica))
     return _simulacion["perfiles"], _simulacion["juicios"]
 

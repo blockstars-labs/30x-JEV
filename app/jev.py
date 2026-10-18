@@ -59,6 +59,16 @@ class RespuestaJEV:
         return self.tokens_entrada * PRECIO_USD_POR_MTOK / 1_000_000
 
 
+def respuesta_desde_registro(d: dict, modelo: str = "") -> RespuestaJEV:
+    """Reconstruye una respuesta de JEV guardada en JSON (reportes/), para recalcular sin volver a llamar."""
+    return RespuestaJEV(
+        modelo=d.get("modelo", modelo), tokens_entrada=d.get("tokens_entrada", 0), latencia_ms=d.get("latencia_ms", 0.0),
+        choices={k: RespuestaChoice(v["valor"], v["confianza"], v["probabilidades"]) for k, v in d["choices"].items()},
+        scores={k: RespuestaScore(v["score"], v["confianza"], {int(i): x for i, x in v["probabilidades"].items()})
+                for k, v in d["scores"].items()},
+        nouls=dict(d["nouls"]))
+
+
 class JEVLive:
     def __init__(self) -> None:
         from typesafe_sdk import TypeSafeClient
