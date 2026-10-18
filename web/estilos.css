@@ -334,6 +334,29 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 #resultado-politica .seccion { margin-top: 18px; }
 #resultado-politica > p:last-child { margin-top: 16px; }
 
+/* ---------- Pestañas con subtítulo ---------- */
+.tabs button { flex-direction: column; align-items: flex-start; gap: 0; padding: 5px 13px; line-height: 1.25; }
+.tab-t { font-size: 13.5px; font-weight: 500; }
+.tab-s { font-size: 11px; font-weight: 400; color: var(--muted-fg); white-space: nowrap; }
+.tabs button[aria-selected="true"] .tab-s { color: var(--lima); }
+
+/* ---------- Probar en vivo: lote ---------- */
+.modos-prueba { margin-bottom: 18px; }
+.lote-carga { margin-bottom: 16px; }
+.lote-zona { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 28px 20px; border: 1.5px dashed var(--border-strong); border-radius: var(--r-md); transition: border-color .15s, background .15s; }
+.lote-zona.encima { border-color: var(--lima); background: var(--lima-suave); }
+.lote-zona .muted { max-width: 60ch; }
+.lote-zona .acciones { justify-content: center; margin-top: 8px; }
+.lote-ico { width: 30px; height: 30px; fill: none; stroke: var(--lima); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.enlace { display: inline; margin: 0; font-size: inherit; font-weight: 500; color: var(--lima); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.lote-progreso { margin-top: 16px; display: grid; gap: 6px; }
+.lote-barra { height: 6px; border-radius: 99px; background: var(--muted); overflow: hidden; }
+.lote-barra span { display: block; height: 100%; width: 0; background: var(--lima); border-radius: 99px; transition: width .25s var(--suave); }
+.lote-rutas { margin: 16px 0; }
+.lista-head { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px 10px; }
+#lote-error { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+#lote-error[hidden] { display: none; }
+
 /* ---------- Búsqueda global ---------- */
 .buscador { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: center; align-items: flex-start; padding: 12vh 16px 16px; }
 .buscador[hidden] { display: none; }
@@ -384,6 +407,14 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   .tabs button { flex: 1; justify-content: center; padding: 6px 8px; }
   main { padding: 24px 16px 64px; }
   .plantillas, .selects-f, .ficha { grid-template-columns: minmax(0, 1fr); }
+  .tabs button { align-items: center; padding: 5px 4px; }
+  .tab-s { font-size: 9.5px; }
+  /* En el teléfono la Tierra se achica para que no tape el contenido. */
+  body[data-escena="personas"] #escena { transform: translateY(-14vh); }
+  body[data-escena="ambiente"] #escena { transform: translateY(36vh); opacity: .35; }
+  .globo-hueco { height: 44vh; }
+  .modos-prueba { width: 100%; }
+  .modos-prueba .seg-item { flex: 1; justify-content: center; white-space: normal; text-align: center; }
   .hechos { gap: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
