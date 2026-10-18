@@ -1,8 +1,8 @@
 {
-  "_nota": "Umbrales iniciales. Hay que calibrarlos con el set etiquetado (scripts/evaluar.py) antes de confiar en ellos.",
+  "_nota": "perfil_valido_min calibrado con JEV real (jev-1.13.0, 300 perfiles, 2026-10-18): genuinos ≥ 0,52, trampas ≤ 0,10; 0,35 deja margen a ambos lados. Validado en 5 particiones 70/30. Los umbrales de ventas se mantienen conservadores: bajarlos no mejoró nada. Recalibrar con scripts/calibrar.py.",
 
   "umbrales": {
-    "perfil_valido_min": 0.8,
+    "perfil_valido_min": 0.35,
     "confianza_choice_min": 0.45,
     "listo_ventas_auto": 0.8,
     "listo_ventas_revision": 0.5,

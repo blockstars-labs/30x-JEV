@@ -47,6 +47,16 @@ PREGUNTAS = [
              "How strong is the person's current intent to join a paid program, based only on what they wrote? "
              "If `mensajes_posteriores` exists, its last message reflects their current intent best.",
              tuple(INTENCION)),
+    # Presencia del dolor, separada de cuál es: con JEV real, preguntar solo "¿cuál es su dolor?" hacía
+    # que dedujera un dolor a partir del objetivo ("quiero automatizar" → "procesos manuales").
+    Pregunta("dolor_declarado", "noul",
+             "Does the person explicitly describe a current problem, difficulty or pain in their business in "
+             "`inscripcion` or `mensajes_posteriores`? A goal or a wish (for example 'I want to automate with AI' "
+             "or 'I want to sell more') is NOT a problem.",
+             criterio_si="They state something that is going wrong or limiting them now, for example 'everything "
+                         "is manual', 'sales are falling' or 'we depend on referrals'.",
+             criterio_no="They only state goals, interests or questions, or say nothing about problems in their business.",
+             claves_mock=tuple(c for o in DOLORES for c in o.claves_mock)),
     Pregunta("perfil_valido", "noul",
              "Are `inscripcion` and `mensajes_posteriores` genuine messages from a real prospect?",
              criterio_si="A person describing themselves, their business, goals or questions, even if brief.",

@@ -29,7 +29,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 REPORTES = RAIZ / "reportes"
 
 REJILLA = {
-    "perfil_valido_min": [0.5, 0.7, 0.8, 0.9],
+    "perfil_valido_min": [0.2, 0.3, 0.4, 0.5, 0.7, 0.8],
     "confianza_choice_min": [0.2, 0.3, 0.45, 0.6, 0.75],
     "listo_ventas_auto": [0.7, 0.8, 0.9],
     "confianza_rol_ventas": [0.5, 0.7, 0.85],

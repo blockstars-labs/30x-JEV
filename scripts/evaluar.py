@@ -54,7 +54,7 @@ def main(modo: str | None) -> None:
     for p, reg, _ in filas:
         e, r = p["etiquetas"], reg["respuestas_jev"]
         for campo in ("rol", "dolor", "objetivo"):
-            c = r["choices"][campo]
+            c = reg["juicios_jev"][campo]  # juicio de JEV ya combinado en código (p. ej. dolor + presencia del dolor)
             ok = c["valor"] == e[campo]
             aciertos[campo] += ok
             b = calibracion[min(int(c["confianza"] * 5), 4)]

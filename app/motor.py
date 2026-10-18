@@ -23,7 +23,17 @@ def juicios_desde_jev(r: RespuestaJEV) -> Juicios:
         return Juicio(c.valor, c.confianza, c.probabilidades)
 
     intencion = r.scores["intencion"]
-    return Juicios(rol=choice("rol"), dolor=choice("dolor"), objetivo=choice("objetivo"),
+    dolor = choice("dolor")
+    p = r.nouls.get("dolor_declarado")
+    if p is not None:
+        # El código combina las dos preguntas: si la persona no declara un problema, el dolor es "ninguno".
+        # La confianza de un Noul se expresa como |2p - 1| (documentación de TypeSafe).
+        certeza = abs(2 * p - 1)
+        if p < 0.5:
+            dolor = Juicio("ninguno", certeza, {"ninguno": 1 - p, dolor.valor if dolor.valor != "ninguno" else "otro": p})
+        elif dolor.valor != "ninguno":
+            dolor = Juicio(dolor.valor, min(dolor.confianza, certeza), dolor.probabilidades)
+    return Juicios(rol=choice("rol"), dolor=dolor, objetivo=choice("objetivo"),
                    intencion_esperada=intencion.score, intencion_probabilidades=intencion.probabilidades,
                    perfil_valido=r.nouls["perfil_valido"])
 
@@ -88,6 +98,8 @@ def procesar(perfil: dict, cliente, politica: dict | None = None, registrar: boo
     estado = construir_estado(perfil)
     respuesta = cliente.evaluar(estado)
     juicios = juicios_desde_jev(respuesta)
+    juicios_jev = {c: {"valor": getattr(juicios, c).valor, "confianza": getattr(juicios, c).confianza}
+                   for c in ("rol", "dolor", "objetivo")}  # lo que concluyó JEV, antes de cualquier revisión del LLM
     decision: Decision = decidir(juicios, perfil["temas"], politica)
     juicios, decision, revisiones = resolver_con_llm(estado, juicios, decision, perfil["temas"], politica, llm)
     explicacion = explicar(juicios, decision)
@@ -104,6 +116,7 @@ def procesar(perfil: dict, cliente, politica: dict | None = None, registrar: boo
             "scores": {k: vars(v) for k, v in respuesta.scores.items()},
             "nouls": respuesta.nouls,
         },
+        "juicios_jev": juicios_jev,
         "decision": vars(decision),
         "explicacion": explicacion,
         "revisiones_llm": [vars(r) for r in revisiones],

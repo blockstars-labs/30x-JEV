@@ -1,10 +1,10 @@
 # 30X · JEV Router: estado del proyecto
 
-Actualizado: 17 de octubre de 2026
+Actualizado: 18 de octubre de 2026
 
 ## Resumen
 
-El prototipo ya clasifica y reclasifica personas de punta a punta, con un LLM que resuelve las dudas de JEV y una calibración automática de umbrales, pero todo en modo simulado: falta conectar el JEV real (y el LLM real) para tener métricas válidas. El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 22 tests pasan.
+El prototipo ya funciona con **JEV real** (jev-1.13.0): en 300 inscripciones sintéticas acierta 99–100 % en rol, dolor y objetivo (30X hoy: 81 / 55 / 55 %), decide solo el 94 % de los casos con 96 % de precisión y no tuvo ningún pase a ventas indebido. El LLM sigue simulado (falta llave de Anthropic). El código está en [blockstars-labs/30x-JEV](https://github.com/blockstars-labs/30x-JEV), rama `main`, y los 22 tests pasan.
 
 El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el modelo de decisión de TypeSafe AI) miles de veces al día, en milisegundos y por fracciones de centavo. Elegimos la idea de **clusterización dinámica** del área Comercial: cada persona que se inscribe a un evento queda en un segmento (programa sugerido + siguiente acción), y ese segmento se recalcula cuando su situación cambia.
 
@@ -13,12 +13,12 @@ El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el mode
 | Prototipo: clasificación al inscribirse | Hecho, en modo simulado |
 | Prototipo: reclasificación dinámica | Hecho, en modo simulado |
 | Ruta hacia un LLM (System Two) | Hecho, en modo simulado |
-| Calibración de umbrales | Hecha (script); falta correrla con JEV real |
-| Métricas con JEV real | Pendiente: falta la llave de JEV |
+| Calibración de umbrales | Hecha con JEV real |
+| Métricas con JEV real | Hechas (18 de octubre) |
 | Vista visual del prototipo | Hecha (`python -m app.servidor`) |
 | Panel de política (umbrales y pesos en vivo) | Hecho |
 | Guardrail de JEV sobre los mensajes del LLM | Hecho, en modo simulado |
-| Playbook (máx. 5 páginas u 8 slides) | Pendiente |
+| Playbook (máx. 5 páginas u 8 slides) | Hecho, con los resultados reales |
 | Repositorio público | Pendiente: hoy es privado |
 
 ## Qué se ha hecho
@@ -43,6 +43,7 @@ Todo el trabajo es del 17 de octubre de 2026. Las decisiones importantes están 
 | 14 | Playbook de 8 slides (presentación aparte, con espacios para las métricas reales) | Entregable obligatorio |
 | 15 | Panel de política en la vista | Mostrar que 30X controla las reglas: mover umbrales y ver el efecto sin llamar a JEV |
 | 16 | Guardrail: JEV revisa los mensajes del LLM antes de enviarlos | Cierra el ciclo (JEV decide, el LLM escribe, JEV vigila) y cubre la idea de guardrails de 30X |
+| 17 | **Conexión a JEV real** (18 de octubre) y tres correcciones con datos | Ver «Resultados con JEV real» |
 
 ## Cómo funciona
 
@@ -188,60 +189,41 @@ cp .env.example .env
 
 Los reportes quedan en `reportes/` (no se suben al repo). En el `.env`, `JEV_MODO=mock` usa el simulador y `JEV_MODO=live` el JEV real; `LLM_MODO` acepta `mock`, `live` (requiere `ANTHROPIC_API_KEY`) u `off`.
 
-## Resultados hasta ahora
+## Resultados con JEV real
 
-Todo funciona de punta a punta, pero estas cifras salen del JEV **simulado** y no miden a JEV: sirven para probar el flujo. Las métricas reales llegan cuando tengamos la llave.
+Medido el 18 de octubre de 2026 con `jev-1.13.0` sobre los datos sintéticos del repo. El LLM estuvo apagado, así que las cifras miden JEV + reglas.
 
-| Métrica | Clasificación al inscribirse (300 perfiles) | Reclasificación (361 decisiones) |
+| Métrica | Resultado | Referencia |
 | --- | --- | --- |
-| Decisiones sin persona (JEV solo + resueltas por el LLM) | 69,3 % (75 + 133) | 69,5 % (136 + 115) |
-| Precisión de esas decisiones | 53,4 % | 56,6 % |
-| Pases a ventas indebidos | 0 | 1 |
-| Perfiles trampa procesados sin revisión | 0 | — |
-| Cambios de segmento detectados | — | 82 (58 reales; recall 56,9 %, precisión 40,2 %) |
-| Eventos resueltos sin llamar a JEV | — | 60 de 257 |
+| Acierto en rol / dolor / objetivo | 99 % / 100 % / 99 % | 30X hoy: 81 / 55 / 55 % |
+| Acierto en intención de compra | 79 % | — |
+| Decisiones sin intervención humana | 93,7 % (281 de 300) | — |
+| Precisión de esas decisiones | 96,4 % | Los 10 errores son de bajo riesgo: contenido general en vez del de un programa, o al revés |
+| Pases a ventas indebidos / trampas procesadas solas | 0 / 0 | Meta: 0 |
+| Latencia p50 / p95 | 268 / 358 ms | — |
+| Costo | USD 0,07 por 1.000 decisiones | Hacerlo con un LLM costaría unas 180 veces más |
+| Reclasificación: cambios de segmento detectados | recall 86 %, precisión 74 % | Con el simulador: 57 % / 34 % |
+| Guardrail (20 mensajes etiquetados) | 0 fugas de 12, 0 falsas alarmas de 8 | — |
 
-La precisión por pregunta del simulador (rol 61,7 %, dolor 46,0 %, objetivo 69,0 %) no se compara con la línea base de 30X: tanto JEV como el LLM simulados son sustitutos por palabras clave.
+**Lo que corregimos gracias a JEV real**
 
-**Costo (300 perfiles, simulado):** JEV cuesta unos USD 0,003 en total. Revisar las dudas con el LLM cuesta unos USD 0,49. Clasificar todo con el LLM en vez de JEV costaría unos USD 2,12 (supuesto: misma entrada y 300 tokens de salida por perfil). JEV hace el trabajo de volumen por una fracción del costo y el LLM se reserva para las dudas.
+1. **Dolor:** al preguntar solo "¿cuál es su dolor?", JEV deducía un dolor a partir del objetivo ("quiero automatizar" → "procesos manuales") y acertaba el 49,7 %. Agregamos una pregunta sí/no aparte ("¿describe explícitamente un problema?") que el código combina con la elección: pasó a 100 %.
+2. **Umbral de perfil genuino:** el valor inicial (0,8) mandaba casi todo a revisión, porque JEV da a las inscripciones genuinas entre 0,52 y 0,78. `calibrar.py` mostró que las trampas nunca pasan de 0,10; quedó en 0,35, con margen a ambos lados. Validado en 5 particiones 70/30 con datos no vistos: 91–97 % de automatización y 95–98 % de precisión, siempre sin errores de seguridad.
+3. **Guardrail:** la pregunta de coherencia mezclaba dos juicios (programa y persona) y frenaba 6 de 8 mensajes buenos. Separada, quedó en 0 falsas alarmas.
 
-**Qué vamos a reportar con JEV real** (va directo al playbook):
-
-- Precisión de rol, dolor y objetivo frente a la línea base de 30X (81 / 55 / 55 %).
-- Porcentaje de decisiones que toma solo y su precisión.
-- Pases a ventas indebidos y trampas que se cuelan: la meta es **0**.
-- Calibración: si JEV dice 0,9 de confianza, ¿acierta cerca del 90 %?
-- Detección de cambios de segmento (recall y precisión).
-- Latencia (p50/p95) y costo por cada 1.000 decisiones.
-- Robustez al orden de opciones: JEV tiende a preferir la primera opción, así que reordenaremos y compararemos.
-- Precisión de los casos que resolvió el LLM y su costo real.
-- La frontera automatización ↔ precisión de `scripts/calibrar.py` y los umbrales recomendados.
+**Cuidado al presentarlo:** las inscripciones son sintéticas, generadas con plantillas a partir de las proporciones de 30X. El texto real es más variado, así que estas cifras hay que confirmarlas con una muestra real etiquetada por 30X. Con 300 casos y cero errores graves, la regla de tres dice que la tasa real podría llegar hasta 1 %.
 
 ## Acceso a JEV
 
-No tenemos llave todavía: la organización en TypeSafe no tiene créditos y la consola no deja crear llaves sin saldo. Hay dos caminos y el código sirve para ambos.
-
-| | TypeSafe | DigitalOcean |
-| --- | --- | --- |
-| Dónde se crea la llave | [console.typesafe.ai/keys](https://console.typesafe.ai/keys) | Model Studio → Model Access Keys ([guía](https://docs.digitalocean.com/products/inference/how-to/model-access-keys/)) |
-| Requisito | Créditos en Billing | Créditos y un nivel de cuenta que habilite modelos de terceros |
-| URL | `https://api.typesafe.ai` | `https://inference.do-ai.run` ([guía](https://docs.digitalocean.com/products/inference/how-to/use-system-one-api/)) |
-| Modelo | `jev-latest` | `typesafe-jev-1.13.0` |
-| Precio | USD 0,042 por millón de tokens de entrada; salida gratis | Igual |
-
-**Cuánto cuesta probar:** una evaluación completa de 300 perfiles son unos 1–3 millones de tokens, entre USD 0,05 y 0,13. Con USD 5 alcanza para todo el reto. No encontramos publicado el mínimo de recarga de TypeSafe; aparece en la pantalla de pago.
-
-**Configuración** en el archivo `.env` (nunca en el código ni en el chat):
+Conectado a JEV real por TypeSafe desde el 18 de octubre. La llave va en el archivo `.env` (nunca en el código ni en el chat; git lo ignora):
 
 ```bash
 JEV_MODO=live
-TYPESAFE_API_KEY=<la llave>
-# Solo si se usa DigitalOcean:
-TYPESAFE_BASE_URL=https://inference.do-ai.run
-TYPESAFE_DEFAULT_MODEL=typesafe-jev-1.13.0
+TYPESAFE_API_KEY=<la llave, sin comillas ni espacios>
+LLM_MODO=mock   # o live con ANTHROPIC_API_KEY, u off
 ```
 
-Falta probar que el SDK de TypeSafe funcione contra la URL de DigitalOcean; si no, se agrega un cliente HTTP directo. Antes de pagar vale la pena preguntar por créditos del hackathon (community@30x.com) y desactivar la recarga automática.
+Todas las evaluaciones con JEV real costaron menos de USD 0,10. También se puede usar JEV desde DigitalOcean (`TYPESAFE_BASE_URL=https://inference.do-ai.run` y `TYPESAFE_DEFAULT_MODEL=typesafe-jev-1.13.0`), aunque esa ruta no está probada.
 
 ## Cómo responde a los criterios de evaluación
 
@@ -261,10 +243,10 @@ Lo más urgente es conseguir la llave de JEV: sin ella no hay métricas reales n
 
 - [x] Ruta hacia un LLM (revisor de dudas y redactor de mensajes)
 - [x] Script de calibración de umbrales
-- [ ] Conseguir créditos y llave de JEV (TypeSafe o DigitalOcean)
+- [x] Conseguir créditos y llave de JEV
 - [ ] Conseguir llave de Anthropic para el LLM real (o correr con `LLM_MODO=off`)
-- [ ] Hacer una llamada de prueba y correr ambas evaluaciones con JEV real
-- [ ] Correr `scripts/calibrar.py live`, revisar `config/politica_calibrada.json` y aplicar los umbrales
+- [x] Correr todas las evaluaciones con JEV real
+- [x] Calibrar con JEV real y aplicar el umbral de perfil genuino
 - [ ] Probar el sesgo por orden de opciones
 - [ ] Escribir el playbook (8 slides: problema, qué decide JEV, preguntas, política y umbrales, quién opera, resultados vs. línea base, costo y latencia, riesgos)
 - [x] Vista del prototipo: resumen, decisiones con detalle, reclasificación y prueba en vivo

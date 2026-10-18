@@ -91,7 +91,8 @@ function renderResumen() {
   const ventasOk = m.pases_a_ventas_indebidos === 0 && m.perfiles_invalidos_procesados_solos === 0;
   const ahorro = m.costo_usd_si_todo_fuera_llm / Math.max(m.costo_usd_total, 1e-9);
   v.innerHTML = `
-    ${modo === "mock" ? `<div class="aviso-simulado">Datos de una corrida <b>simulada</b> (JEV y LLM sustituidos por palabras clave). Prueban que el flujo funciona; las cifras reales salen al conectar el JEV real.</div>` : ""}
+    ${modo === "mock" ? `<div class="aviso-simulado">Datos de una corrida <b>simulada</b> (JEV y LLM sustituidos por palabras clave). Prueban que el flujo funciona; las cifras reales salen al conectar el JEV real.</div>`
+      : `<div class="aviso-simulado">Resultados de <b>JEV real</b> sobre ${m.perfiles} inscripciones <b>sintéticas</b> generadas con plantillas a partir de las proporciones de 30X. El texto de inscripciones reales es más variado: hay que confirmar estas cifras con una muestra real etiquetada por 30X.</div>`}
     <div class="rejilla-tiles">
       ${tile("Decisiones sin intervención humana", pct(sinPersona / m.perfiles, 0), `${sinPersona} de ${m.perfiles} inscripciones`, "heroe")}
       ${tile("Precisión cuando actúa solo", pct(m.precision_al_actuar_solo, 0), "contra la respuesta conocida")}
@@ -317,7 +318,7 @@ function prepararPrueba() {
 const NOMBRES_GUARDRAIL = {
   promesas: "¿Promete algo sin respaldo?",
   tono: "¿Tono adecuado?",
-  coherencia: "¿Habla del programa y de la persona?",
+  coherencia: "¿Habla del programa sugerido?",
   instrucciones: "¿Trae instrucciones al sistema?",
 };
 
