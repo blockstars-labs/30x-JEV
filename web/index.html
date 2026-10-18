@@ -56,68 +56,24 @@
       <div class="encabezado">
         <div>
           <span class="etiqueta-mono">En vivo</span>
-          <h1>Escribe una inscripción.<br><span class="tenue">Pálpito decide en milisegundos.</span></h1>
+          <h1>Sube perfiles del CRM.<br><span class="tenue">Pálpito decide en milisegundos.</span></h1>
+          <p>Un CSV con el formato del archivo de perfiles de 30X, de hasta 100 filas. Pálpito sugiere programa y siguiente paso para cada uno y lo compara con lo que ya tiene el CRM.</p>
         </div>
       </div>
 
-      <div class="segmentado modos-prueba" role="group" aria-label="Qué quieres probar">
-        <button type="button" class="seg-item" data-modo="una" aria-pressed="true">Una inscripción</button>
-        <button type="button" class="seg-item" data-modo="lote" aria-pressed="false">Un lote · CSV de hasta 100 filas</button>
-      </div>
-
-      <div id="modo-lote" hidden>
-        <div class="card lote-carga">
-          <div class="lote-zona" id="lote-zona">
-            <svg class="lote-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-            <p><b>Arrastra aquí un CSV</b> o <label class="enlace">elige un archivo<input type="file" id="lote-archivo" accept=".csv,text/csv" hidden></label></p>
-            <p class="muted pequeno">Máximo <b>100 filas</b>. Columnas: canal, cargo, que_te_gustaria_lograr, mayor_reto_hoy, comentario, temas (separados por |). Solo datos ficticios.</p>
-            <div class="acciones">
-              <button type="button" class="btn lima" id="lote-ejemplo">Usar el lote de ejemplo</button>
-              <button type="button" class="btn ghost" id="lote-plantilla">Descargar plantilla</button>
-            </div>
+      <div class="card lote-carga">
+        <div class="lote-zona" id="lote-zona">
+          <svg class="lote-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+          <p><b>Arrastra aquí un CSV</b> o <label class="enlace">elige un archivo<input type="file" id="lote-archivo" accept=".csv,text/csv" hidden></label></p>
+          <p class="muted pequeno">Máximo <b>100 perfiles</b>. Columnas del archivo de 30X: <b>ID, Rol, Dolor principal, Objetivo principal, Temas de interés</b>. Opcionales: Intención, y Programa y Programa sugerido para comparar. Las demás columnas se ignoran.</p>
+          <div class="acciones">
+            <button type="button" class="btn lima" id="lote-ejemplo">Usar perfiles de ejemplo</button>
+            <button type="button" class="btn ghost" id="lote-plantilla">Descargar plantilla</button>
           </div>
-          <p id="lote-error" class="error" hidden></p>
-          <div id="lote-progreso" class="lote-progreso" hidden><div class="lote-barra"><span></span></div><p class="mono pequeno muted"></p></div>
         </div>
-        <div id="lote-resultado"></div>
+        <p id="lote-error" class="error" hidden></p>
       </div>
-
-      <div class="maestro-detalle prueba" id="modo-una">
-        <form id="form-inscripcion" class="card" novalidate>
-          <div class="plantillas" role="group" aria-label="Ejemplos">
-            <button type="button" class="plantilla" data-ejemplo="fundadora"><b>Fundadora</b><span>Sin proceso comercial</span></button>
-            <button type="button" class="plantilla" data-ejemplo="curioso"><b>Curioso</b><span>Viene por contenido</span></button>
-            <button type="button" class="plantilla" data-ejemplo="trampa"><b>Trampa</b><span>Instrucciones al sistema</span></button>
-          </div>
-
-          <div class="campos">
-            <label>Canal
-              <select name="canal">
-                <option value="formulario_luma">Formulario de Luma</option>
-                <option value="correo">Correo</option>
-                <option value="mensaje">Mensaje</option>
-              </select>
-            </label>
-            <label>Cargo <input name="cargo" placeholder="CEO y fundadora" autocomplete="off"></label>
-            <label>¿Qué le gustaría lograr? <input name="que_te_gustaria_lograr" autocomplete="off"></label>
-            <label>¿Cuál es su mayor reto hoy? <input name="mayor_reto_hoy" autocomplete="off"></label>
-            <label>Comentario <textarea name="comentario" rows="2"></textarea></label>
-            <fieldset>
-              <legend>Temas de interés</legend>
-              <div id="temas" class="temas"></div>
-            </fieldset>
-          </div>
-
-          <button type="submit" class="btn lima grande">Clasificar con JEV</button>
-          <p id="error-inscripcion" class="error" hidden></p>
-        </form>
-
-        <div id="resultado-prueba" class="card detalle vacio">
-          <img class="vacio-logo" src="logo.svg" alt="" width="48" height="48">
-          <p><b>Aquí aparece el pálpito</b></p>
-          <p class="muted">Qué programa le va, qué hacer con esta persona y por qué. En milisegundos.</p>
-        </div>
-      </div>
+      <div id="lote-resultado"></div>
 
       <details class="card plegable bloque">
         <summary>

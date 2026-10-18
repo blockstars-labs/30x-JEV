@@ -6,6 +6,7 @@ Sirve la página (web/) y una API pequeña:
 - POST /api/evento     agrega un evento a esa persona y la reclasifica
 - POST /api/simular    recalcula todas las decisiones con otros umbrales y pesos, sin llamar a JEV
 - POST /api/guardrail  JEV revisa un mensaje antes de enviarlo
+- POST /api/perfiles   clasifica un lote (máx. 100) de perfiles con el formato del archivo de 30X
 
 Las llaves de JEV y del LLM se quedan en el servidor (.env); el navegador nunca las ve.
 
@@ -28,6 +29,7 @@ from app.catalogo import DOLORES, INTENCION, OBJETIVOS, PROGRAMAS, ROLES, TEMAS,
 from app.jev import crear_cliente, respuesta_desde_registro
 from app.llm import crear_llm
 from app.guardrail import revisar_mensaje
+from app.lote import clasificar_lote
 from app.motor import juicios_desde_jev, redactar_mensaje
 from app.personas import aplicar_evento, crear_persona, reevaluar
 from app.politica import ACCIONES, cargar_politica, explicar
@@ -234,6 +236,8 @@ class Manejador(SimpleHTTPRequestHandler):
                 return self._json(simular(cuerpo))
             if self.path == "/api/guardrail":
                 return self._json(guardrail(cuerpo))
+            if self.path == "/api/perfiles":
+                return self._json(clasificar_lote(cuerpo.get("filas") or [], politica))
             return self._json({"error": "Ruta desconocida"}, 404)
         except ValueError as e:
             return self._json({"error": str(e)}, 400)

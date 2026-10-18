@@ -76,7 +76,7 @@ evaluaciones al arrancar. Las llaves se quedan en el servidor; el navegador nunc
 | Personas (inicio) | La Tierra con los países y ciudades de donde llegan las personas; filtros por origen (Luma, campañas, orgánico), país, programa, edad, sector y tamaño de empresa; búsqueda y ficha de cada persona con su historia de eventos. País, ciudad, edad y origen son **sintéticos** (`scripts/generar_demografia.py`) y solo sirven para la visualización |
 | Decisiones | Las 300 inscripciones con filtro por ruta y búsqueda; al elegir una: la decisión, el porqué, lo que escribió, las probabilidades de JEV y si acertó frente a la respuesta correcta |
 | Reglas | Controles de umbrales y pesos: recalcula las 300 decisiones al instante, sin llamar a JEV, y muestra el efecto en automatización, precisión y seguridad. Descarga la configuración propuesta |
-| Probar en vivo | Escribir una inscripción en vivo (con ejemplos, incluido un caso trampa), agregarle eventos para ver cómo se reclasifica y probar el guardrail de JEV sobre mensajes |
+| Probar en vivo | Subir un CSV de hasta 100 perfiles con el formato del archivo de 30X (ID, Rol, Dolor principal, Objetivo principal, Temas de interés; opcionales Intención, Programa y Programa sugerido). Como ya vienen categorizados, no pasan por JEV: se les aplica la política (`app/lote.py`, `POST /api/perfiles`) y se comparan con el programa del CRM y el sugerido por 30X. Incluye perfiles de ejemplo, plantilla y descarga de resultados. Abajo, el guardrail de JEV sobre mensajes |
 
 Búsqueda global con ⌘K (o `/`). Marca y uso del logo: [docs/marca/MARCA.md](docs/marca/MARCA.md).
 

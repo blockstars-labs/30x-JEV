@@ -349,6 +349,9 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .lote-zona .acciones { justify-content: center; margin-top: 8px; }
 .lote-ico { width: 30px; height: 30px; fill: none; stroke: var(--lima); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .enlace { display: inline; margin: 0; font-size: inherit; font-weight: 500; color: var(--lima); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.lote-tiempo { margin: 4px 0 -4px; }
+.barras button:disabled { cursor: default; }
+.barras button:disabled:hover { background: transparent; }
 .lote-progreso { margin-top: 16px; display: grid; gap: 6px; }
 .lote-barra { height: 6px; border-radius: 99px; background: var(--muted); overflow: hidden; }
 .lote-barra span { display: block; height: 100%; width: 0; background: var(--lima); border-radius: 99px; transition: width .25s var(--suave); }
