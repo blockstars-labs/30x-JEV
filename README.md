@@ -12,6 +12,7 @@ solo donde JEV no alcanza.
 > Clusterización dinámica y alertas de riesgo en programas: lo que 30X gana, cómo decide, arquitectura,
 > cuándo pasa a una persona, quién lo opera, cómo se mide, costo y cómo se adopta.
 >
+> **🌐 Prototipo en vivo: [palpito-30x.emanuel-benavides.workers.dev](https://palpito-30x.emanuel-benavides.workers.dev)**<br>
 > **🎤 Presentación: [Pálpito para 30X (Google Slides)](https://docs.google.com/presentation/d/1hSXl41bbRzoTCLeOBF-vFDM0fKhTflXv/edit?usp=sharing)**
 
 ## Qué hace
