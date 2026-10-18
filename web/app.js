@@ -62,6 +62,16 @@ function ciudadesDe(lista) {
   return Object.values(c).map((x) => ({ ...x, lat: x.lat / x.n, lng: x.lng / x.n })).sort((a, b) => b.n - a.n);
 }
 
+// Una "ciudad" por país, en el centro de su gente: para la vista general del globo.
+function paisesDe(lista) {
+  const c = {};
+  lista.forEach((p) => {
+    const x = (c[p.demo.pais] ||= { ciudad: p.demo.pais, lat: 0, lng: 0, n: 0 });
+    x.n += 1; x.lat += p.demo.lat; x.lng += p.demo.lon;
+  });
+  return Object.values(c).map((x) => ({ ...x, lat: x.lat / x.n, lng: x.lng / x.n })).sort((a, b) => b.n - a.n);
+}
+
 function etiquetaCiudad(d) {
   const el = document.createElement("div");
   el.className = "geo-etq";
@@ -186,12 +196,19 @@ function barraRutas(rutas, total) {
 }
 
 // La explicación llega como un párrafo; se parte en frases para leerla de un vistazo.
-function explicacionHtml(texto) {
+// La explicación llega como un párrafo: se parte en frases, primero el programa y la acción, y el
+// detalle técnico (confianzas, afinidad) queda plegado.
+const CLAVE_PORQUE = /^(Programa|Va a revisión|El perfil no parece|Duda|La intención|El rol no es|Perfil típico)/;
+function explicacionHtml(texto, visibles = 3) {
   const partes = String(texto || "")
     .split(/\.\s+(?=[A-ZÁÉÍÓÚÑ¿(])/)
     .map((s) => s.trim().replace(/\.$/, ""))
     .filter(Boolean);
-  return `<ul class="porque">${partes.map((p) => `<li>${esc(p)}.</li>`).join("")}</ul>`;
+  const orden = [...partes.filter((p) => CLAVE_PORQUE.test(p)), ...partes.filter((p) => !CLAVE_PORQUE.test(p))];
+  const li = (p) => `<li>${esc(p.replace(/^Programa: /, "").replace(/ \(1\.00\)/g, ""))}.</li>`;
+  const resto = orden.slice(visibles);
+  return `<ul class="porque">${orden.slice(0, visibles).map(li).join("")}</ul>${resto.length
+    ? `<details class="mas-porque"><summary>Ver detalle (${resto.length})</summary><ul class="porque">${resto.map(li).join("")}</ul></details>` : ""}`;
 }
 
 function probabilidades(campo, juicio, max = 3) {
@@ -243,8 +260,8 @@ function veredictoHtml(programa, accion, humana) {
 // Aviso honesto de qué son las cifras (texto del equipo, se muestra en Decisiones).
 function avisoDatos() {
   const { metricas: m, modo } = estado.datos;
-  if (modo === "mock") return "Datos de una corrida <b>simulada</b> (JEV y LLM sustituidos por palabras clave). Prueban que el flujo funciona; las cifras reales salen al conectar el JEV real.";
-  return `Resultados de <b>JEV real</b> sobre ${m ? m.perfiles : ""} inscripciones <b>sintéticas</b> generadas con plantillas a partir de las proporciones de 30X. El texto de inscripciones reales es más variado: hay que confirmar estas cifras con una muestra real etiquetada por 30X.`;
+  if (modo === "mock") return "";
+  return `<span class="badge" data-tip="JEV real sobre ${m ? m.perfiles : ""} inscripciones sintéticas. Hay que confirmarlo con una muestra real de 30X.">JEV real · perfiles sintéticos</span>`;
 }
 
 // ---------- Decisiones ----------
@@ -257,15 +274,12 @@ function detalleDecision(r) {
     <div class="detalle-head"><span class="mono muted">${esc(r.perfil_id)} · ${esc(CANALES[r.estado_enviado.canal] || r.estado_enviado.canal)}${demo ? ` · ${esc(demo.ciudad)}` : ""}</span>${badgeRuta(d.ruta)}</div>
     ${veredictoHtml(c.programas[d.programa], c.acciones[d.accion_propuesta], humana)}
     <div class="seccion"><h4>Por qué</h4>${explicacionHtml(r.explicacion)}</div>
-    ${r.revisiones_llm?.length ? `<div class="seccion"><h4>Revisión del LLM</h4>${r.revisiones_llm.map((x) => `<p>${esc(x.campo)}: <b>${esc(c[x.campo]?.[x.eleccion] || x.eleccion)}</b><br><span class="muted">${esc(x.justificacion)}</span></p>`).join("")}</div>` : ""}
     <div class="seccion"><h4>Lo que escribió</h4>${entradaHtml(r.estado_enviado.inscripcion)}</div>
     <details class="plegable"><summary>Respuestas de JEV <span class="mono muted">${Math.round(r.latencia_ms)} ms</span></summary>
       ${respuestasJev(j.choices.rol, j.choices.dolor, j.choices.objetivo, j.scores.intencion.probabilidades, j.nouls.perfil_valido)}
     </details>
     <details class="plegable"><summary>¿Acertó? ${humana ? `<span class="badge">Lo decide una persona</span>` : `<span class="badge ${acierto ? "ok" : "mal"}">${acierto ? "Sí" : "No"}</span>`}</summary>
-      <p class="muted pequeno">Cada perfil de prueba trae escrita la decisión correcta, para medir si el sistema acierta.</p>
-      <p class="correcta">${acierto ? "Decidió lo mismo que la respuesta correcta:" : "La respuesta correcta era:"} <b>${esc(c.programas[r.esperado.programa])}</b> · ${esc(c.acciones[r.esperado.accion])}</p>
-      <p class="muted pequeno">Afinidad ${esc(d.banda)} (${d.afinidad.toFixed(2)}) · regla aplicada: ${esc(d.regla_programa)}</p>
+      <p class="correcta">Lo correcto: <b>${esc(c.programas[r.esperado.programa])}</b> · ${esc(c.acciones[r.esperado.accion])}</p>
     </details>`;
 }
 
@@ -283,7 +297,7 @@ function renderDecisiones() {
     .map(([k, t, n]) => `<button class="seg-item" data-filtro="${k}" aria-pressed="${estado.filtroRuta === k}">${t}<span class="seg-n">${n}</span></button>`)
     .join("");
   v.innerHTML = `
-    ${encabezado("Decisiones", "Qué decidió con cada persona.<br><span class='tenue'>Y por qué.</span>", avisoDatos())}
+    ${encabezado("Decisiones", "Qué decidió con cada persona.<br><span class='tenue'>Y por qué.</span>", "", avisoDatos())}
     <div class="barra-herr">
       <div class="segmentado" role="group" aria-label="Filtrar por quién decide">${opciones}</div>
       ${buscadorLocal("buscar-dec", "Buscar por ID, programa, ciudad o lo que escribió", estado.busquedaDec)}
@@ -415,7 +429,7 @@ function detalleGente(p) {
     <div class="detalle-head"><span class="mono muted">${esc(p.perfil_id)} · ${esc(demo.ciudad)}, ${esc(demo.pais)}</span>${badgeRuta(d.ruta)}</div>
     ${veredictoHtml(c.programas[d.programa], c.acciones[d.accion_propuesta], d.ruta === "revision_humana")}
     <dl class="ficha">
-      ${fila("Llegó por <span class='ilustrativo'>ilustrativo</span>", `${esc(demo.origen)}${demo.campana ? `<span class="muted"> · ${esc(demo.campana)}</span>` : ""}`)}
+      ${fila("Llegó por", `${esc(demo.origen)}${demo.campana ? `<span class="muted"> · ${esc(demo.campana)}</span>` : ""}`)}
       ${fila("Canal", esc(CANALES[p.estado_enviado.canal] || p.estado_enviado.canal))}
       ${fila("Edad", esc(demo.edad))}
       ${fila("Sector", esc(demo.sector))}
@@ -436,8 +450,8 @@ function renderPersonas() {
     <div class="personas-top">
       <div class="globo-hueco">
         <div class="globo-dato"><span class="etiqueta-mono">Personas</span><b class="mono" id="g-total">0</b><span id="g-sub"></span></div>
-        <p class="aviso-demo"><b>Ubicación, edad, sector, empresa y origen son ilustrativos.</b> 30X solo comparte perfiles sin datos demográficos; estos se generan al azar para mostrar cómo se vería el mapa. El programa y la decisión sí salen de Pálpito.</p>
-        <p class="globo-ayuda">Arrastra la Tierra · clic en un país para filtrar</p>
+        <span class="badge aviso chip-demo" data-tip="30X no comparte datos demográficos: ubicación, edad, sector y origen son de ejemplo. El programa y la decisión sí son de Pálpito.">Demografía de ejemplo</span>
+        <p class="globo-ayuda">Arrastra · clic en un país para filtrar</p>
       </div>
       <div class="card filtros-card" id="filtros-personas"></div>
     </div>
@@ -501,8 +515,8 @@ function actualizarPersonas({ mantenerFoco = false } = {}) {
       ${stat("Origen principal", esc(origen1?.[0] || "—"), origen1 ? `${origen1[1]} personas` : "", "texto")}
     </div>
     <div class="grid-2">
-      <div class="card"><div class="card-head"><h3>De dónde vienen</h3><p>Toca una barra para filtrar.</p></div>${barrasFaceta(lista, "origen", 8)}</div>
-      <div class="card"><div class="card-head"><h3>Qué programa les va</h3><p>Lo que sugirió Pálpito para este grupo.</p></div>${barrasFaceta(lista, "programa", 8)}</div>
+      <div class="card"><div class="card-head"><h3>De dónde vienen</h3></div>${barrasFaceta(lista, "origen", 8)}</div>
+      <div class="card"><div class="card-head"><h3>Programa sugerido</h3></div>${barrasFaceta(lista, "programa", 8)}</div>
     </div>
     <div class="maestro-detalle personas-lista">
       <div class="card lista">${visibles
@@ -511,7 +525,7 @@ function actualizarPersonas({ mantenerFoco = false } = {}) {
           <span class="fila-sub"><span class="mono">${esc(p.perfil_id)}</span> · ${esc(p.demo.ciudad)} · ${esc(p.demo.origen)}</span></span>
           ${p.cambios ? `<span class="badge lima">${p.cambios} ${p.cambios === 1 ? "cambio" : "cambios"}</span>` : badgeRuta(p.decision.ruta)}</button>`)
         .join("") || `<p class="muted vacio-txt">Nadie cumple estos filtros.</p>`}
-        ${n > visibles.length ? `<p class="muted pequeno vacio-txt">Y ${n - visibles.length} más. Filtra o busca para acotar.</p>` : ""}</div>
+        ${n > visibles.length ? `<p class="muted pequeno vacio-txt">+${n - visibles.length} más</p>` : ""}</div>
       <div class="card detalle entra" id="detalle-persona">${sel ? detalleGente(sel) : ""}</div>
     </div>`;
   $("#personas-cuerpo").querySelectorAll(".fila").forEach((b) => b.addEventListener("click", () => elegirPersona(b.dataset.persona)));
@@ -543,7 +557,7 @@ function actualizarGloboPersonas(lista) {
     f.__alt = !nPais ? 0.004 : f.properties.name === sel ? 0.06 : 0.012 + 0.03 * (nPais / tope);
     f.__color = !nPais ? "rgba(0,0,0,0)" : `rgba(233,255,123,${f.properties.name === sel ? 0.85 : 0.18 + 0.5 * (nPais / tope)})`;
   });
-  g.polygonsData([...ESC.paises]).htmlElementsData(ciudadesDe(lista).slice(0, 12)).ringsData([]);
+  g.polygonsData([...ESC.paises]).htmlElementsData(sel ? ciudadesDe(lista).slice(0, 8) : paisesDe(lista)).ringsData([]);
   if (lista.length) {
     const lat = lista.reduce((s, p) => s + p.demo.lat, 0) / lista.length;
     const lng = lista.reduce((s, p) => s + p.demo.lon, 0) / lista.length;
@@ -754,9 +768,9 @@ function detalleLote(x, i) {
   return `
     <div class="detalle-head"><span class="mono muted">${esc(x.id || `Fila ${i + 1}`)}</span>${badgeRuta(x.ruta)}</div>
     ${veredictoHtml(x.programa_nombre, x.accion_texto, x.ruta === "revision_humana")}
-    ${x.no_reconocidos.length ? `<p class="error">No reconocí: ${esc(x.no_reconocidos.join(", "))}. Se tomó como “sin dato”.</p>` : ""}
+    ${x.no_reconocidos.length ? `<p class="error">No reconocido: ${esc(x.no_reconocidos.join(", "))}</p>` : ""}
     <div class="seccion"><h4>Por qué</h4>${explicacionHtml(x.explicacion)}</div>
-    <div class="seccion"><h4>Lo que trae el perfil</h4>
+    <div class="seccion"><h4>Perfil</h4>
       <dl class="ficha">
         ${fila("Rol", esc(c.rol[e.rol] || e.rol))}
         ${fila("Dolor", esc(c.dolor[e.dolor] || e.dolor))}
@@ -765,10 +779,10 @@ function detalleLote(x, i) {
         ${fila("Intención", `${esc(e.intencion)}${e.intencion_supuesta ? ` <span class="ilustrativo">supuesta</span>` : ""}`)}
       </dl>
     </div>
-    <div class="seccion"><h4>Frente a lo que ya tiene 30X</h4>
+    <div class="seccion"><h4>Frente a 30X</h4>
       <dl class="ficha">
-        ${fila("Programa en el CRM", `${esc(x.comparar.programa_crm || "—")} ${marca(k.crm)}`)}
-        ${fila("Programa sugerido por 30X", `${esc(x.comparar.programa_sugerido_30x || "—")} ${marca(k.sugerido)}`)}
+        ${fila("CRM", `${esc(x.comparar.programa_crm || "—")} ${marca(k.crm)}`)}
+        ${fila("Sugerido por 30X", `${esc(x.comparar.programa_sugerido_30x || "—")} ${marca(k.sugerido)}`)}
       </dl>
     </div>`;
 }
@@ -787,15 +801,14 @@ function pintarLote() {
   const top = Object.entries(programas).sort((a, b) => b[1] - a[1]);
   const caja = $("#lote-resultado");
   caja.innerHTML = `
-    <p class="mono pequeno muted lote-tiempo">${r.length} perfiles en ${Math.max(1, Math.round(LOTE.ms))} ms</p>
     <div class="stats">
-      ${stat("Perfiles", r.length, `${(rutas.revision_humana || 0)} van a una persona`)}
+      ${stat("Perfiles", r.length, `en ${Math.max(1, Math.round(LOTE.ms))} ms`)}
       ${stat("Programa más sugerido", esc(top[0][0]), `${top[0][1]} perfiles`, "texto")}
-      ${stat("Coincide con 30X", sug ? sug.pct : "—", sug ? `programa sugerido · ${sug.n} perfiles` : "el CSV no trae Programa sugerido")}
-      ${stat("Coincide con el CRM", crm ? crm.pct : "—", crm ? `programa del deal · ${crm.n} con equivalente` : "el CSV no trae Programa")}
+      ${stat("Coincide con 30X", sug ? sug.pct : "—", sug ? `de ${sug.n} con programa sugerido` : "sin columna Programa sugerido")}
+      ${stat("Coincide con el CRM", crm ? crm.pct : "—", crm ? `de ${crm.n} con programa en el CRM` : "sin columna Programa")}
     </div>
     <div class="card lote-rutas">
-      <div class="card-head"><h3>Qué programa sugiere Pálpito</h3><p>${asesor ? `${asesor} listos para un asesor.` : "Sin intención declarada en el archivo, nadie pasa a ventas: Pálpito sugiere programa y contenido."}</p></div>
+      <div class="card-head"><h3>Programa sugerido</h3>${asesor ? `<p>${asesor} listos para un asesor</p>` : ""}</div>
       <ul class="barras">${top.map(([p, n]) => `<li><button type="button" disabled><span class="b-nombre">${esc(p)}</span><span class="b-pista"><span style="width:${(n / top[0][1]) * 100}%"></span></span><span class="b-n mono">${n}</span></button></li>`).join("")}</ul>
     </div>
     <div class="maestro-detalle">
@@ -882,12 +895,12 @@ function prepararGuardrail() {
 
 // ---------- Reglas (política) ----------
 const CONTROLES = [
-  ["umbrales", "perfil_valido_min", "Mínimo para tratar una inscripción como genuina", "Por debajo, siempre la revisa una persona (spam o instrucciones al sistema).", 0.3, 0.99, 0.01],
-  ["umbrales", "confianza_choice_min", "Confianza mínima en rol, dolor u objetivo", "Si JEV duda más que esto y la duda cambia la decisión, no actúa solo.", 0.1, 0.9, 0.01],
-  ["umbrales", "listo_ventas_revision", "Probabilidad de compra para proponer pasar a ventas", "Desde aquí la acción propuesta es pasar a un asesor.", 0.3, 0.9, 0.01],
-  ["umbrales", "listo_ventas_auto", "Probabilidad de compra para pasar a ventas sin persona", "Entre el valor anterior y este, una persona confirma.", 0.5, 0.99, 0.01],
-  ["umbrales", "confianza_rol_ventas", "Confianza en el rol para pasar a ventas", "Pasar a ventas exige saber que la persona puede decidir la compra.", 0.3, 0.99, 0.01],
-  ["pesos", "intencion", "Intención de compra", "Los pesos no necesitan sumar 1.", 0, 1, 0.05],
+  ["umbrales", "perfil_valido_min", "Perfil genuino", "Debajo, lo revisa una persona.", 0.3, 0.99, 0.01],
+  ["umbrales", "confianza_choice_min", "Certeza en rol, dolor y objetivo", "Si duda y cambia la decisión, pide ayuda.", 0.1, 0.9, 0.01],
+  ["umbrales", "listo_ventas_revision", "Proponer un asesor", "Desde aquí propone pasar a ventas.", 0.3, 0.9, 0.01],
+  ["umbrales", "listo_ventas_auto", "Asesor sin confirmar", "Desde aquí no necesita a una persona.", 0.5, 0.99, 0.01],
+  ["umbrales", "confianza_rol_ventas", "Certeza del rol para ventas", "Debe saber si puede decidir la compra.", 0.3, 0.99, 0.01],
+  ["pesos", "intencion", "Intención de compra", "", 0, 1, 0.05],
   ["pesos", "poder_decision", "Poder de decisión (rol)", "", 0, 1, 0.05],
   ["pesos", "claridad", "Claridad de la necesidad", "", 0, 1, 0.05],
   ["pesos", "compromiso", "Compromiso observado", "", 0, 1, 0.05],
@@ -912,7 +925,7 @@ function seguridad(n) {
 function resultadosPolitica(r) {
   const a = r.actual, s = r.simulada;
   return `
-    <div class="card-head"><h3>Efecto de estos valores</h3><p>Sobre ${s.perfiles} inscripciones, sin llamar de nuevo a JEV.</p></div>
+    <div class="card-head"><h3>Efecto en ${s.perfiles} inscripciones</h3><p>Al instante, sin llamar a JEV</p></div>
     <div class="stats compactas">
       ${stat("JEV decide solo", pct(s.automatizacion, 1), delta(s.automatizacion, a.automatizacion))}
       ${stat("Precisión al actuar solo", pct(s.precision, 1), delta(s.precision, a.precision))}
@@ -920,8 +933,7 @@ function resultadosPolitica(r) {
       ${stat("Perfiles trampa procesados solos", seguridad(s.invalidos_automaticos), `Política actual: ${a.invalidos_automaticos}`)}
     </div>
     <div class="seccion"><h4>Política actual</h4>${barraRutas(a.rutas, a.perfiles)}</div>
-    <div class="seccion"><h4>Con estos valores</h4>${barraRutas(s.rutas, s.perfiles)}</div>
-    <p class="muted pequeno">Mide JEV + reglas sin el LLM. En producción, el LLM resolvería parte de lo que aquí va a una persona.</p>`;
+    <div class="seccion"><h4>Con estos valores</h4>${barraRutas(s.rutas, s.perfiles)}</div>`;
 }
 
 let temporizador = null;
@@ -954,12 +966,12 @@ function controles(grupo) {
 function renderPolitica() {
   const v = $("#vista-politica");
   v.innerHTML = `
-    ${encabezado("Reglas", "Tú pones los límites.<br><span class='tenue'>Pálpito los respeta.</span>", "Mueve un umbral y mira el efecto al instante. Se recalcula en código con lo que JEV ya respondió: sin llamadas nuevas ni costo.")}
+    ${encabezado("Reglas", "Tú pones los límites.<br><span class='tenue'>Pálpito los respeta.</span>")}
     <div class="maestro-detalle politica">
       <div class="card">
-        <div class="card-head"><h3>Umbrales</h3><p>Cuándo actúa solo y cuándo pide ayuda.</p></div>
+        <div class="card-head"><h3>Umbrales</h3></div>
         ${controles("umbrales")}
-        <details class="plegable"><summary>Pesos de la afinidad</summary>${controles("pesos")}</details>
+        <details class="plegable"><summary>Pesos de afinidad</summary>${controles("pesos")}</details>
         <div class="acciones">
           <button type="button" class="btn ghost" id="restablecer">Volver a la política actual</button>
           <button type="button" class="btn ghost" id="descargar">Descargar configuración</button>

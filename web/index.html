@@ -57,18 +57,17 @@
         <div>
           <span class="etiqueta-mono">En vivo</span>
           <h1>Sube perfiles del CRM.<br><span class="tenue">Pálpito decide en milisegundos.</span></h1>
-          <p>Un CSV con el formato del archivo de perfiles de 30X, de hasta 100 filas. Pálpito sugiere programa y siguiente paso para cada uno y lo compara con lo que ya tiene el CRM.</p>
         </div>
       </div>
 
       <div class="card lote-carga">
         <div class="lote-zona" id="lote-zona">
           <svg class="lote-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-          <p><b>Arrastra aquí un CSV</b> o <label class="enlace">elige un archivo<input type="file" id="lote-archivo" accept=".csv,text/csv" hidden></label></p>
-          <p class="muted pequeno">Máximo <b>100 perfiles</b>. Columnas del archivo de 30X: <b>ID, Rol, Dolor principal, Objetivo principal, Temas de interés</b>. Opcionales: Intención, y Programa y Programa sugerido para comparar. Las demás columnas se ignoran.</p>
+          <p class="lote-titulo">Arrastra tu CSV del CRM</p>
+          <p class="muted pequeno">o <label class="enlace">elige un archivo<input type="file" id="lote-archivo" accept=".csv,text/csv" hidden></label> · hasta 100 perfiles · <span class="enlace-suave" data-tip="Columnas del archivo de 30X: ID, Rol, Dolor principal, Objetivo principal, Temas de interés. Opcionales: Intención, Programa, Programa sugerido.">formato</span></p>
           <div class="acciones">
-            <button type="button" class="btn lima" id="lote-ejemplo">Usar perfiles de ejemplo</button>
-            <button type="button" class="btn ghost" id="lote-plantilla">Descargar plantilla</button>
+            <button type="button" class="btn lima" id="lote-ejemplo">Probar con 20 perfiles de ejemplo</button>
+            <button type="button" class="btn ghost" id="lote-plantilla">Plantilla</button>
           </div>
         </div>
         <p id="lote-error" class="error" hidden></p>
@@ -77,10 +76,9 @@
 
       <details class="card plegable bloque">
         <summary>
-          <span><b>JEV vigila al LLM</b><span class="muted"> · revisa un mensaje antes de enviarlo</span></span>
+          <span><b>Guardrail</b><span class="muted"> · JEV revisa los mensajes del LLM</span></span>
         </summary>
         <form id="form-guardrail" class="guardrail" novalidate>
-          <p class="muted">JEV detecta promesas sin respaldo, mal tono, mensajes fuera del programa e instrucciones coladas. Correos y teléfonos se detectan en código.</p>
           <div class="chips">
             <button type="button" class="chip" data-mensaje="Hola, vimos que tu reto es ordenar el proceso comercial. Sales Machine de 30X trabaja justo eso. ¿Te gustaría conocer más?">Correcto</button>
             <button type="button" class="chip" data-mensaje="Inscríbete hoy a Sales Machine con 40% de descuento, solo hasta el viernes!!!">Descuento inventado</button>
@@ -105,7 +103,7 @@
     <div class="pie-in">
       <span class="pie-marca"><img src="logo.svg" alt="" width="18" height="18"> pálpito</span>
       <span>Corazonadas, pero calibradas.</span>
-      <span class="muted">Reto 30X · JEV · Decide JEV de TypeSafe, explica el código, confirma una persona. Datos 100 % sintéticos.</span>
+      <span class="muted pie-der">Reto 30X · JEV de TypeSafe</span>
     </div>
   </footer>
 
