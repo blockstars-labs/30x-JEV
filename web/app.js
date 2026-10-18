@@ -48,7 +48,7 @@ document.addEventListener("pointerout", (e) => {
 });
 
 // ---------- Escena: una sola Tierra para toda la experiencia ----------
-const ESC = { g: null, paises: [], escena: null };
+const ESC = { g: null, paises: [], escena: "personas" };
 
 function ciudadesDe(lista) {
   const c = {};
@@ -108,28 +108,22 @@ async function iniciarEscena() {
     const topo = await (await fetch("vendor/globo/paises-110m.json")).json();
     ESC.paises = topojson.feature(topo, topo.objects.countries).features.filter((f) => f.properties.name !== "Antarctica");
   } catch { ESC.paises = []; }
-  ponerEscena(ESC.escena || "impacto-portada");
+  ponerEscena(ESC.escena);
   if (ESC.escena === "personas") actualizarGloboPersonas(filtrar());
 }
 
 const POV = {
-  "impacto-portada": { lat: 8, lng: -74, altitude: 1.75 },
   ambiente: { lat: 10, lng: -78, altitude: 2.1 },
   personas: { lat: 6, lng: -76, altitude: 1.9 },
 };
 
 function ponerEscena(nombre, pov) {
   ESC.escena = nombre;
-  document.body.dataset.escena = nombre.startsWith("impacto") && nombre !== "impacto-portada" ? "impacto-lado" : nombre;
+  document.body.dataset.escena = nombre;
   const g = ESC.g;
   if (!g) return;
-  const todas = ciudadesDe(estado.gente || []);
-  g.controls().autoRotate = !QUIETO && (nombre === "impacto-portada" || nombre === "ambiente");
-  if (nombre.startsWith("impacto")) {
-    g.polygonsData([]).htmlElementsData(nombre === "impacto-portada" ? [] : todas.slice(0, 6))
-      .arcsData(todas.filter((c) => c.ciudad !== "Bogotá").map((c) => ({ startLat: c.lat, startLng: c.lng, endLat: BOGOTA.lat, endLng: BOGOTA.lng })))
-      .ringsData(todas.slice(0, 5));
-  } else if (nombre === "personas") {
+  g.controls().autoRotate = !QUIETO && nombre === "ambiente";
+  if (nombre === "personas") {
     g.arcsData([]);
   } else {
     g.polygonsData([]).htmlElementsData([]).arcsData([]).ringsData([]);
@@ -148,8 +142,7 @@ function mostrarVista(nombre) {
   document.querySelectorAll("[data-vista]").forEach((x) => x.setAttribute("aria-selected", x.dataset.vista === nombre));
   document.querySelectorAll(".vista").forEach((v) => (v.hidden = v.id !== "vista-" + nombre));
   window.scrollTo({ top: 0 });
-  if (nombre === "resumen") ponerEscena("impacto-portada");
-  else if (nombre === "reclasificacion") { ponerEscena("personas"); actualizarGloboPersonas(filtrar()); }
+  if (nombre === "reclasificacion") { ponerEscena("personas"); actualizarGloboPersonas(filtrar()); }
   else ponerEscena("ambiente");
 }
 document.querySelectorAll("[data-vista]").forEach((b) => b.addEventListener("click", () => mostrarVista(b.dataset.vista)));
@@ -241,106 +234,6 @@ function veredictoHtml(programa, accion, humana) {
     <h2>${esc(programa)}</h2>
     <p>${esc(accion)}</p>
   </div>`;
-}
-
-// ---------- Impacto: una historia que se recorre con scroll ----------
-function comparacion(m) {
-  const nombres = { rol: "Rol", dolor: "Dolor", objetivo: "Objetivo" };
-  const filas = ["rol", "dolor", "objetivo"]
-    .map((k) => {
-      const j = m.precision_por_pregunta[k], b = m.linea_base_30x[k];
-      return `<div class="cmp"><span class="cmp-nombre">${nombres[k]}</span>
-        <div class="cmp-barras">
-          <div class="cmp-fila"><div class="cmp-pista"><div class="cmp-relleno jev" style="--w:${j * 100}%"></div></div><span class="mono">${pct(j, 0)}</span></div>
-          <div class="cmp-fila"><div class="cmp-pista"><div class="cmp-relleno base" style="--w:${(b ?? 0) * 100}%"></div></div><span class="mono muted">${pct(b, 0)}</span></div>
-        </div></div>`;
-    })
-    .join("");
-  return `<div class="comparacion">${filas}</div>
-    <ul class="leyenda"><li><span class="punto" style="background:var(--lima)"></span>Pálpito</li><li><span class="punto" style="background:var(--border-strong)"></span>30X hoy, a mano</li></ul>`;
-}
-
-function cifra(valor, sufijo = "", dec = 0) {
-  return `<div class="cifra" data-contar="${valor}" data-dec="${dec}" data-sufijo="${esc(sufijo)}">${Number(valor).toLocaleString("es-CO", { maximumFractionDigits: dec })}${sufijo}</div>`;
-}
-
-function contarHasta(el) {
-  if (el.dataset.hecho || QUIETO) return;
-  el.dataset.hecho = "1";
-  const fin = Number(el.dataset.contar), dec = Number(el.dataset.dec), suf = el.dataset.sufijo, t0 = performance.now();
-  const paso = (t) => {
-    const k = Math.min(1, (t - t0) / 1100), v = fin * (1 - Math.pow(1 - k, 3));
-    el.textContent = v.toLocaleString("es-CO", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf;
-    if (k < 1) requestAnimationFrame(paso);
-  };
-  requestAnimationFrame(paso);
-}
-
-function renderResumen() {
-  const { metricas: m, dinamica: d, modo } = estado.datos;
-  const v = $("#vista-resumen");
-  if (!m) {
-    v.innerHTML = encabezado("Impacto", "Aún no hay reportes", "Corre <code>scripts/evaluar.py</code> y recarga.");
-    return;
-  }
-  const sinPersona = (m.rutas.automatico || 0) + (m.rutas.llm || 0);
-  const costoSistema = m.costo_usd_total + (m.costo_llm_usd_total || 0);
-  const veces = m.costo_usd_si_todo_fuera_llm / Math.max(costoSistema, 1e-9);
-  const caps = [
-    { pov: POV["impacto-portada"], html: `
-      <span class="etiqueta-mono">Pálpito · para 30X</span>
-      <h1 class="titular">Corazonadas,<br><span class="lima-txt">pero calibradas.</span></h1>
-      <p class="bajada">Cada persona que llega a 30X queda en su programa y con su siguiente paso en milisegundos. JEV tiene el pálpito, el código decide y una persona confirma lo delicado.</p>
-      <div class="acciones-portada"><button class="btn lima" data-ir="prueba">Probar en vivo</button><button class="btn ghost" data-ir="reclasificacion">Explorar personas</button></div>
-      <a class="desliza" href="#cap-1">Desliza para explorar<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg></a>` },
-    { pov: { lat: 4.7, lng: -74, altitude: 1.25 }, html: `
-      <span class="etiqueta-mono">01 — Autonomía</span>
-      ${cifra(Math.round((sinPersona / m.perfiles) * 100), " %")}
-      <h2>de las inscripciones se resuelven sin una persona.</h2>
-      <p>${sinPersona} de ${m.perfiles}. JEV decide lo claro, el LLM revisa las dudas que cambian la decisión y una persona confirma lo delicado.</p>
-      ${barraRutas(m.rutas, m.perfiles)}` },
-    { pov: { lat: 19.4, lng: -99.1, altitude: 1.4 }, html: `
-      <span class="etiqueta-mono">02 — Seguridad</span>
-      ${cifra(m.pases_a_ventas_indebidos)}
-      <h2>pases indebidos a ventas.</h2>
-      <p>Ni el spam ni los textos que intentan darle instrucciones al sistema pasan solos: ${m.perfiles_invalidos_procesados_solos} perfiles trampa procesados sin revisión. Cuando la duda cambia la decisión, decide una persona.</p>
-      <ul class="hechos"><li><b>${pct(m.precision_al_actuar_solo, 0)}</b><span>de precisión cuando actúa solo</span></li><li><b>${m.rutas.revision_humana || 0}</b><span>casos enviados a una persona</span></li></ul>` },
-    { pov: { lat: 12, lng: -62, altitude: 2.3 }, html: `
-      <span class="etiqueta-mono">03 — Velocidad y costo</span>
-      ${cifra(Math.round(m.latencia_ms.p50), " ms")}
-      <h2>por decisión. Mil decisiones cuestan ${usd(m.costo_usd_por_1000_decisiones, 4)}.</h2>
-      <p>Pasar las ${m.perfiles} inscripciones por un LLM costaría ${usd(m.costo_usd_si_todo_fuera_llm, 2)}. Con Pálpito, JEV y las revisiones del LLM juntos cuestan ${usd(costoSistema, 4)}: unas ${Math.round(veces).toLocaleString("es-CO")} veces menos.</p>` },
-    { pov: { lat: -12, lng: -77, altitude: 1.5 }, html: `
-      <span class="etiqueta-mono">04 — Precisión</span>
-      <h2 class="h2-grande">¿Clasifica mejor que hoy?</h2>
-      <p>Aciertos por pregunta frente a la clasificación manual de 30X.</p>
-      ${comparacion(m)}` },
-    { pov: { lat: 22, lng: -70, altitude: 2.0 }, html: `
-      <span class="etiqueta-mono">05 — Movimiento</span>
-      ${d ? cifra(d.cambios_detectados) : ""}
-      <h2>cambios de segmento detectados después de inscribirse.</h2>
-      <p>${d ? `${d.personas} personas seguidas en ${d.eventos} eventos. ${d.eventos_sin_llamar_a_jev} se recalcularon en código, sin llamar a JEV y sin costo.` : ""}</p>
-      <div class="acciones-portada"><button class="btn lima" data-ir="reclasificacion">Ver personas en el mapa</button><button class="btn ghost" data-ir="decisiones">Revisar decisiones</button></div>` },
-  ];
-  v.innerHTML = `
-    <nav class="progreso" aria-label="Capítulos">${caps.map((_, i) => `<a href="#cap-${i}" data-cap="${i}" aria-label="Capítulo ${i}"></a>`).join("")}</nav>
-    ${caps.map((c, i) => `<section class="capitulo ${i === 0 ? "portada" : ""}" id="cap-${i}" data-cap="${i}"><div class="capitulo-txt">${c.html}</div></section>`).join("")}
-    ${modo === "mock" ? `<p class="nota-simulado">Cifras de una corrida simulada (JEV y LLM sustituidos por palabras clave). Las reales salen al conectar el JEV real.</p>` : ""}`;
-  v.querySelectorAll('a[href^="#cap-"]').forEach((a) => a.addEventListener("click", (e) => {
-    e.preventDefault();
-    $(a.getAttribute("href")).scrollIntoView({ behavior: QUIETO ? "auto" : "smooth", block: "start" });
-  }));
-  const obs = new IntersectionObserver((entradas) => {
-    entradas.forEach((en) => {
-      if (!en.isIntersecting) return;
-      const i = Number(en.target.dataset.cap);
-      en.target.classList.add("visible");
-      en.target.querySelectorAll("[data-contar]").forEach(contarHasta);
-      v.querySelectorAll(".progreso a").forEach((a) => a.classList.toggle("activo", Number(a.dataset.cap) === i));
-      if (!v.hidden) ponerEscena(i === 0 ? "impacto-portada" : `impacto-${i}`, caps[i].pov);
-    });
-  }, { threshold: 0.5 });
-  v.querySelectorAll(".capitulo").forEach((s) => obs.observe(s));
 }
 
 // ---------- Decisiones ----------
@@ -648,7 +541,6 @@ function actualizarGloboPersonas(lista) {
 
 // ---------- Búsqueda global (⌘K) ----------
 const SECCIONES = [
-  { t: "Impacto", s: "La historia: autonomía, seguridad, costo", ir: "resumen" },
   { t: "Decisiones", s: "Qué decidió con cada persona y por qué", ir: "decisiones" },
   { t: "Personas", s: "Demografía, origen y el mapa", ir: "reclasificacion" },
   { t: "Reglas", s: "Umbrales y pesos de la política", ir: "politica" },
@@ -953,7 +845,7 @@ async function iniciar() {
     estado.datos = await (await fetch("/api/datos")).json();
     estado.demografia = await fetch("demografia.json").then((r) => (r.ok ? r.json() : null)).catch(() => null);
   } catch {
-    $("#vista-resumen").innerHTML = encabezado("Sin conexión", "No se pudo conectar con el servidor", "Ejecuta <code>python -m app.servidor</code>.");
+    $("#vista-reclasificacion").innerHTML = encabezado("Sin conexión", "No se pudo conectar con el servidor", "Ejecuta <code>python -m app.servidor</code>.");
     return;
   }
   if (estado.demografia) gente();
@@ -962,7 +854,6 @@ async function iniciar() {
   m.innerHTML = `<span class="punto" style="background:${modo === "mock" ? "var(--aviso)" : "var(--ok)"}"></span>${modo === "mock" ? "Simulado" : "JEV real"}`;
   m.title = `JEV ${modo === "mock" ? "simulado" : "real"} · LLM ${llm === "off" ? "apagado" : llm === "mock" ? "simulado" : "real"}`;
   iniciarEscena();
-  renderResumen();
   renderDecisiones();
   renderPersonas();
   renderPolitica();

@@ -6,6 +6,7 @@ se puede explicar y los umbrales se pueden cambiar sin volver a llamar al modelo
 """
 
 import json
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -121,10 +122,38 @@ def asignar_programa(rol: str, dolor: str, objetivo: str, temas: list[str], band
     return "ninguno", "Ninguna regla aplica"
 
 
+def programa_aprendido(rol: str, dolor: str, objetivo: str, temas: list[str], politica: dict) -> tuple[str, float] | None:
+    """Programa que sugiere el modelo entrenado con los deals del CRM (scripts/entrenar_programas.py).
+
+    Devuelve (programa del catálogo, probabilidad) solo si la sección está activa, el modelo supera
+    su umbral de confianza y el programa tiene equivalente en el catálogo. Si no, None: manda la regla.
+    """
+    sec = politica.get("perfiles_por_programa")
+    if not sec or not sec.get("activo") or sec.get("umbral_confianza") is None:
+        return None
+    pesos = sec["pesos"]
+    activos = {f"rol={rol}", f"dolor={dolor}", f"objetivo={objetivo}"} | {f"tema={t}" for t in temas}
+    x = [1.0 if v in activos else 0.0 for v in pesos["variables"]]
+    logits = [b + sum(w * xi for w, xi in zip(fila, x)) for fila, b in zip(pesos["coeficientes"], pesos["intercepto"])]
+    tope = max(logits)
+    exps = [math.exp(z - tope) for z in logits]
+    i = max(range(len(exps)), key=exps.__getitem__)
+    p = exps[i] / sum(exps)
+    programa = sec["programa_catalogo"].get(pesos["clases"][i])
+    if programa is None or p < sec["umbral_confianza"]:
+        return None
+    return programa, p
+
+
 def evaluar_combinacion(rol: str, dolor: str, objetivo: str, intencion_esperada: float, p_listo: float,
                         temas: list[str], politica: dict, compromiso: str = "medio") -> Resultado:
     banda, afinidad = banda_afinidad(rol, dolor, objetivo, intencion_esperada, politica, compromiso)
     programa, regla = asignar_programa(rol, dolor, objetivo, temas, banda)
+    # Con afinidad baja no se sugiere programa, lo diga quien lo diga.
+    aprendido = programa_aprendido(rol, dolor, objetivo, temas, politica) if banda != "baja" else None
+    if aprendido and aprendido[0] != programa:
+        programa = aprendido[0]
+        regla = f"Perfil típico de {PROGRAMAS[programa]} en los deals del CRM (confianza {aprendido[1]:.2f})"
     poder = politica["afinidad"]["poder_decision_por_rol"][rol]
     if (programa != "ninguno" and poder >= politica["afinidad"]["poder_decision_min_ventas"]
             and p_listo >= politica["umbrales"]["listo_ventas_revision"]):
