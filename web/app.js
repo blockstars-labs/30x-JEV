@@ -655,28 +655,29 @@ async function enviar(url, cuerpo) {
 // nadie sube la base completa por error. Para lotes grandes están los scripts de evaluación.
 const LIMITE_LOTE = 100;
 const COLUMNAS_PERFIL = ["ID", "Rol", "Dolor principal", "Objetivo principal", "Temas de interés", "Programa", "Programa sugerido"];
-// Perfiles inventados con las mismas categorías que usa 30X (no son datos del CRM).
+// Perfiles inventados con las mismas categorías que usa 30X (no son datos del CRM). No traen Programa ni
+// Programa sugerido: compararlos contra valores inventados daría cifras de acierto falsas.
 const EJEMPLO_PERFILES = [
-  ["EJ-01", "Fundador, socio o CEO", "No tiene proceso comercial estructurado", "Construir una máquina de ventas", "sales, gtm", "Sales Machine", "Sales Machine"],
-  ["EJ-02", "Líder comercial o de ventas", "Vive de referidos y prospecta a mano", "Vender más", "sales, ai", "AI Sales", "AI Sales"],
-  ["EJ-03", "Sin dato de rol", "No declaró ningún dolor", "Formarse (sobre todo en IA)", "ai", "AI Sales", "Sin programa sugerido"],
-  ["EJ-04", "Perfil técnico (ingeniería, datos, producto)", "No declaró ningún dolor", "Automatizar con IA", "ai, product", "AI for devs", "Hardcore AI"],
-  ["EJ-05", "Fundador, socio o CEO", "Expansión internacional sin método", "Expandirse a otros países", "gtm, leadership", "30X Executive Program", "Inmersión Ejecutiva"],
-  ["EJ-06", "Director, VP o C-level (no dueño)", "No declaró ningún dolor", "Automatizar con IA", "ai, leadership", "AI for Executives", "Sin programa sugerido"],
-  ["EJ-07", "Gerente o jefe de área", "Procesos manuales y rezago tecnológico", "Automatizar con IA", "ai, ops", "AI Second Brain", "Hardcore AI"],
-  ["EJ-08", "Fundador, socio o CEO", "El dueño es el cuello de botella y no delega", "Delegar y pasar a un rol estratégico", "leadership, ops", "30X Executive Program", "Inmersión Ejecutiva"],
-  ["EJ-09", "Líder comercial o de ventas", "Ventas estancadas o cayendo", "Construir una máquina de ventas", "sales, negotiation", "Sales Machine", "Sales Machine"],
-  ["EJ-10", "Sin dato de rol", "No declaró ningún dolor", "Automatizar con IA", "ai, sales", "AI Sales", "AI Sales"],
-  ["EJ-11", "Fundador, socio o CEO", "Capital y flujo de caja para crecer", "Levantar capital", "fundraising, finance", "30X Executive Program", "Inmersión Ejecutiva"],
-  ["EJ-12", "Gerente o jefe de área", "No declaró ningún dolor", "Vender más", "sales", "Sales Machine", "AI Sales"],
-  ["EJ-13", "Otro rol", "No declaró ningún dolor", "Otro objetivo", "—", "", "Sin programa sugerido"],
-  ["EJ-14", "Director, VP o C-level (no dueño)", "Falta de claridad estratégica para escalar", "Transformar el modelo de negocio", "leadership, finance", "30X Executive Program", "Inmersión Ejecutiva"],
-  ["EJ-15", "Perfil técnico (ingeniería, datos, producto)", "Procesos manuales y rezago tecnológico", "Automatizar con IA", "ai", "AI for devs", "Hardcore AI"],
-  ["EJ-16", "Fundador, socio o CEO", "No declaró ningún dolor", "Entrar a una red de pares", "leadership", "30X Executive Program", "Inmersión Ejecutiva"],
-  ["EJ-17", "Sin dato de rol", "No declaró ningún dolor", "Vender más", "sales, marketing", "AI Sales", "AI Sales"],
-  ["EJ-18", "Gerente o jefe de área", "Equipo: contratar, retener y vencer la resistencia al cambio", "Desarrollar liderazgo y equipo", "leadership, hiring", "", "Inmersión Ejecutiva"],
-  ["EJ-19", "Líder comercial o de ventas", "No declaró ningún dolor", "Automatizar con IA", "sales, ai", "AI Sales", "AI Sales"],
-  ["EJ-20", "Sin dato de rol", "No declaró ningún dolor", "Automatizar con IA", "ai", "AI Second Brain", "Sin programa sugerido"],
+  ["EJ-01", "Fundador, socio o CEO", "No tiene proceso comercial estructurado", "Construir una máquina de ventas", "sales, gtm"],
+  ["EJ-02", "Líder comercial o de ventas", "Vive de referidos y prospecta a mano", "Vender más", "sales, ai"],
+  ["EJ-03", "Sin dato de rol", "No declaró ningún dolor", "Formarse (sobre todo en IA)", "ai"],
+  ["EJ-04", "Perfil técnico (ingeniería, datos, producto)", "No declaró ningún dolor", "Automatizar con IA", "ai, product"],
+  ["EJ-05", "Fundador, socio o CEO", "Expansión internacional sin método", "Expandirse a otros países", "gtm, leadership"],
+  ["EJ-06", "Director, VP o C-level (no dueño)", "No declaró ningún dolor", "Automatizar con IA", "ai, leadership"],
+  ["EJ-07", "Gerente o jefe de área", "Procesos manuales y rezago tecnológico", "Automatizar con IA", "ai, ops"],
+  ["EJ-08", "Fundador, socio o CEO", "El dueño es el cuello de botella y no delega", "Delegar y pasar a un rol estratégico", "leadership, ops"],
+  ["EJ-09", "Líder comercial o de ventas", "Ventas estancadas o cayendo", "Construir una máquina de ventas", "sales, negotiation"],
+  ["EJ-10", "Sin dato de rol", "No declaró ningún dolor", "Automatizar con IA", "ai, sales"],
+  ["EJ-11", "Fundador, socio o CEO", "Capital y flujo de caja para crecer", "Levantar capital", "fundraising, finance"],
+  ["EJ-12", "Gerente o jefe de área", "No declaró ningún dolor", "Vender más", "sales"],
+  ["EJ-13", "Otro rol", "No declaró ningún dolor", "Otro objetivo", "—"],
+  ["EJ-14", "Director, VP o C-level (no dueño)", "Falta de claridad estratégica para escalar", "Transformar el modelo de negocio", "leadership, finance"],
+  ["EJ-15", "Perfil técnico (ingeniería, datos, producto)", "Procesos manuales y rezago tecnológico", "Automatizar con IA", "ai"],
+  ["EJ-16", "Fundador, socio o CEO", "No declaró ningún dolor", "Entrar a una red de pares", "leadership"],
+  ["EJ-17", "Sin dato de rol", "No declaró ningún dolor", "Vender más", "sales, marketing"],
+  ["EJ-18", "Gerente o jefe de área", "Equipo: contratar, retener y vencer la resistencia al cambio", "Desarrollar liderazgo y equipo", "leadership, hiring"],
+  ["EJ-19", "Líder comercial o de ventas", "No declaró ningún dolor", "Automatizar con IA", "sales, ai"],
+  ["EJ-20", "Sin dato de rol", "No declaró ningún dolor", "Automatizar con IA", "ai"],
 ];
 const LOTE = { filas: [], resultados: [], sel: 0 };
 
@@ -804,8 +805,8 @@ function pintarLote() {
     <div class="stats">
       ${stat("Perfiles", r.length, `en ${Math.max(1, Math.round(LOTE.ms))} ms`)}
       ${stat("Programa más sugerido", esc(top[0][0]), `${top[0][1]} perfiles`, "texto")}
-      ${stat("Coincide con 30X", sug ? sug.pct : "—", sug ? `de ${sug.n} con programa sugerido` : "sin columna Programa sugerido")}
-      ${stat("Coincide con el CRM", crm ? crm.pct : "—", crm ? `de ${crm.n} con programa en el CRM` : "sin columna Programa")}
+      ${sug ? stat("Coincide con 30X", sug.pct, `de ${sug.n} con programa sugerido`) : stat("Van a una persona", rutas.revision_humana || 0, "dudas o perfiles sospechosos")}
+      ${crm ? stat("Coincide con el CRM", crm.pct, `de ${crm.n} con programa en el CRM`) : stat("Listos para un asesor", asesor, "con intención declarada")}
     </div>
     <div class="card lote-rutas">
       <div class="card-head"><h3>Programa sugerido</h3>${asesor ? `<p>${asesor} listos para un asesor</p>` : ""}</div>
