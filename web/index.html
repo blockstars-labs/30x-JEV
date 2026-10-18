@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="estilos.css">
 </head>
-<body data-escena="impacto-portada">
+<body data-escena="personas">
   <!-- Escena: una sola Tierra detrás de toda la experiencia; cada vista la mueve. -->
   <div id="escena" aria-hidden="true">
     <div id="escena-globo"></div>
@@ -21,16 +21,15 @@
 
   <header class="topbar">
     <div class="topbar-in">
-      <button class="marca" data-vista="resumen" aria-label="Pálpito, ir al inicio">
+      <button class="marca" data-vista="reclasificacion" aria-label="Pálpito, ir al inicio">
         <img class="marca-logo" src="logo.svg" alt="" width="28" height="28">
         <span class="marca-nombre">pálpito</span>
         <span class="marca-por">para 30X</span>
       </button>
 
       <nav class="tabs" role="tablist" aria-label="Secciones">
-        <button role="tab" data-vista="resumen" aria-selected="true">Impacto</button>
+        <button role="tab" data-vista="reclasificacion" aria-selected="true">Personas</button>
         <button role="tab" data-vista="decisiones" aria-selected="false">Decisiones</button>
-        <button role="tab" data-vista="reclasificacion" aria-selected="false">Personas</button>
         <button role="tab" data-vista="politica" aria-selected="false">Reglas</button>
       </nav>
 
@@ -49,9 +48,8 @@
   </header>
 
   <main>
-    <section id="vista-resumen" class="vista"></section>
+    <section id="vista-reclasificacion" class="vista"></section>
     <section id="vista-decisiones" class="vista" hidden></section>
-    <section id="vista-reclasificacion" class="vista" hidden></section>
     <section id="vista-politica" class="vista" hidden></section>
 
     <section id="vista-prueba" class="vista" hidden>
