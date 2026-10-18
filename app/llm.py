@@ -83,20 +83,31 @@ class LLMLive:
         import anthropic
         self._cliente = anthropic.Anthropic()
 
-    def _crear(self, sistema: str, contenido: str, formato: dict | None = None):
+    def _crear(self, sistema: str, contenido: str, formato: dict | None = None, max_tokens: int = 4000,
+               modelo: str = MODELO):
         output_config = {"effort": "low"}
         if formato:
             output_config["format"] = formato
         # fallbacks="default": si el modelo declina, la API reintenta en el modelo recomendado.
         return self._cliente.beta.messages.create(
-            model=MODELO,
-            max_tokens=4000,
+            model=modelo,
+            max_tokens=max_tokens,
             betas=["server-side-fallback-2026-07-01"],
             fallbacks="default",
             system=sistema,
             output_config=output_config,
             messages=[{"role": "user", "content": contenido}],
         )
+
+    def json(self, sistema: str, contenido: str, esquema: dict, max_tokens: int = 16000,
+             modelo: str = MODELO) -> tuple[dict | None, int, int]:
+        """Respuesta JSON validada contra `esquema` (salida estructurada). None si el modelo declina."""
+        r = self._crear(sistema, contenido, {"type": "json_schema", "schema": esquema}, max_tokens, modelo)
+        uso = (r.usage.input_tokens, r.usage.output_tokens)
+        if r.stop_reason in ("refusal", "max_tokens"):
+            return None, *uso
+        texto = next((b.text for b in r.content if b.type == "text"), "")
+        return json.loads(texto), *uso
 
     def revisar(self, estado: dict, campo: str, pregunta: str, candidatos: list[Opcion],
                 probs: dict[str, float]) -> Revision:

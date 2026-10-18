@@ -1,0 +1,36 @@
+{
+  "_nota": "Parámetros del descubrimiento automático. Las variables, los segmentos y los umbrales de decisión NO se definen aquí: salen de los datos. Lo único que 30X elige es el nivel de riesgo.",
+
+  "modelo_jev": "jev-1.13.0",
+  "_modelo_jev": "Versión fijada: los umbrales se aprenden contra una versión concreta y el alias jev-latest puede moverse sin aviso.",
+  "modelo_llm": "claude-opus-5-5",
+  "_modelo_llm": "El LLM solo propone variables y pone nombres: 1 a 3 llamadas por descubrimiento, nunca por persona. Para gastar menos, cambiar a claude-haiku-5-5.",
+
+  "muestra_max": 400,
+  "muestra_min": 150,
+  "presupuesto_usd": 0.50,
+  "_presupuesto": "Tope por descubrimiento con JEV real. Si la estimación lo supera, se achica la muestra; si ni con la mínima cabe, no se corre.",
+  "rondas": 2,
+  "max_candidatas": 32,
+  "max_nuevas_ronda2": 8,
+  "repeticiones_consistencia": 30,
+  "trabajadores": 4,
+
+  "riesgo": "normal",
+  "niveles_riesgo": {
+    "conservador": {"precision_asignacion": 0.9, "lift_asesor": 1.5},
+    "normal": {"precision_asignacion": 0.8, "lift_asesor": 1.3},
+    "agresivo": {"precision_asignacion": 0.7, "lift_asesor": 1.15}
+  },
+
+  "reglas_fijas": {
+    "genuino_min": 0.35,
+    "_genuino_min": "Mismo umbral calibrado con JEV real para perfil_valido (2026-10-18): trampas ≤ 0,10, genuinos ≥ 0,52.",
+    "asesor_con_duda": "revision"
+  },
+
+  "seleccion": {"frecuencia_min": 0.3, "max_variables": 24, "min_variables": 3, "corr_max": 0.9, "inestable_max": 0.2,
+                "repeticiones_estabilidad": 30},
+  "segmentos": {"k_max": 8, "min_segmento": 0.04, "bootstrap_k": 6},
+  "deriva": {"ventana": 200, "margen_min": 0.08, "cambio_proporcion": 0.10}
+}
