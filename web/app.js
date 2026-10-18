@@ -236,6 +236,13 @@ function veredictoHtml(programa, accion, humana) {
   </div>`;
 }
 
+// Aviso honesto de qué son las cifras (texto del equipo, se muestra en Decisiones).
+function avisoDatos() {
+  const { metricas: m, modo } = estado.datos;
+  if (modo === "mock") return "Datos de una corrida <b>simulada</b> (JEV y LLM sustituidos por palabras clave). Prueban que el flujo funciona; las cifras reales salen al conectar el JEV real.";
+  return `Resultados de <b>JEV real</b> sobre ${m ? m.perfiles : ""} inscripciones <b>sintéticas</b> generadas con plantillas a partir de las proporciones de 30X. El texto de inscripciones reales es más variado: hay que confirmar estas cifras con una muestra real etiquetada por 30X.`;
+}
+
 // ---------- Decisiones ----------
 function detalleDecision(r) {
   const c = cat(), d = r.decision, j = r.respuestas_jev;
@@ -272,7 +279,7 @@ function renderDecisiones() {
     .map(([k, t, n]) => `<button class="seg-item" data-filtro="${k}" aria-pressed="${estado.filtroRuta === k}">${t}<span class="seg-n">${n}</span></button>`)
     .join("");
   v.innerHTML = `
-    ${encabezado("Decisiones", "Qué decidió con cada persona.<br><span class='tenue'>Y por qué.</span>")}
+    ${encabezado("Decisiones", "Qué decidió con cada persona.<br><span class='tenue'>Y por qué.</span>", avisoDatos())}
     <div class="barra-herr">
       <div class="segmentado" role="group" aria-label="Filtrar por quién decide">${opciones}</div>
       ${buscadorLocal("buscar-dec", "Buscar por ID, programa, ciudad o lo que escribió", estado.busquedaDec)}
@@ -702,7 +709,7 @@ function prepararPrueba() {
 const NOMBRES_GUARDRAIL = {
   promesas: "¿Promete algo sin respaldo?",
   tono: "¿Tono adecuado?",
-  coherencia: "¿Habla del programa y de la persona?",
+  coherencia: "¿Habla del programa sugerido?",
   instrucciones: "¿Trae instrucciones al sistema?",
 };
 

@@ -71,13 +71,14 @@ Principios, tomados de la documentación de TypeSafe:
 Servidor local sin dependencias extra (`app/servidor.py` + `web/`). Si faltan los reportes, corre las
 evaluaciones al arrancar. Las llaves se quedan en el servidor; el navegador nunca las ve.
 
-| Pestaña | Qué muestra |
+| Vista | Qué muestra |
 | --- | --- |
-| Resumen | Decisiones sin intervención humana, precisión frente a la clasificación actual de 30X, quién decide cada caso (JEV, LLM o persona) y costo frente a hacerlo todo con un LLM |
-| Decisiones | Las 300 inscripciones con filtro por ruta; al elegir una: lo que llegó, las probabilidades de JEV, la decisión, la explicación, la revisión del LLM y la respuesta conocida |
-| Reclasificación | Líneas de tiempo por persona con cada evento y lo que cambió en su segmento |
-| Política | Controles de umbrales y pesos: recalcula las 300 decisiones al instante, sin llamar a JEV, y muestra el efecto en automatización, precisión y seguridad. Descarga la configuración propuesta |
-| Pruébalo | Escribir una inscripción en vivo (con ejemplos, incluido un caso trampa), agregarle eventos para ver cómo se reclasifica y probar el guardrail de JEV sobre mensajes |
+| Personas (inicio) | La Tierra con los países y ciudades de donde llegan las personas; filtros por origen (Luma, campañas, orgánico), país, programa, edad, sector y tamaño de empresa; búsqueda y ficha de cada persona con su historia de eventos. País, ciudad, edad y origen son **sintéticos** (`scripts/generar_demografia.py`) y solo sirven para la visualización |
+| Decisiones | Las 300 inscripciones con filtro por ruta y búsqueda; al elegir una: la decisión, el porqué, lo que escribió, las probabilidades de JEV y si acertó frente a la respuesta correcta |
+| Reglas | Controles de umbrales y pesos: recalcula las 300 decisiones al instante, sin llamar a JEV, y muestra el efecto en automatización, precisión y seguridad. Descarga la configuración propuesta |
+| Probar en vivo | Escribir una inscripción en vivo (con ejemplos, incluido un caso trampa), agregarle eventos para ver cómo se reclasifica y probar el guardrail de JEV sobre mensajes |
+
+Búsqueda global con ⌘K (o `/`). Marca y uso del logo: [docs/marca/MARCA.md](docs/marca/MARCA.md).
 
 ## Datos
 
