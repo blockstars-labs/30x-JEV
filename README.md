@@ -9,6 +9,8 @@ JEV (TypeSafe AI) toma los juicios rápidos; el código toma las decisiones con 
 
 > **¿Nuevo en el proyecto?** Lee primero [docs/ESTADO_DEL_PROYECTO.md](docs/ESTADO_DEL_PROYECTO.md):
 > qué se ha hecho, decisiones tomadas, resultados, acceso a JEV y pendientes.
+>
+> **Playbook (entregable):** [docs/PLAYBOOK.md](docs/PLAYBOOK.md): la propuesta, cómo decide, umbrales, quién lo opera y cómo se mide, con los resultados de JEV real.
 
 ## Cómo funciona
 

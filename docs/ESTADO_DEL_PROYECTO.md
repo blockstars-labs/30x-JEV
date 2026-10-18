@@ -18,7 +18,7 @@ El reto es **30X: JEV**: mostrar qué decisiones de 30X puede tomar JEV (el mode
 | Vista visual del prototipo | Hecha (`python -m app.servidor`) |
 | Panel de política (umbrales y pesos en vivo) | Hecho |
 | Guardrail de JEV sobre los mensajes del LLM | Hecho, en modo simulado |
-| Playbook (máx. 5 páginas u 8 slides) | Hecho, con los resultados reales |
+| Playbook (máx. 5 páginas u 8 slides) | Hecho, con los resultados reales: [docs/PLAYBOOK.md](PLAYBOOK.md) y versión en 8 slides |
 | Repositorio público | Pendiente: hoy es privado |
 
 ## Qué se ha hecho
