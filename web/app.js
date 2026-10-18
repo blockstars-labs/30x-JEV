@@ -411,7 +411,7 @@ function detalleGente(p) {
     <div class="detalle-head"><span class="mono muted">${esc(p.perfil_id)} · ${esc(demo.ciudad)}, ${esc(demo.pais)}</span>${badgeRuta(d.ruta)}</div>
     ${veredictoHtml(c.programas[d.programa], c.acciones[d.accion_propuesta], d.ruta === "revision_humana")}
     <dl class="ficha">
-      ${fila("Llegó por", `${esc(demo.origen)}${demo.campana ? `<span class="muted"> · ${esc(demo.campana)}</span>` : ""}`)}
+      ${fila("Llegó por <span class='ilustrativo'>ilustrativo</span>", `${esc(demo.origen)}${demo.campana ? `<span class="muted"> · ${esc(demo.campana)}</span>` : ""}`)}
       ${fila("Canal", esc(CANALES[p.estado_enviado.canal] || p.estado_enviado.canal))}
       ${fila("Edad", esc(demo.edad))}
       ${fila("Sector", esc(demo.sector))}
@@ -432,6 +432,7 @@ function renderPersonas() {
     <div class="personas-top">
       <div class="globo-hueco">
         <div class="globo-dato"><span class="etiqueta-mono">Personas</span><b class="mono" id="g-total">0</b><span id="g-sub"></span></div>
+        <p class="aviso-demo"><b>Ubicación, edad, sector, empresa y origen son ilustrativos.</b> 30X solo comparte perfiles sin datos demográficos; estos se generan al azar para mostrar cómo se vería el mapa. El programa y la decisión sí salen de Pálpito.</p>
         <p class="globo-ayuda">Arrastra la Tierra · clic en un país para filtrar</p>
       </div>
       <div class="card filtros-card" id="filtros-personas"></div>

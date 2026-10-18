@@ -234,6 +234,9 @@ main { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; paddin
 .globo-dato { display: flex; flex-direction: column; gap: 2px; }
 .globo-dato b { font-size: clamp(64px, 7vw, 96px); font-weight: 400; letter-spacing: -0.06em; line-height: 1; color: var(--lima); text-shadow: 0 0 40px rgba(233, 255, 123, 0.3); margin-top: 8px; }
 .globo-dato span:last-child { color: var(--muted-fg); font-size: 14px; }
+.aviso-demo { margin-top: 16px; max-width: 34ch; font-size: 12.5px; color: var(--muted-fg); padding: 10px 12px; border-left: 2px solid var(--aviso); background: rgba(5, 5, 6, 0.92); backdrop-filter: blur(8px); position: relative; z-index: 2; pointer-events: auto; }
+.aviso-demo b { color: var(--fg); font-weight: 500; }
+.ilustrativo { font-family: var(--f-num); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--aviso); margin-left: 4px; }
 .globo-ayuda { position: absolute; left: 0; bottom: 12px; font-family: var(--f-num); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-fg); }
 body[data-escena="personas"] main, body[data-escena="personas"] #vista-reclasificacion, body[data-escena="personas"] .personas-top, body[data-escena="personas"] .globo-hueco { pointer-events: none; }
 body[data-escena="personas"] .filtros-card, body[data-escena="personas"] #personas-cuerpo, body[data-escena="personas"] .vista:not(#vista-reclasificacion) { pointer-events: auto; }
