@@ -225,7 +225,6 @@ def analizar(simulada: dict, actual: dict, politica: dict, politica_actual: dict
         "alertas": alertas,
         "cambios": _cambios(simulada, actual, politica, politica_actual),
         "secciones": [_que_pasa(simulada), ventas, contenido, confianza],
-        "nota": (f"Calculado sobre {total} inscripciones sintéticas del prototipo, con las respuestas de JEV "
-                 f"{'real' if modo == 'live' else 'simulado'} ya guardadas. Mover los controles no vuelve a "
-                 "llamar a JEV."),
+        "nota": (f"Calculado sobre {total} inscripciones con las respuestas de JEV ya guardadas. "
+                 "Mover los controles no vuelve a llamar a JEV."),
     }

@@ -32,5 +32,7 @@
   "seleccion": {"frecuencia_min": 0.3, "max_variables": 24, "min_variables": 3, "corr_max": 0.9, "inestable_max": 0.2,
                 "repeticiones_estabilidad": 30},
   "segmentos": {"k_max": 8, "min_segmento": 0.04, "bootstrap_k": 6},
-  "deriva": {"ventana": 200, "margen_min": 0.08, "cambio_proporcion": 0.10}
+  "deriva": {"ventana": 200, "margen_min": 0.08, "cambio_proporcion": 0.10},
+  "alertas": {"tasa_alto": 0.6, "lift_medio": 2.0,
+              "_nota": "Metas de precisión de las alertas de abandono: los umbrales de riesgo que las cumplen se aprenden fuera de muestra."}
 }

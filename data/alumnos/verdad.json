@@ -1,0 +1,2166 @@
+{
+ "_nota": "Solo para evaluar: el sistema nunca lee este archivo.",
+ "corte": "2026-10-18",
+ "alumnos": {
+  "A-0001": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0002": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0003": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0004": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0005": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0006": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0007": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0008": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0009": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0010": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0011": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0012": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0013": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0014": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0015": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0016": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0017": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0018": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0019": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0020": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0021": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0022": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0023": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0024": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0025": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0026": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0027": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0028": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0029": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0030": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0031": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0032": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0033": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0034": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0035": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0036": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0037": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0038": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0039": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0040": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0041": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0042": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0043": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0044": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0045": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0046": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0047": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0048": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0049": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0050": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0051": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0052": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0053": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0054": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0055": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0056": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0057": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0058": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0059": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0060": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0061": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0062": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0063": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0064": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0065": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0066": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0067": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0068": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0069": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0070": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0071": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0072": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0073": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0074": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0075": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0076": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0077": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0078": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0079": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0080": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0081": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0082": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0083": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0084": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0085": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0086": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0087": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0088": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0089": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0090": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0091": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0092": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0093": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0094": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0095": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0096": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0097": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0098": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0099": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0100": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0101": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0102": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0103": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0104": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0105": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0106": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0107": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0108": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0109": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0110": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0111": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0112": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0113": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0114": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0115": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0116": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0117": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0118": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0119": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0120": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0121": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0122": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0123": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0124": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0125": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0126": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0127": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0128": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0129": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0130": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0131": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0132": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0133": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0134": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0135": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0136": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0137": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0138": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0139": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0140": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0141": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0142": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0143": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0144": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0145": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0146": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0147": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0148": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0149": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0150": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0151": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0152": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0153": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0154": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0155": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0156": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0157": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0158": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0159": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0160": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0161": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0162": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0163": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0164": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0165": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0166": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0167": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0168": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0169": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0170": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0171": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0172": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0173": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0174": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0175": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0176": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0177": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0178": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0179": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0180": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0181": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0182": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0183": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0184": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0185": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0186": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0187": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0188": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0189": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0190": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0191": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0192": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0193": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0194": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0195": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0196": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0197": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0198": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0199": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0200": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0201": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0202": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0203": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0204": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0205": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0206": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0207": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0208": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0209": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0210": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0211": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0212": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0213": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0214": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0215": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0216": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0217": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0218": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0219": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0220": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0221": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0222": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0223": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0224": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0225": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0226": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0227": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0228": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0229": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0230": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0231": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0232": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0233": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0234": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0235": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0236": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0237": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0238": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0239": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0240": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0241": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0242": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0243": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0244": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0245": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0246": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0247": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0248": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0249": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0250": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0251": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0252": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0253": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0254": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0255": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0256": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0257": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0258": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0259": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0260": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0261": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0262": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0263": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0264": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0265": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0266": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0267": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0268": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0269": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0270": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0271": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0272": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0273": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0274": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0275": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0276": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0277": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0278": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0279": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0280": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0281": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0282": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0283": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0284": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0285": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0286": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0287": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0288": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0289": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0290": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0291": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0292": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0293": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0294": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0295": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0296": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0297": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0298": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0299": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0300": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0301": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0302": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0303": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0304": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0305": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0306": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0307": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0308": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0309": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0310": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0311": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0312": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0313": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0314": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0315": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0316": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0317": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0318": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0319": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0320": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0321": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0322": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0323": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0324": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0325": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0326": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0327": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0328": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0329": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0330": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0331": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0332": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0333": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0334": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0335": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0336": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0337": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0338": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0339": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0340": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0341": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0342": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0343": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0344": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0345": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0346": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0347": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0348": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0349": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0350": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0351": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0352": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0353": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0354": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0355": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0356": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0357": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0358": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0359": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0360": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0361": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0362": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0363": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0364": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0365": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0366": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0367": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0368": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0369": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0370": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0371": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0372": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0373": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0374": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0375": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0376": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0377": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0378": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0379": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0380": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0381": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0382": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0383": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0384": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0385": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0386": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0387": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0388": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0389": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0390": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0391": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0392": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0393": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0394": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0395": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0396": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0397": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0398": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0399": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0400": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0401": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0402": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0403": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0404": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0405": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0406": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0407": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0408": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0409": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0410": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0411": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0412": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0413": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0414": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0415": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0416": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0417": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0418": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0419": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0420": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0421": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0422": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0423": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0424": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0425": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0426": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0427": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0428": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0429": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0430": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0431": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0432": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0433": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0434": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0435": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0436": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0437": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0438": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0439": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0440": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0441": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0442": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0443": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0444": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0445": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0446": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0447": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0448": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0449": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0450": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0451": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0452": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0453": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0454": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0455": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0456": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0457": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0458": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0459": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0460": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0461": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0462": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0463": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0464": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0465": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0466": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0467": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0468": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0469": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0470": {
+   "perfil": "comprometido",
+   "abandona": true
+  },
+  "A-0471": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0472": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0473": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0474": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0475": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0476": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0477": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0478": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0479": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0480": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0481": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0482": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0483": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0484": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0485": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0486": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0487": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0488": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0489": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0490": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0491": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0492": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0493": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0494": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0495": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0496": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0497": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0498": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0499": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0500": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0501": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0502": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0503": {
+   "perfil": "desconectado",
+   "abandona": true
+  },
+  "A-0504": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0505": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0506": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0507": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0508": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0509": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0510": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0511": {
+   "perfil": "desconectado",
+   "abandona": false
+  },
+  "A-0512": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0513": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0514": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0515": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0516": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0517": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0518": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0519": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0520": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0521": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0522": {
+   "perfil": "sin_tiempo",
+   "abandona": true
+  },
+  "A-0523": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0524": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0525": {
+   "perfil": "frustrado",
+   "abandona": false
+  },
+  "A-0526": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0527": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0528": {
+   "perfil": "sin_tiempo",
+   "abandona": false
+  },
+  "A-0529": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0530": {
+   "perfil": "rezagado",
+   "abandona": false
+  },
+  "A-0531": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0532": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0533": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0534": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0535": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0536": {
+   "perfil": "frustrado",
+   "abandona": true
+  },
+  "A-0537": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0538": {
+   "perfil": "rezagado",
+   "abandona": true
+  },
+  "A-0539": {
+   "perfil": "comprometido",
+   "abandona": false
+  },
+  "A-0540": {
+   "perfil": "comprometido",
+   "abandona": false
+  }
+ }
+}

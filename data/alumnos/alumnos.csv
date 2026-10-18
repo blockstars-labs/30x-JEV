@@ -1,0 +1,541 @@
+alumno,nombre,correo,programa,cohorte,cargo,fecha_inicio,estado_final
+A-0001,Isabella Rojas,a-0001@example.com,AI for Executives,2026-04,Líder de producto,2026-04-06,Terminó
+A-0002,Sebastián Mejía,a-0002@example.com,AI Sales,2026-04,Gerente general,2026-04-06,Abandonó
+A-0003,Daniela Rojas,a-0003@example.com,AI Sales,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0004,Mariana Salazar,a-0004@example.com,30X Executive Program,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0005,Santiago Quintero,a-0005@example.com,AI Sales,2026-04,CEO,2026-04-06,Terminó
+A-0006,Santiago Ospina,a-0006@example.com,Sales Machine,2026-04,CEO,2026-04-06,Terminó
+A-0007,Mateo Herrera,a-0007@example.com,AI for devs,2026-04,Fundadora,2026-04-06,Terminó
+A-0008,Andrés Herrera,a-0008@example.com,30X Executive Program,2026-04,Líder de producto,2026-04-06,Terminó
+A-0009,Sebastián Quintero,a-0009@example.com,AI Second Brain,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0010,Andrés Herrera,a-0010@example.com,AI for devs,2026-04,Analista de datos,2026-04-06,Terminó
+A-0011,Sebastián Villalba,a-0011@example.com,AI for Executives,2026-04,Desarrollador,2026-04-06,Terminó
+A-0012,Valentina Salazar,a-0012@example.com,Sales Machine,2026-04,Líder de producto,2026-04-06,Terminó
+A-0013,Mateo Villalba,a-0013@example.com,AI Second Brain,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0014,Mariana Rojas,a-0014@example.com,AI Sales,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0015,Sebastián Castaño,a-0015@example.com,AI Second Brain,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0016,Andrés Villalba,a-0016@example.com,30X Executive Program,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0017,Valentina Quintero,a-0017@example.com,Sales Machine,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0018,Santiago Rojas,a-0018@example.com,AI for Executives,2026-04,Analista de datos,2026-04-06,Terminó
+A-0019,Mateo Ospina,a-0019@example.com,AI Second Brain,2026-04,Director de operaciones,2026-04-06,Abandonó
+A-0020,Camila Quintero,a-0020@example.com,30X Executive Program,2026-04,Analista de datos,2026-04-06,Terminó
+A-0021,Camila Villalba,a-0021@example.com,AI for devs,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0022,Nicolás Mejía,a-0022@example.com,AI Sales,2026-04,CEO,2026-04-06,Terminó
+A-0023,Sebastián Salazar,a-0023@example.com,AI Second Brain,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0024,Valentina Salazar,a-0024@example.com,AI Sales,2026-04,Fundadora,2026-04-06,Abandonó
+A-0025,Santiago Salazar,a-0025@example.com,Sales Machine,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0026,Mariana Mejía,a-0026@example.com,AI Second Brain,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0027,Daniela Mejía,a-0027@example.com,30X Executive Program,2026-04,Gerente general,2026-04-06,Terminó
+A-0028,Mariana Rojas,a-0028@example.com,AI for Executives,2026-04,CEO,2026-04-06,Terminó
+A-0029,Sebastián Salazar,a-0029@example.com,AI for Executives,2026-04,Gerente general,2026-04-06,Terminó
+A-0030,Andrés Herrera,a-0030@example.com,AI Sales,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0031,Valentina Ospina,a-0031@example.com,AI for Executives,2026-04,Coordinador de ventas,2026-04-06,Abandonó
+A-0032,Isabella Salazar,a-0032@example.com,AI Sales,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0033,Andrés Rojas,a-0033@example.com,AI Sales,2026-04,Desarrollador,2026-04-06,Terminó
+A-0034,Mariana Mejía,a-0034@example.com,AI for devs,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0035,Sebastián Castaño,a-0035@example.com,Sales Machine,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0036,Nicolás Mejía,a-0036@example.com,AI for Executives,2026-04,Gerente general,2026-04-06,Terminó
+A-0037,Mariana Villalba,a-0037@example.com,Sales Machine,2026-04,CEO,2026-04-06,Abandonó
+A-0038,Daniela Villalba,a-0038@example.com,30X Executive Program,2026-04,Gerente general,2026-04-06,Terminó
+A-0039,Daniela Ospina,a-0039@example.com,AI Second Brain,2026-04,Fundadora,2026-04-06,Terminó
+A-0040,Isabella Quintero,a-0040@example.com,AI for Executives,2026-04,Desarrollador,2026-04-06,Terminó
+A-0041,Valentina Ospina,a-0041@example.com,AI Second Brain,2026-04,Líder de producto,2026-04-06,Terminó
+A-0042,Daniela Quintero,a-0042@example.com,30X Executive Program,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0043,Mateo Villalba,a-0043@example.com,Sales Machine,2026-04,Fundadora,2026-04-06,Terminó
+A-0044,Mateo Ospina,a-0044@example.com,30X Executive Program,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0045,Isabella Castaño,a-0045@example.com,AI Second Brain,2026-04,Fundadora,2026-04-06,Terminó
+A-0046,Nicolás Villalba,a-0046@example.com,30X Executive Program,2026-04,Gerente general,2026-04-06,Terminó
+A-0047,Mariana Rojas,a-0047@example.com,AI Second Brain,2026-04,Desarrollador,2026-04-06,Abandonó
+A-0048,Sebastián Ospina,a-0048@example.com,AI Sales,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0049,Sebastián Castaño,a-0049@example.com,Sales Machine,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0050,Santiago Castaño,a-0050@example.com,AI Second Brain,2026-04,CEO,2026-04-06,Terminó
+A-0051,Nicolás Castaño,a-0051@example.com,AI for devs,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0052,Nicolás Castaño,a-0052@example.com,AI for Executives,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0053,Sebastián Rojas,a-0053@example.com,AI for Executives,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0054,Andrés Salazar,a-0054@example.com,30X Executive Program,2026-04,Desarrollador,2026-04-06,Abandonó
+A-0055,Mateo Castaño,a-0055@example.com,AI Sales,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0056,Isabella Villalba,a-0056@example.com,AI for devs,2026-04,Analista de datos,2026-04-06,Terminó
+A-0057,Andrés Salazar,a-0057@example.com,AI Sales,2026-04,Gerente general,2026-04-06,Terminó
+A-0058,Isabella Villalba,a-0058@example.com,AI Sales,2026-04,Fundadora,2026-04-06,Terminó
+A-0059,Mariana Castaño,a-0059@example.com,AI Second Brain,2026-04,CEO,2026-04-06,Terminó
+A-0060,Valentina Herrera,a-0060@example.com,AI Second Brain,2026-04,Fundadora,2026-04-06,Terminó
+A-0061,Mateo Mejía,a-0061@example.com,AI Sales,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0062,Isabella Herrera,a-0062@example.com,AI Sales,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0063,Camila Salazar,a-0063@example.com,AI Second Brain,2026-04,Analista de datos,2026-04-06,Terminó
+A-0064,Camila Herrera,a-0064@example.com,Sales Machine,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0065,Nicolás Rojas,a-0065@example.com,AI for devs,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0066,Daniela Castaño,a-0066@example.com,AI for Executives,2026-04,Analista de datos,2026-04-06,Terminó
+A-0067,Valentina Salazar,a-0067@example.com,AI for Executives,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0068,Mateo Mejía,a-0068@example.com,30X Executive Program,2026-04,Líder de producto,2026-04-06,Terminó
+A-0069,Isabella Mejía,a-0069@example.com,30X Executive Program,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0070,Mateo Mejía,a-0070@example.com,Sales Machine,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0071,Camila Quintero,a-0071@example.com,AI Sales,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0072,Camila Villalba,a-0072@example.com,AI for devs,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0073,Camila Quintero,a-0073@example.com,Sales Machine,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0074,Mariana Castaño,a-0074@example.com,30X Executive Program,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0075,Andrés Mejía,a-0075@example.com,AI for devs,2026-04,Analista de datos,2026-04-06,Terminó
+A-0076,Daniela Herrera,a-0076@example.com,AI Sales,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0077,Andrés Villalba,a-0077@example.com,30X Executive Program,2026-04,Analista de datos,2026-04-06,Abandonó
+A-0078,Valentina Villalba,a-0078@example.com,AI for devs,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0079,Santiago Ospina,a-0079@example.com,AI for Executives,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0080,Camila Salazar,a-0080@example.com,AI Sales,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0081,Nicolás Herrera,a-0081@example.com,AI for devs,2026-04,Analista de datos,2026-04-06,Terminó
+A-0082,Nicolás Mejía,a-0082@example.com,AI Sales,2026-04,Analista de datos,2026-04-06,Abandonó
+A-0083,Mariana Ospina,a-0083@example.com,AI for devs,2026-04,Fundadora,2026-04-06,Terminó
+A-0084,Valentina Salazar,a-0084@example.com,Sales Machine,2026-04,Director de operaciones,2026-04-06,Abandonó
+A-0085,Andrés Mejía,a-0085@example.com,Sales Machine,2026-04,CEO,2026-04-06,Terminó
+A-0086,Isabella Rojas,a-0086@example.com,AI Second Brain,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0087,Santiago Salazar,a-0087@example.com,AI Sales,2026-04,CEO,2026-04-06,Terminó
+A-0088,Santiago Villalba,a-0088@example.com,AI for devs,2026-04,Analista de datos,2026-04-06,Terminó
+A-0089,Santiago Quintero,a-0089@example.com,AI for devs,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0090,Andrés Quintero,a-0090@example.com,Sales Machine,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0091,Andrés Salazar,a-0091@example.com,30X Executive Program,2026-04,CEO,2026-04-06,Terminó
+A-0092,Sebastián Villalba,a-0092@example.com,AI for Executives,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0093,Santiago Herrera,a-0093@example.com,AI for Executives,2026-04,Analista de datos,2026-04-06,Terminó
+A-0094,Daniela Ospina,a-0094@example.com,Sales Machine,2026-04,Fundadora,2026-04-06,Terminó
+A-0095,Mariana Quintero,a-0095@example.com,AI Second Brain,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0096,Mateo Salazar,a-0096@example.com,AI Sales,2026-04,Fundadora,2026-04-06,Abandonó
+A-0097,Andrés Quintero,a-0097@example.com,AI Second Brain,2026-04,Fundadora,2026-04-06,Abandonó
+A-0098,Isabella Ospina,a-0098@example.com,Sales Machine,2026-04,Fundadora,2026-04-06,Terminó
+A-0099,Valentina Herrera,a-0099@example.com,Sales Machine,2026-04,Líder de producto,2026-04-06,Terminó
+A-0100,Mariana Mejía,a-0100@example.com,Sales Machine,2026-04,Jefa de marketing,2026-04-06,Abandonó
+A-0101,Valentina Herrera,a-0101@example.com,Sales Machine,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0102,Isabella Castaño,a-0102@example.com,Sales Machine,2026-04,Fundadora,2026-04-06,Abandonó
+A-0103,Isabella Ospina,a-0103@example.com,30X Executive Program,2026-04,CEO,2026-04-06,Terminó
+A-0104,Sebastián Mejía,a-0104@example.com,AI for Executives,2026-04,Analista de datos,2026-04-06,Terminó
+A-0105,Camila Rojas,a-0105@example.com,AI for devs,2026-04,Fundadora,2026-04-06,Terminó
+A-0106,Camila Herrera,a-0106@example.com,AI for Executives,2026-04,Director de operaciones,2026-04-06,Abandonó
+A-0107,Mariana Mejía,a-0107@example.com,AI Second Brain,2026-04,Fundadora,2026-04-06,Terminó
+A-0108,Andrés Salazar,a-0108@example.com,AI Sales,2026-04,Director de operaciones,2026-04-06,Terminó
+A-0109,Nicolás Ospina,a-0109@example.com,30X Executive Program,2026-04,Coordinador de ventas,2026-04-06,Terminó
+A-0110,Sebastián Ospina,a-0110@example.com,Sales Machine,2026-04,Fundadora,2026-04-06,Terminó
+A-0111,Santiago Quintero,a-0111@example.com,AI for devs,2026-04,Desarrollador,2026-04-06,Terminó
+A-0112,Santiago Herrera,a-0112@example.com,AI for devs,2026-04,Analista de datos,2026-04-06,Terminó
+A-0113,Mateo Castaño,a-0113@example.com,Sales Machine,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0114,Camila Herrera,a-0114@example.com,30X Executive Program,2026-04,Gerente comercial,2026-04-06,Terminó
+A-0115,Camila Villalba,a-0115@example.com,30X Executive Program,2026-04,Líder de producto,2026-04-06,Terminó
+A-0116,Sebastián Quintero,a-0116@example.com,30X Executive Program,2026-04,Analista de datos,2026-04-06,Abandonó
+A-0117,Daniela Villalba,a-0117@example.com,AI for Executives,2026-04,Gerente general,2026-04-06,Terminó
+A-0118,Mariana Herrera,a-0118@example.com,30X Executive Program,2026-04,Líder de producto,2026-04-06,Terminó
+A-0119,Santiago Villalba,a-0119@example.com,Sales Machine,2026-04,Líder de producto,2026-04-06,Terminó
+A-0120,Andrés Quintero,a-0120@example.com,30X Executive Program,2026-04,Desarrollador,2026-04-06,Terminó
+A-0121,Mariana Salazar,a-0121@example.com,30X Executive Program,2026-04,Desarrollador,2026-04-06,Terminó
+A-0122,Andrés Ospina,a-0122@example.com,AI Sales,2026-04,Gerente comercial,2026-04-06,Abandonó
+A-0123,Sebastián Mejía,a-0123@example.com,AI for devs,2026-04,CEO,2026-04-06,Terminó
+A-0124,Mariana Villalba,a-0124@example.com,Sales Machine,2026-04,Fundadora,2026-04-06,Terminó
+A-0125,Sebastián Rojas,a-0125@example.com,AI Sales,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0126,Valentina Ospina,a-0126@example.com,Sales Machine,2026-04,Gerente general,2026-04-06,Abandonó
+A-0127,Daniela Herrera,a-0127@example.com,AI Sales,2026-04,Jefa de marketing,2026-04-06,Terminó
+A-0128,Daniela Ospina,a-0128@example.com,AI for devs,2026-04,Desarrollador,2026-04-06,Terminó
+A-0129,Camila Rojas,a-0129@example.com,AI for Executives,2026-04,Fundadora,2026-04-06,Terminó
+A-0130,Mateo Mejía,a-0130@example.com,AI for Executives,2026-04,CEO,2026-04-06,Abandonó
+A-0131,Santiago Rojas,a-0131@example.com,30X Executive Program,2026-05,Gerente general,2026-05-04,Abandonó
+A-0132,Mateo Quintero,a-0132@example.com,AI for Executives,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0133,Mariana Salazar,a-0133@example.com,30X Executive Program,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0134,Mateo Salazar,a-0134@example.com,AI for Executives,2026-05,Líder de producto,2026-05-04,Terminó
+A-0135,Mateo Herrera,a-0135@example.com,Sales Machine,2026-05,Analista de datos,2026-05-04,Terminó
+A-0136,Mateo Mejía,a-0136@example.com,AI for devs,2026-05,Desarrollador,2026-05-04,Terminó
+A-0137,Mariana Quintero,a-0137@example.com,AI for devs,2026-05,Líder de producto,2026-05-04,Terminó
+A-0138,Andrés Castaño,a-0138@example.com,Sales Machine,2026-05,Director de operaciones,2026-05-04,Abandonó
+A-0139,Sebastián Quintero,a-0139@example.com,AI for Executives,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0140,Santiago Salazar,a-0140@example.com,30X Executive Program,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0141,Sebastián Rojas,a-0141@example.com,30X Executive Program,2026-05,Director de operaciones,2026-05-04,Abandonó
+A-0142,Santiago Ospina,a-0142@example.com,AI Second Brain,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0143,Isabella Salazar,a-0143@example.com,AI Sales,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0144,Sebastián Ospina,a-0144@example.com,AI Second Brain,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0145,Sebastián Mejía,a-0145@example.com,30X Executive Program,2026-05,CEO,2026-05-04,Terminó
+A-0146,Daniela Salazar,a-0146@example.com,AI Second Brain,2026-05,CEO,2026-05-04,Terminó
+A-0147,Sebastián Villalba,a-0147@example.com,AI for Executives,2026-05,Analista de datos,2026-05-04,Terminó
+A-0148,Santiago Salazar,a-0148@example.com,AI for Executives,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0149,Santiago Ospina,a-0149@example.com,AI Sales,2026-05,CEO,2026-05-04,Terminó
+A-0150,Sebastián Rojas,a-0150@example.com,AI Second Brain,2026-05,Fundadora,2026-05-04,Terminó
+A-0151,Mateo Villalba,a-0151@example.com,AI for devs,2026-05,Líder de producto,2026-05-04,Abandonó
+A-0152,Mariana Rojas,a-0152@example.com,30X Executive Program,2026-05,Coordinador de ventas,2026-05-04,Abandonó
+A-0153,Camila Ospina,a-0153@example.com,AI for Executives,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0154,Daniela Herrera,a-0154@example.com,AI for Executives,2026-05,Desarrollador,2026-05-04,Terminó
+A-0155,Valentina Villalba,a-0155@example.com,AI Second Brain,2026-05,Desarrollador,2026-05-04,Terminó
+A-0156,Sebastián Villalba,a-0156@example.com,AI for Executives,2026-05,Líder de producto,2026-05-04,Terminó
+A-0157,Nicolás Castaño,a-0157@example.com,AI for devs,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0158,Mateo Mejía,a-0158@example.com,AI for Executives,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0159,Camila Quintero,a-0159@example.com,AI for devs,2026-05,Gerente comercial,2026-05-04,Abandonó
+A-0160,Santiago Salazar,a-0160@example.com,AI for Executives,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0161,Mariana Mejía,a-0161@example.com,AI Second Brain,2026-05,Líder de producto,2026-05-04,Terminó
+A-0162,Sebastián Salazar,a-0162@example.com,AI Sales,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0163,Andrés Quintero,a-0163@example.com,AI for Executives,2026-05,Líder de producto,2026-05-04,Terminó
+A-0164,Isabella Rojas,a-0164@example.com,AI for devs,2026-05,Desarrollador,2026-05-04,Terminó
+A-0165,Isabella Villalba,a-0165@example.com,AI for Executives,2026-05,Gerente general,2026-05-04,Terminó
+A-0166,Nicolás Mejía,a-0166@example.com,Sales Machine,2026-05,Líder de producto,2026-05-04,Terminó
+A-0167,Daniela Mejía,a-0167@example.com,AI Sales,2026-05,Fundadora,2026-05-04,Abandonó
+A-0168,Santiago Villalba,a-0168@example.com,AI for Executives,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0169,Isabella Ospina,a-0169@example.com,AI Sales,2026-05,Desarrollador,2026-05-04,Terminó
+A-0170,Valentina Castaño,a-0170@example.com,Sales Machine,2026-05,Desarrollador,2026-05-04,Terminó
+A-0171,Mateo Villalba,a-0171@example.com,30X Executive Program,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0172,Santiago Mejía,a-0172@example.com,AI Sales,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0173,Andrés Rojas,a-0173@example.com,Sales Machine,2026-05,Desarrollador,2026-05-04,Terminó
+A-0174,Mariana Rojas,a-0174@example.com,AI for Executives,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0175,Daniela Mejía,a-0175@example.com,AI Sales,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0176,Camila Rojas,a-0176@example.com,AI Sales,2026-05,CEO,2026-05-04,Terminó
+A-0177,Daniela Ospina,a-0177@example.com,AI Sales,2026-05,Desarrollador,2026-05-04,Terminó
+A-0178,Santiago Quintero,a-0178@example.com,AI for Executives,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0179,Valentina Quintero,a-0179@example.com,AI for Executives,2026-05,Analista de datos,2026-05-04,Abandonó
+A-0180,Sebastián Ospina,a-0180@example.com,AI Second Brain,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0181,Andrés Quintero,a-0181@example.com,AI for Executives,2026-05,Director de operaciones,2026-05-04,Abandonó
+A-0182,Sebastián Castaño,a-0182@example.com,AI Second Brain,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0183,Mateo Salazar,a-0183@example.com,30X Executive Program,2026-05,Gerente general,2026-05-04,Abandonó
+A-0184,Andrés Villalba,a-0184@example.com,30X Executive Program,2026-05,Director de operaciones,2026-05-04,Abandonó
+A-0185,Nicolás Ospina,a-0185@example.com,AI Sales,2026-05,Fundadora,2026-05-04,Terminó
+A-0186,Santiago Mejía,a-0186@example.com,AI Second Brain,2026-05,Fundadora,2026-05-04,Terminó
+A-0187,Isabella Herrera,a-0187@example.com,AI Sales,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0188,Santiago Mejía,a-0188@example.com,30X Executive Program,2026-05,CEO,2026-05-04,Terminó
+A-0189,Sebastián Rojas,a-0189@example.com,AI for devs,2026-05,CEO,2026-05-04,Terminó
+A-0190,Sebastián Rojas,a-0190@example.com,AI Sales,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0191,Mateo Quintero,a-0191@example.com,AI Second Brain,2026-05,CEO,2026-05-04,Terminó
+A-0192,Valentina Mejía,a-0192@example.com,AI Second Brain,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0193,Isabella Quintero,a-0193@example.com,AI Second Brain,2026-05,Analista de datos,2026-05-04,Terminó
+A-0194,Camila Quintero,a-0194@example.com,30X Executive Program,2026-05,Líder de producto,2026-05-04,Terminó
+A-0195,Isabella Rojas,a-0195@example.com,Sales Machine,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0196,Sebastián Herrera,a-0196@example.com,AI Second Brain,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0197,Camila Herrera,a-0197@example.com,30X Executive Program,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0198,Santiago Rojas,a-0198@example.com,30X Executive Program,2026-05,Gerente general,2026-05-04,Terminó
+A-0199,Valentina Herrera,a-0199@example.com,AI for devs,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0200,Santiago Rojas,a-0200@example.com,Sales Machine,2026-05,Gerente general,2026-05-04,Terminó
+A-0201,Valentina Castaño,a-0201@example.com,30X Executive Program,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0202,Nicolás Herrera,a-0202@example.com,Sales Machine,2026-05,Gerente comercial,2026-05-04,Abandonó
+A-0203,Daniela Villalba,a-0203@example.com,AI for devs,2026-05,Gerente general,2026-05-04,Terminó
+A-0204,Mariana Herrera,a-0204@example.com,AI for devs,2026-05,Analista de datos,2026-05-04,Abandonó
+A-0205,Camila Rojas,a-0205@example.com,AI for Executives,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0206,Nicolás Quintero,a-0206@example.com,AI for devs,2026-05,Fundadora,2026-05-04,Abandonó
+A-0207,Mateo Rojas,a-0207@example.com,AI Second Brain,2026-05,Gerente general,2026-05-04,Terminó
+A-0208,Daniela Rojas,a-0208@example.com,AI for devs,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0209,Andrés Salazar,a-0209@example.com,Sales Machine,2026-05,Desarrollador,2026-05-04,Terminó
+A-0210,Mariana Ospina,a-0210@example.com,AI for Executives,2026-05,Analista de datos,2026-05-04,Terminó
+A-0211,Sebastián Herrera,a-0211@example.com,AI Second Brain,2026-05,Desarrollador,2026-05-04,Abandonó
+A-0212,Mariana Salazar,a-0212@example.com,AI Sales,2026-05,CEO,2026-05-04,Terminó
+A-0213,Santiago Rojas,a-0213@example.com,AI for devs,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0214,Mariana Villalba,a-0214@example.com,AI for devs,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0215,Andrés Castaño,a-0215@example.com,Sales Machine,2026-05,CEO,2026-05-04,Terminó
+A-0216,Camila Mejía,a-0216@example.com,AI for Executives,2026-05,Gerente general,2026-05-04,Terminó
+A-0217,Isabella Salazar,a-0217@example.com,Sales Machine,2026-05,Analista de datos,2026-05-04,Terminó
+A-0218,Mateo Rojas,a-0218@example.com,Sales Machine,2026-05,Desarrollador,2026-05-04,Terminó
+A-0219,Sebastián Ospina,a-0219@example.com,AI Sales,2026-05,Desarrollador,2026-05-04,Terminó
+A-0220,Andrés Salazar,a-0220@example.com,Sales Machine,2026-05,CEO,2026-05-04,Terminó
+A-0221,Mateo Herrera,a-0221@example.com,AI Second Brain,2026-05,Fundadora,2026-05-04,Abandonó
+A-0222,Santiago Castaño,a-0222@example.com,Sales Machine,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0223,Sebastián Quintero,a-0223@example.com,Sales Machine,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0224,Camila Quintero,a-0224@example.com,AI for devs,2026-05,Fundadora,2026-05-04,Terminó
+A-0225,Sebastián Salazar,a-0225@example.com,Sales Machine,2026-05,Gerente comercial,2026-05-04,Abandonó
+A-0226,Valentina Castaño,a-0226@example.com,AI Second Brain,2026-05,Desarrollador,2026-05-04,Terminó
+A-0227,Mateo Castaño,a-0227@example.com,AI for devs,2026-05,Líder de producto,2026-05-04,Terminó
+A-0228,Daniela Herrera,a-0228@example.com,AI for devs,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0229,Sebastián Villalba,a-0229@example.com,AI Sales,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0230,Camila Villalba,a-0230@example.com,AI for Executives,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0231,Valentina Castaño,a-0231@example.com,AI for devs,2026-05,Fundadora,2026-05-04,Abandonó
+A-0232,Mateo Herrera,a-0232@example.com,AI Sales,2026-05,Coordinador de ventas,2026-05-04,Terminó
+A-0233,Mariana Villalba,a-0233@example.com,30X Executive Program,2026-05,Fundadora,2026-05-04,Terminó
+A-0234,Santiago Rojas,a-0234@example.com,30X Executive Program,2026-05,Fundadora,2026-05-04,Terminó
+A-0235,Mateo Salazar,a-0235@example.com,Sales Machine,2026-05,Coordinador de ventas,2026-05-04,Abandonó
+A-0236,Mariana Castaño,a-0236@example.com,AI for Executives,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0237,Valentina Ospina,a-0237@example.com,AI for Executives,2026-05,Director de operaciones,2026-05-04,Abandonó
+A-0238,Mateo Quintero,a-0238@example.com,AI for devs,2026-05,Analista de datos,2026-05-04,Terminó
+A-0239,Isabella Villalba,a-0239@example.com,AI for Executives,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0240,Mateo Mejía,a-0240@example.com,30X Executive Program,2026-05,Director de operaciones,2026-05-04,Abandonó
+A-0241,Sebastián Mejía,a-0241@example.com,AI for devs,2026-05,Gerente general,2026-05-04,Terminó
+A-0242,Andrés Rojas,a-0242@example.com,AI Sales,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0243,Andrés Quintero,a-0243@example.com,AI for Executives,2026-05,Jefa de marketing,2026-05-04,Abandonó
+A-0244,Daniela Herrera,a-0244@example.com,AI Sales,2026-05,Fundadora,2026-05-04,Abandonó
+A-0245,Daniela Mejía,a-0245@example.com,Sales Machine,2026-05,Fundadora,2026-05-04,Terminó
+A-0246,Daniela Ospina,a-0246@example.com,AI for devs,2026-05,Gerente general,2026-05-04,Terminó
+A-0247,Daniela Mejía,a-0247@example.com,AI for Executives,2026-05,Desarrollador,2026-05-04,Terminó
+A-0248,Mariana Rojas,a-0248@example.com,AI Second Brain,2026-05,Fundadora,2026-05-04,Terminó
+A-0249,Sebastián Castaño,a-0249@example.com,AI Second Brain,2026-05,Gerente comercial,2026-05-04,Abandonó
+A-0250,Valentina Ospina,a-0250@example.com,AI for Executives,2026-05,Coordinador de ventas,2026-05-04,Abandonó
+A-0251,Santiago Ospina,a-0251@example.com,AI Second Brain,2026-05,Director de operaciones,2026-05-04,Terminó
+A-0252,Daniela Rojas,a-0252@example.com,Sales Machine,2026-05,Coordinador de ventas,2026-05-04,Abandonó
+A-0253,Valentina Villalba,a-0253@example.com,30X Executive Program,2026-05,Jefa de marketing,2026-05-04,Terminó
+A-0254,Valentina Quintero,a-0254@example.com,Sales Machine,2026-05,Gerente general,2026-05-04,Abandonó
+A-0255,Santiago Ospina,a-0255@example.com,Sales Machine,2026-05,Fundadora,2026-05-04,Abandonó
+A-0256,Daniela Quintero,a-0256@example.com,30X Executive Program,2026-05,Gerente comercial,2026-05-04,Terminó
+A-0257,Andrés Quintero,a-0257@example.com,Sales Machine,2026-05,Gerente general,2026-05-04,Terminó
+A-0258,Valentina Villalba,a-0258@example.com,AI Sales,2026-05,CEO,2026-05-04,Terminó
+A-0259,Isabella Quintero,a-0259@example.com,Sales Machine,2026-05,CEO,2026-05-04,Terminó
+A-0260,Camila Herrera,a-0260@example.com,30X Executive Program,2026-05,CEO,2026-05-04,Abandonó
+A-0261,Daniela Quintero,a-0261@example.com,AI Sales,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0262,Nicolás Rojas,a-0262@example.com,30X Executive Program,2026-06,Fundadora,2026-06-01,Abandonó
+A-0263,Daniela Ospina,a-0263@example.com,AI for devs,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0264,Daniela Ospina,a-0264@example.com,AI for Executives,2026-06,Gerente general,2026-06-01,Abandonó
+A-0265,Valentina Herrera,a-0265@example.com,AI for Executives,2026-06,Desarrollador,2026-06-01,Terminó
+A-0266,Isabella Villalba,a-0266@example.com,AI Sales,2026-06,Coordinador de ventas,2026-06-01,Abandonó
+A-0267,Daniela Mejía,a-0267@example.com,30X Executive Program,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0268,Andrés Herrera,a-0268@example.com,AI for devs,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0269,Daniela Herrera,a-0269@example.com,AI Sales,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0270,Sebastián Quintero,a-0270@example.com,30X Executive Program,2026-06,Fundadora,2026-06-01,Terminó
+A-0271,Mariana Rojas,a-0271@example.com,AI Second Brain,2026-06,Líder de producto,2026-06-01,Terminó
+A-0272,Andrés Mejía,a-0272@example.com,AI Second Brain,2026-06,Gerente general,2026-06-01,Abandonó
+A-0273,Nicolás Rojas,a-0273@example.com,AI Second Brain,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0274,Daniela Rojas,a-0274@example.com,AI Second Brain,2026-06,Gerente general,2026-06-01,Terminó
+A-0275,Daniela Quintero,a-0275@example.com,AI for devs,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0276,Camila Salazar,a-0276@example.com,30X Executive Program,2026-06,Gerente general,2026-06-01,Abandonó
+A-0277,Sebastián Salazar,a-0277@example.com,AI Sales,2026-06,Analista de datos,2026-06-01,Terminó
+A-0278,Isabella Mejía,a-0278@example.com,AI Second Brain,2026-06,Desarrollador,2026-06-01,Terminó
+A-0279,Santiago Rojas,a-0279@example.com,AI for Executives,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0280,Isabella Ospina,a-0280@example.com,30X Executive Program,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0281,Nicolás Rojas,a-0281@example.com,AI Sales,2026-06,Desarrollador,2026-06-01,Terminó
+A-0282,Sebastián Villalba,a-0282@example.com,AI for devs,2026-06,Gerente general,2026-06-01,Terminó
+A-0283,Mariana Mejía,a-0283@example.com,AI Second Brain,2026-06,Fundadora,2026-06-01,Terminó
+A-0284,Sebastián Ospina,a-0284@example.com,30X Executive Program,2026-06,Líder de producto,2026-06-01,Terminó
+A-0285,Nicolás Herrera,a-0285@example.com,AI for Executives,2026-06,Fundadora,2026-06-01,Terminó
+A-0286,Sebastián Mejía,a-0286@example.com,30X Executive Program,2026-06,Director de operaciones,2026-06-01,Abandonó
+A-0287,Daniela Herrera,a-0287@example.com,Sales Machine,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0288,Valentina Castaño,a-0288@example.com,AI Second Brain,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0289,Daniela Herrera,a-0289@example.com,AI for Executives,2026-06,CEO,2026-06-01,Abandonó
+A-0290,Camila Herrera,a-0290@example.com,Sales Machine,2026-06,Fundadora,2026-06-01,Abandonó
+A-0291,Valentina Quintero,a-0291@example.com,AI for Executives,2026-06,Analista de datos,2026-06-01,Terminó
+A-0292,Mateo Villalba,a-0292@example.com,Sales Machine,2026-06,Fundadora,2026-06-01,Abandonó
+A-0293,Camila Quintero,a-0293@example.com,30X Executive Program,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0294,Isabella Quintero,a-0294@example.com,AI Second Brain,2026-06,Analista de datos,2026-06-01,Abandonó
+A-0295,Andrés Rojas,a-0295@example.com,AI Sales,2026-06,Gerente comercial,2026-06-01,Abandonó
+A-0296,Daniela Herrera,a-0296@example.com,30X Executive Program,2026-06,Líder de producto,2026-06-01,Abandonó
+A-0297,Mateo Mejía,a-0297@example.com,AI Second Brain,2026-06,Líder de producto,2026-06-01,Abandonó
+A-0298,Santiago Rojas,a-0298@example.com,AI for Executives,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0299,Daniela Salazar,a-0299@example.com,AI Sales,2026-06,Gerente general,2026-06-01,Abandonó
+A-0300,Camila Rojas,a-0300@example.com,AI Second Brain,2026-06,Desarrollador,2026-06-01,Terminó
+A-0301,Sebastián Salazar,a-0301@example.com,AI Second Brain,2026-06,Fundadora,2026-06-01,Terminó
+A-0302,Valentina Quintero,a-0302@example.com,AI Sales,2026-06,Líder de producto,2026-06-01,Terminó
+A-0303,Santiago Villalba,a-0303@example.com,30X Executive Program,2026-06,Desarrollador,2026-06-01,Terminó
+A-0304,Daniela Herrera,a-0304@example.com,30X Executive Program,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0305,Sebastián Ospina,a-0305@example.com,Sales Machine,2026-06,Analista de datos,2026-06-01,Terminó
+A-0306,Andrés Castaño,a-0306@example.com,Sales Machine,2026-06,Líder de producto,2026-06-01,Terminó
+A-0307,Sebastián Mejía,a-0307@example.com,AI for devs,2026-06,CEO,2026-06-01,Terminó
+A-0308,Andrés Villalba,a-0308@example.com,AI for Executives,2026-06,Coordinador de ventas,2026-06-01,Abandonó
+A-0309,Sebastián Salazar,a-0309@example.com,AI for devs,2026-06,Director de operaciones,2026-06-01,Abandonó
+A-0310,Santiago Salazar,a-0310@example.com,AI for Executives,2026-06,Desarrollador,2026-06-01,Terminó
+A-0311,Mariana Villalba,a-0311@example.com,AI Second Brain,2026-06,Gerente general,2026-06-01,Terminó
+A-0312,Nicolás Rojas,a-0312@example.com,AI Sales,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0313,Valentina Rojas,a-0313@example.com,AI for Executives,2026-06,Desarrollador,2026-06-01,Terminó
+A-0314,Mariana Rojas,a-0314@example.com,AI for devs,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0315,Nicolás Salazar,a-0315@example.com,AI for Executives,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0316,Camila Rojas,a-0316@example.com,30X Executive Program,2026-06,CEO,2026-06-01,Terminó
+A-0317,Daniela Quintero,a-0317@example.com,AI Second Brain,2026-06,Analista de datos,2026-06-01,Terminó
+A-0318,Sebastián Quintero,a-0318@example.com,AI for Executives,2026-06,Analista de datos,2026-06-01,Terminó
+A-0319,Isabella Ospina,a-0319@example.com,AI Sales,2026-06,Gerente general,2026-06-01,Terminó
+A-0320,Mateo Ospina,a-0320@example.com,Sales Machine,2026-06,Gerente general,2026-06-01,Terminó
+A-0321,Sebastián Castaño,a-0321@example.com,AI for devs,2026-06,Gerente general,2026-06-01,Terminó
+A-0322,Isabella Rojas,a-0322@example.com,AI for Executives,2026-06,CEO,2026-06-01,Abandonó
+A-0323,Isabella Quintero,a-0323@example.com,AI Sales,2026-06,Líder de producto,2026-06-01,Abandonó
+A-0324,Daniela Quintero,a-0324@example.com,30X Executive Program,2026-06,Gerente general,2026-06-01,Terminó
+A-0325,Daniela Salazar,a-0325@example.com,30X Executive Program,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0326,Daniela Rojas,a-0326@example.com,AI for devs,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0327,Isabella Quintero,a-0327@example.com,AI Sales,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0328,Daniela Ospina,a-0328@example.com,AI for devs,2026-06,Fundadora,2026-06-01,Terminó
+A-0329,Camila Quintero,a-0329@example.com,AI Sales,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0330,Mateo Salazar,a-0330@example.com,AI for Executives,2026-06,Líder de producto,2026-06-01,Terminó
+A-0331,Daniela Mejía,a-0331@example.com,Sales Machine,2026-06,Fundadora,2026-06-01,Terminó
+A-0332,Andrés Ospina,a-0332@example.com,AI for devs,2026-06,Analista de datos,2026-06-01,Terminó
+A-0333,Daniela Villalba,a-0333@example.com,30X Executive Program,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0334,Camila Ospina,a-0334@example.com,AI for Executives,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0335,Mariana Mejía,a-0335@example.com,Sales Machine,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0336,Sebastián Quintero,a-0336@example.com,AI for devs,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0337,Valentina Castaño,a-0337@example.com,30X Executive Program,2026-06,Gerente general,2026-06-01,Abandonó
+A-0338,Santiago Rojas,a-0338@example.com,AI for devs,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0339,Daniela Ospina,a-0339@example.com,AI for Executives,2026-06,CEO,2026-06-01,Terminó
+A-0340,Camila Mejía,a-0340@example.com,AI for devs,2026-06,Gerente general,2026-06-01,Terminó
+A-0341,Mateo Villalba,a-0341@example.com,AI Sales,2026-06,Fundadora,2026-06-01,Terminó
+A-0342,Santiago Ospina,a-0342@example.com,AI for Executives,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0343,Andrés Herrera,a-0343@example.com,AI Sales,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0344,Santiago Rojas,a-0344@example.com,AI for Executives,2026-06,Gerente general,2026-06-01,Terminó
+A-0345,Mariana Quintero,a-0345@example.com,AI Second Brain,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0346,Sebastián Herrera,a-0346@example.com,AI for devs,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0347,Mariana Quintero,a-0347@example.com,AI Sales,2026-06,Coordinador de ventas,2026-06-01,Abandonó
+A-0348,Camila Mejía,a-0348@example.com,AI Second Brain,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0349,Sebastián Castaño,a-0349@example.com,AI Sales,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0350,Camila Mejía,a-0350@example.com,Sales Machine,2026-06,Gerente comercial,2026-06-01,Abandonó
+A-0351,Santiago Ospina,a-0351@example.com,AI for Executives,2026-06,CEO,2026-06-01,Terminó
+A-0352,Nicolás Salazar,a-0352@example.com,AI for Executives,2026-06,Líder de producto,2026-06-01,Abandonó
+A-0353,Valentina Villalba,a-0353@example.com,AI Second Brain,2026-06,Gerente general,2026-06-01,Terminó
+A-0354,Valentina Castaño,a-0354@example.com,AI for Executives,2026-06,Gerente general,2026-06-01,Terminó
+A-0355,Valentina Castaño,a-0355@example.com,AI for devs,2026-06,Fundadora,2026-06-01,Terminó
+A-0356,Camila Ospina,a-0356@example.com,AI for Executives,2026-06,Gerente general,2026-06-01,Terminó
+A-0357,Andrés Castaño,a-0357@example.com,Sales Machine,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0358,Mariana Herrera,a-0358@example.com,30X Executive Program,2026-06,Analista de datos,2026-06-01,Terminó
+A-0359,Valentina Herrera,a-0359@example.com,Sales Machine,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0360,Nicolás Salazar,a-0360@example.com,AI Second Brain,2026-06,Gerente general,2026-06-01,Terminó
+A-0361,Valentina Ospina,a-0361@example.com,30X Executive Program,2026-06,Analista de datos,2026-06-01,Terminó
+A-0362,Sebastián Herrera,a-0362@example.com,AI for Executives,2026-06,Desarrollador,2026-06-01,Abandonó
+A-0363,Sebastián Herrera,a-0363@example.com,Sales Machine,2026-06,Jefa de marketing,2026-06-01,Abandonó
+A-0364,Andrés Rojas,a-0364@example.com,AI for devs,2026-06,Desarrollador,2026-06-01,Terminó
+A-0365,Camila Salazar,a-0365@example.com,30X Executive Program,2026-06,Fundadora,2026-06-01,Terminó
+A-0366,Sebastián Ospina,a-0366@example.com,AI for Executives,2026-06,Líder de producto,2026-06-01,Abandonó
+A-0367,Valentina Rojas,a-0367@example.com,AI Second Brain,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0368,Daniela Villalba,a-0368@example.com,30X Executive Program,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0369,Mateo Mejía,a-0369@example.com,30X Executive Program,2026-06,Gerente comercial,2026-06-01,Terminó
+A-0370,Mateo Villalba,a-0370@example.com,AI Sales,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0371,Andrés Villalba,a-0371@example.com,AI Sales,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0372,Santiago Salazar,a-0372@example.com,AI for devs,2026-06,Fundadora,2026-06-01,Terminó
+A-0373,Mariana Mejía,a-0373@example.com,AI for Executives,2026-06,Jefa de marketing,2026-06-01,Terminó
+A-0374,Nicolás Castaño,a-0374@example.com,30X Executive Program,2026-06,CEO,2026-06-01,Terminó
+A-0375,Daniela Herrera,a-0375@example.com,30X Executive Program,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0376,Daniela Ospina,a-0376@example.com,AI Second Brain,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0377,Isabella Castaño,a-0377@example.com,AI Sales,2026-06,Coordinador de ventas,2026-06-01,Abandonó
+A-0378,Santiago Castaño,a-0378@example.com,AI Second Brain,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0379,Valentina Castaño,a-0379@example.com,AI for devs,2026-06,Coordinador de ventas,2026-06-01,Terminó
+A-0380,Santiago Herrera,a-0380@example.com,AI Second Brain,2026-06,Desarrollador,2026-06-01,Terminó
+A-0381,Andrés Ospina,a-0381@example.com,AI for Executives,2026-06,Desarrollador,2026-06-01,Terminó
+A-0382,Isabella Villalba,a-0382@example.com,AI Second Brain,2026-06,Coordinador de ventas,2026-06-01,Abandonó
+A-0383,Daniela Herrera,a-0383@example.com,AI Sales,2026-06,Analista de datos,2026-06-01,Terminó
+A-0384,Sebastián Salazar,a-0384@example.com,Sales Machine,2026-06,Director de operaciones,2026-06-01,Terminó
+A-0385,Isabella Castaño,a-0385@example.com,AI for devs,2026-06,Gerente general,2026-06-01,Terminó
+A-0386,Nicolás Quintero,a-0386@example.com,AI Second Brain,2026-06,CEO,2026-06-01,Terminó
+A-0387,Mateo Villalba,a-0387@example.com,AI for devs,2026-06,CEO,2026-06-01,Terminó
+A-0388,Isabella Villalba,a-0388@example.com,30X Executive Program,2026-06,CEO,2026-06-01,Abandonó
+A-0389,Valentina Rojas,a-0389@example.com,AI for devs,2026-06,Gerente general,2026-06-01,Terminó
+A-0390,Andrés Mejía,a-0390@example.com,Sales Machine,2026-06,Jefa de marketing,2026-06-01,Abandonó
+A-0391,Andrés Rojas,a-0391@example.com,30X Executive Program,2026-09,Gerente general,2026-09-14,
+A-0392,Isabella Salazar,a-0392@example.com,AI Second Brain,2026-09,Gerente general,2026-09-14,
+A-0393,Nicolás Villalba,a-0393@example.com,AI for Executives,2026-09,Desarrollador,2026-09-14,
+A-0394,Daniela Castaño,a-0394@example.com,Sales Machine,2026-09,Jefa de marketing,2026-09-14,
+A-0395,Camila Quintero,a-0395@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0396,Nicolás Ospina,a-0396@example.com,30X Executive Program,2026-09,Gerente general,2026-09-14,
+A-0397,Nicolás Ospina,a-0397@example.com,AI for Executives,2026-09,Gerente general,2026-09-14,
+A-0398,Sebastián Rojas,a-0398@example.com,Sales Machine,2026-09,Desarrollador,2026-09-14,
+A-0399,Camila Herrera,a-0399@example.com,AI Second Brain,2026-09,Analista de datos,2026-09-14,
+A-0400,Isabella Herrera,a-0400@example.com,AI for Executives,2026-09,Coordinador de ventas,2026-09-14,
+A-0401,Mariana Rojas,a-0401@example.com,AI for Executives,2026-09,Fundadora,2026-09-14,
+A-0402,Mariana Villalba,a-0402@example.com,30X Executive Program,2026-09,Desarrollador,2026-09-14,
+A-0403,Santiago Quintero,a-0403@example.com,Sales Machine,2026-09,Fundadora,2026-09-14,
+A-0404,Camila Ospina,a-0404@example.com,30X Executive Program,2026-09,Analista de datos,2026-09-14,
+A-0405,Santiago Herrera,a-0405@example.com,Sales Machine,2026-09,Gerente comercial,2026-09-14,
+A-0406,Mariana Herrera,a-0406@example.com,AI for devs,2026-09,Líder de producto,2026-09-14,
+A-0407,Mateo Mejía,a-0407@example.com,AI for devs,2026-09,Desarrollador,2026-09-14,
+A-0408,Daniela Quintero,a-0408@example.com,Sales Machine,2026-09,Gerente comercial,2026-09-14,
+A-0409,Nicolás Ospina,a-0409@example.com,AI Second Brain,2026-09,Jefa de marketing,2026-09-14,
+A-0410,Mateo Villalba,a-0410@example.com,30X Executive Program,2026-09,CEO,2026-09-14,
+A-0411,Camila Quintero,a-0411@example.com,AI for devs,2026-09,Analista de datos,2026-09-14,
+A-0412,Andrés Salazar,a-0412@example.com,Sales Machine,2026-09,Director de operaciones,2026-09-14,
+A-0413,Mariana Castaño,a-0413@example.com,30X Executive Program,2026-09,CEO,2026-09-14,
+A-0414,Camila Ospina,a-0414@example.com,AI for Executives,2026-09,Coordinador de ventas,2026-09-14,
+A-0415,Daniela Ospina,a-0415@example.com,AI for devs,2026-09,Coordinador de ventas,2026-09-14,
+A-0416,Santiago Rojas,a-0416@example.com,AI for devs,2026-09,Gerente general,2026-09-14,
+A-0417,Valentina Salazar,a-0417@example.com,AI for Executives,2026-09,Gerente comercial,2026-09-14,
+A-0418,Valentina Castaño,a-0418@example.com,AI for Executives,2026-09,Coordinador de ventas,2026-09-14,
+A-0419,Santiago Herrera,a-0419@example.com,AI for devs,2026-09,Gerente comercial,2026-09-14,
+A-0420,Santiago Ospina,a-0420@example.com,AI Sales,2026-09,Gerente comercial,2026-09-14,
+A-0421,Mateo Castaño,a-0421@example.com,AI for Executives,2026-09,Jefa de marketing,2026-09-14,
+A-0422,Camila Quintero,a-0422@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0423,Andrés Herrera,a-0423@example.com,AI Second Brain,2026-09,CEO,2026-09-14,
+A-0424,Sebastián Salazar,a-0424@example.com,AI for Executives,2026-09,Desarrollador,2026-09-14,
+A-0425,Isabella Herrera,a-0425@example.com,AI for Executives,2026-09,CEO,2026-09-14,
+A-0426,Mariana Rojas,a-0426@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0427,Mateo Herrera,a-0427@example.com,30X Executive Program,2026-09,Fundadora,2026-09-14,
+A-0428,Isabella Ospina,a-0428@example.com,AI Second Brain,2026-09,CEO,2026-09-14,
+A-0429,Valentina Mejía,a-0429@example.com,30X Executive Program,2026-09,Gerente comercial,2026-09-14,
+A-0430,Sebastián Salazar,a-0430@example.com,Sales Machine,2026-09,Gerente general,2026-09-14,
+A-0431,Sebastián Quintero,a-0431@example.com,30X Executive Program,2026-09,Gerente general,2026-09-14,
+A-0432,Valentina Salazar,a-0432@example.com,AI for devs,2026-09,Analista de datos,2026-09-14,
+A-0433,Mateo Castaño,a-0433@example.com,Sales Machine,2026-09,Desarrollador,2026-09-14,
+A-0434,Nicolás Herrera,a-0434@example.com,AI Sales,2026-09,CEO,2026-09-14,
+A-0435,Camila Villalba,a-0435@example.com,30X Executive Program,2026-09,Líder de producto,2026-09-14,
+A-0436,Santiago Ospina,a-0436@example.com,30X Executive Program,2026-09,Analista de datos,2026-09-14,
+A-0437,Mateo Villalba,a-0437@example.com,AI for Executives,2026-09,Analista de datos,2026-09-14,
+A-0438,Camila Villalba,a-0438@example.com,AI for devs,2026-09,Desarrollador,2026-09-14,
+A-0439,Isabella Herrera,a-0439@example.com,Sales Machine,2026-09,Gerente comercial,2026-09-14,
+A-0440,Isabella Ospina,a-0440@example.com,AI for devs,2026-09,Jefa de marketing,2026-09-14,
+A-0441,Daniela Ospina,a-0441@example.com,AI for Executives,2026-09,Desarrollador,2026-09-14,
+A-0442,Daniela Castaño,a-0442@example.com,AI Second Brain,2026-09,Analista de datos,2026-09-14,
+A-0443,Camila Herrera,a-0443@example.com,AI for Executives,2026-09,Analista de datos,2026-09-14,
+A-0444,Nicolás Castaño,a-0444@example.com,30X Executive Program,2026-09,CEO,2026-09-14,
+A-0445,Santiago Salazar,a-0445@example.com,30X Executive Program,2026-09,Analista de datos,2026-09-14,
+A-0446,Camila Herrera,a-0446@example.com,30X Executive Program,2026-09,Fundadora,2026-09-14,
+A-0447,Daniela Herrera,a-0447@example.com,30X Executive Program,2026-09,Director de operaciones,2026-09-14,
+A-0448,Camila Villalba,a-0448@example.com,30X Executive Program,2026-09,Jefa de marketing,2026-09-14,
+A-0449,Andrés Mejía,a-0449@example.com,30X Executive Program,2026-09,Gerente general,2026-09-14,
+A-0450,Mariana Quintero,a-0450@example.com,Sales Machine,2026-09,Líder de producto,2026-09-14,
+A-0451,Daniela Ospina,a-0451@example.com,AI Second Brain,2026-09,Analista de datos,2026-09-14,
+A-0452,Camila Castaño,a-0452@example.com,AI Sales,2026-09,Desarrollador,2026-09-14,
+A-0453,Mateo Mejía,a-0453@example.com,Sales Machine,2026-09,Gerente general,2026-09-14,
+A-0454,Sebastián Mejía,a-0454@example.com,AI Sales,2026-09,Gerente comercial,2026-09-14,
+A-0455,Mariana Quintero,a-0455@example.com,AI Second Brain,2026-09,Director de operaciones,2026-09-14,
+A-0456,Mateo Castaño,a-0456@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0457,Mateo Rojas,a-0457@example.com,AI for Executives,2026-09,Líder de producto,2026-09-14,
+A-0458,Sebastián Rojas,a-0458@example.com,AI for devs,2026-09,CEO,2026-09-14,
+A-0459,Camila Mejía,a-0459@example.com,AI for Executives,2026-09,Director de operaciones,2026-09-14,
+A-0460,Santiago Quintero,a-0460@example.com,AI Sales,2026-09,Gerente general,2026-09-14,
+A-0461,Sebastián Herrera,a-0461@example.com,AI for Executives,2026-09,Fundadora,2026-09-14,
+A-0462,Sebastián Herrera,a-0462@example.com,Sales Machine,2026-09,Director de operaciones,2026-09-14,
+A-0463,Camila Salazar,a-0463@example.com,AI Sales,2026-09,Líder de producto,2026-09-14,
+A-0464,Sebastián Herrera,a-0464@example.com,30X Executive Program,2026-09,Líder de producto,2026-09-14,
+A-0465,Mariana Rojas,a-0465@example.com,Sales Machine,2026-09,Gerente general,2026-09-14,
+A-0466,Daniela Villalba,a-0466@example.com,AI Second Brain,2026-09,Gerente comercial,2026-09-14,
+A-0467,Camila Ospina,a-0467@example.com,AI for devs,2026-09,Gerente comercial,2026-09-14,
+A-0468,Camila Ospina,a-0468@example.com,30X Executive Program,2026-09,Fundadora,2026-09-14,
+A-0469,Isabella Herrera,a-0469@example.com,AI Sales,2026-09,Desarrollador,2026-09-14,
+A-0470,Andrés Mejía,a-0470@example.com,AI Second Brain,2026-09,Fundadora,2026-09-14,
+A-0471,Daniela Villalba,a-0471@example.com,Sales Machine,2026-09,Jefa de marketing,2026-09-14,
+A-0472,Mateo Villalba,a-0472@example.com,AI for devs,2026-09,Director de operaciones,2026-09-14,
+A-0473,Mariana Salazar,a-0473@example.com,Sales Machine,2026-09,Coordinador de ventas,2026-09-14,
+A-0474,Daniela Quintero,a-0474@example.com,AI for devs,2026-09,Fundadora,2026-09-14,
+A-0475,Isabella Ospina,a-0475@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0476,Sebastián Salazar,a-0476@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0477,Nicolás Rojas,a-0477@example.com,Sales Machine,2026-09,Coordinador de ventas,2026-09-14,
+A-0478,Isabella Villalba,a-0478@example.com,30X Executive Program,2026-09,Gerente comercial,2026-09-14,
+A-0479,Nicolás Villalba,a-0479@example.com,Sales Machine,2026-09,Director de operaciones,2026-09-14,
+A-0480,Sebastián Castaño,a-0480@example.com,AI Second Brain,2026-09,Líder de producto,2026-09-14,
+A-0481,Valentina Rojas,a-0481@example.com,AI Sales,2026-09,Director de operaciones,2026-09-14,
+A-0482,Nicolás Castaño,a-0482@example.com,AI Second Brain,2026-09,Coordinador de ventas,2026-09-14,
+A-0483,Daniela Castaño,a-0483@example.com,AI for Executives,2026-09,Analista de datos,2026-09-14,
+A-0484,Isabella Villalba,a-0484@example.com,AI for Executives,2026-09,Director de operaciones,2026-09-14,
+A-0485,Sebastián Castaño,a-0485@example.com,AI for devs,2026-09,Fundadora,2026-09-14,
+A-0486,Isabella Villalba,a-0486@example.com,Sales Machine,2026-09,CEO,2026-09-14,
+A-0487,Mariana Ospina,a-0487@example.com,AI for Executives,2026-09,Director de operaciones,2026-09-14,
+A-0488,Isabella Ospina,a-0488@example.com,30X Executive Program,2026-09,Gerente comercial,2026-09-14,
+A-0489,Santiago Villalba,a-0489@example.com,AI for Executives,2026-09,Coordinador de ventas,2026-09-14,
+A-0490,Camila Rojas,a-0490@example.com,AI Second Brain,2026-09,Fundadora,2026-09-14,
+A-0491,Sebastián Castaño,a-0491@example.com,AI for Executives,2026-09,Fundadora,2026-09-14,
+A-0492,Isabella Herrera,a-0492@example.com,AI for devs,2026-09,Jefa de marketing,2026-09-14,
+A-0493,Valentina Quintero,a-0493@example.com,AI Second Brain,2026-09,Coordinador de ventas,2026-09-14,
+A-0494,Sebastián Herrera,a-0494@example.com,AI Second Brain,2026-09,Fundadora,2026-09-14,
+A-0495,Mateo Rojas,a-0495@example.com,AI Sales,2026-09,Coordinador de ventas,2026-09-14,
+A-0496,Sebastián Ospina,a-0496@example.com,AI Sales,2026-09,Gerente general,2026-09-14,
+A-0497,Valentina Salazar,a-0497@example.com,AI for Executives,2026-09,Desarrollador,2026-09-14,
+A-0498,Camila Rojas,a-0498@example.com,AI Second Brain,2026-09,CEO,2026-09-14,
+A-0499,Camila Quintero,a-0499@example.com,AI Sales,2026-09,Fundadora,2026-09-14,
+A-0500,Mateo Villalba,a-0500@example.com,AI Second Brain,2026-09,CEO,2026-09-14,
+A-0501,Sebastián Rojas,a-0501@example.com,AI Sales,2026-09,Analista de datos,2026-09-14,
+A-0502,Andrés Rojas,a-0502@example.com,AI Second Brain,2026-09,Gerente general,2026-09-14,
+A-0503,Andrés Quintero,a-0503@example.com,AI for devs,2026-09,Coordinador de ventas,2026-09-14,
+A-0504,Mariana Castaño,a-0504@example.com,30X Executive Program,2026-09,Coordinador de ventas,2026-09-14,
+A-0505,Isabella Herrera,a-0505@example.com,Sales Machine,2026-09,Gerente comercial,2026-09-14,
+A-0506,Sebastián Mejía,a-0506@example.com,AI for devs,2026-09,Desarrollador,2026-09-14,
+A-0507,Mariana Mejía,a-0507@example.com,AI Second Brain,2026-09,Fundadora,2026-09-14,
+A-0508,Andrés Herrera,a-0508@example.com,AI for Executives,2026-09,Coordinador de ventas,2026-09-14,
+A-0509,Camila Mejía,a-0509@example.com,Sales Machine,2026-09,Gerente general,2026-09-14,
+A-0510,Daniela Ospina,a-0510@example.com,AI Sales,2026-09,Jefa de marketing,2026-09-14,
+A-0511,Santiago Quintero,a-0511@example.com,AI Second Brain,2026-09,Director de operaciones,2026-09-14,
+A-0512,Valentina Herrera,a-0512@example.com,AI for Executives,2026-09,Desarrollador,2026-09-14,
+A-0513,Sebastián Castaño,a-0513@example.com,AI Sales,2026-09,Gerente general,2026-09-14,
+A-0514,Santiago Quintero,a-0514@example.com,AI for devs,2026-09,Director de operaciones,2026-09-14,
+A-0515,Isabella Castaño,a-0515@example.com,30X Executive Program,2026-09,Jefa de marketing,2026-09-14,
+A-0516,Nicolás Herrera,a-0516@example.com,AI Second Brain,2026-09,Analista de datos,2026-09-14,
+A-0517,Mariana Salazar,a-0517@example.com,AI Sales,2026-09,Jefa de marketing,2026-09-14,
+A-0518,Nicolás Castaño,a-0518@example.com,AI for Executives,2026-09,CEO,2026-09-14,
+A-0519,Mateo Quintero,a-0519@example.com,AI for devs,2026-09,Analista de datos,2026-09-14,
+A-0520,Sebastián Villalba,a-0520@example.com,Sales Machine,2026-09,Fundadora,2026-09-14,
+A-0521,Sebastián Castaño,a-0521@example.com,AI for Executives,2026-09,Jefa de marketing,2026-09-14,
+A-0522,Sebastián Castaño,a-0522@example.com,AI for Executives,2026-09,Director de operaciones,2026-09-14,
+A-0523,Mariana Mejía,a-0523@example.com,AI for Executives,2026-09,Analista de datos,2026-09-14,
+A-0524,Camila Castaño,a-0524@example.com,AI for devs,2026-09,CEO,2026-09-14,
+A-0525,Mariana Castaño,a-0525@example.com,Sales Machine,2026-09,Coordinador de ventas,2026-09-14,
+A-0526,Mariana Quintero,a-0526@example.com,AI for Executives,2026-09,CEO,2026-09-14,
+A-0527,Camila Rojas,a-0527@example.com,Sales Machine,2026-09,Fundadora,2026-09-14,
+A-0528,Isabella Mejía,a-0528@example.com,AI for devs,2026-09,Jefa de marketing,2026-09-14,
+A-0529,Valentina Quintero,a-0529@example.com,30X Executive Program,2026-09,CEO,2026-09-14,
+A-0530,Mariana Herrera,a-0530@example.com,30X Executive Program,2026-09,Fundadora,2026-09-14,
+A-0531,Isabella Ospina,a-0531@example.com,AI Second Brain,2026-09,Gerente comercial,2026-09-14,
+A-0532,Sebastián Ospina,a-0532@example.com,Sales Machine,2026-09,Jefa de marketing,2026-09-14,
+A-0533,Mateo Herrera,a-0533@example.com,30X Executive Program,2026-09,Director de operaciones,2026-09-14,
+A-0534,Valentina Herrera,a-0534@example.com,AI for devs,2026-09,Jefa de marketing,2026-09-14,
+A-0535,Sebastián Mejía,a-0535@example.com,AI Second Brain,2026-09,Gerente general,2026-09-14,
+A-0536,Daniela Ospina,a-0536@example.com,Sales Machine,2026-09,Gerente comercial,2026-09-14,
+A-0537,Daniela Quintero,a-0537@example.com,AI for devs,2026-09,Director de operaciones,2026-09-14,
+A-0538,Mariana Quintero,a-0538@example.com,AI for devs,2026-09,Gerente general,2026-09-14,
+A-0539,Daniela Villalba,a-0539@example.com,AI for devs,2026-09,Gerente comercial,2026-09-14,
+A-0540,Isabella Villalba,a-0540@example.com,AI Sales,2026-09,Gerente general,2026-09-14,

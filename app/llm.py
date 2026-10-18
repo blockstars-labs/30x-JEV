@@ -145,15 +145,15 @@ class LLMMock:
                            for o in candidatos), reverse=True)
         prompt = _prompt_revision(estado, campo, pregunta, candidatos, probs)
         if not aciertos or aciertos[0][0] == 0 or (len(aciertos) > 1 and aciertos[0][0] == aciertos[1][0]):
-            return Revision(campo, "no_seguro", "(simulado) El texto no permite decidir.", len(prompt) // 4, 40)
-        return Revision(campo, aciertos[0][1], "(simulado) Coincide con lo que escribió la persona.", len(prompt) // 4, 40)
+            return Revision(campo, "no_seguro", "El texto no permite decidir.", len(prompt) // 4, 40)
+        return Revision(campo, aciertos[0][1], "Coincide con lo que escribió la persona.", len(prompt) // 4, 40)
 
     def redactar(self, estado: dict, accion: str, programa: str, explicacion: str) -> Mensaje:
         prompt = _prompt_mensaje(estado, accion, programa, explicacion)
         if accion == "pasar_a_ventas":
-            texto = f"(simulado) Nota para el asesor: persona interesada en {programa}. {explicacion}"
+            texto = f"Nota para el asesor: persona interesada en {programa}. {explicacion}"
         else:
-            texto = f"(simulado) Hola, vimos tu interés y creemos que {programa} de 30X puede ayudarte."
+            texto = f"Hola, vimos tu interés y creemos que {programa} de 30X puede ayudarte."
         return Mensaje(texto, len(prompt) // 4, 120)
 
 

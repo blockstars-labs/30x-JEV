@@ -31,6 +31,7 @@
         <button role="tab" data-vista="reclasificacion" aria-selected="true"><span class="tab-t">Personas</span><span class="tab-s">Quién llega y de dónde</span></button>
         <button role="tab" data-vista="decisiones" aria-selected="false"><span class="tab-t">Decisiones</span><span class="tab-s">Qué hizo con cada una</span></button>
         <button role="tab" data-vista="politica" aria-selected="false"><span class="tab-t">Reglas</span><span class="tab-s">Cuándo pide ayuda</span></button>
+        <button role="tab" data-vista="segmentos" aria-selected="false"><span class="tab-t">Segmentos</span><span class="tab-s">Los descubre en los datos</span></button>
       </nav>
 
       <div class="topbar-der">
@@ -39,9 +40,13 @@
           <span>Buscar</span><kbd>⌘K</kbd>
         </button>
         <span id="modo" class="badge"></span>
+        <button class="btn ghost alertas-btn" data-vista="alertas" aria-selected="false" aria-label="Alertas de riesgo">
+          <svg class="ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5a4.5 4.5 0 0 0-4.5 4.5v3l-1.5 2.5h12L14.5 11V8A4.5 4.5 0 0 0 10 3.5z"/><path d="M8.2 16a1.9 1.9 0 0 0 3.6 0"/></svg>
+          Alertas<span id="alertas-cuenta" class="contador" hidden></span>
+        </button>
         <button class="btn lima" data-vista="prueba" aria-selected="false">
           <svg class="ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.5l9 5.5-9 5.5z" fill="currentColor" stroke="none"/></svg>
-          Probar en vivo
+          Clasificar en vivo
         </button>
       </div>
     </div>
@@ -51,6 +56,8 @@
     <section id="vista-reclasificacion" class="vista"></section>
     <section id="vista-decisiones" class="vista" hidden></section>
     <section id="vista-politica" class="vista" hidden></section>
+    <section id="vista-segmentos" class="vista" hidden></section>
+    <section id="vista-alertas" class="vista" hidden></section>
 
     <section id="vista-prueba" class="vista" hidden>
       <div class="encabezado">
@@ -66,7 +73,7 @@
           <p class="lote-titulo">Arrastra tu CSV del CRM</p>
           <p class="muted pequeno">o <label class="enlace">elige un archivo<input type="file" id="lote-archivo" accept=".csv,text/csv" hidden></label> · hasta 100 perfiles · <span class="enlace-suave" data-tip="Columnas del archivo de 30X: ID, Rol, Dolor principal, Objetivo principal, Temas de interés. Opcionales: Intención, Programa, Programa sugerido.">formato</span></p>
           <div class="acciones">
-            <button type="button" class="btn lima" id="lote-ejemplo">Probar con 20 perfiles de ejemplo</button>
+            <button type="button" class="btn lima" id="lote-ejemplo">Clasificar 20 inscripciones</button>
             <button type="button" class="btn ghost" id="lote-plantilla">Plantilla</button>
           </div>
         </div>

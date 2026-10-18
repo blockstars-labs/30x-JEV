@@ -130,7 +130,7 @@ class Segmentador:
             "segmento": seg["id"], "nombre": seg["nombre"], "confianza": round(conf, 3),
             "probabilidades": {self.segmentos[i]["id"]: round(probs[i], 3) for i in orden},
             "propension": None if p_prop is None else round(p_prop, 3), "accion": accion, "ruta": ruta, "motivos": motivos,
-            "genuino": round(genuino, 3), "ninguno": round(ninguno, 3),
+            "genuino": round(genuino, 3), "ninguno": round(ninguno, 3), "vector": x,
             "explicacion": self._explicar(seg, conf, x, accion, ruta, motivos),
             "tokens": r.tokens_entrada if r is not None else 0, "costo_usd": r.costo_usd if r is not None else 0.0,
             "latencia_ms": round(r.latencia_ms, 1) if r is not None else 0.0,

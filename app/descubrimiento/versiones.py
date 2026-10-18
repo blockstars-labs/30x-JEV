@@ -76,12 +76,15 @@ def comparar(anterior: dict, nueva: dict, asig_anterior: dict[str, str], asig_nu
         for b, sb in enumerate(ids_n):
             if tabla[a, b]:
                 flujos.append({"de": sa, "de_nombre": nombres_a[sa], "a": sb, "a_nombre": nombres_n[sb], "n": int(tabla[a, b])})
-    total = tabla.sum()
     por_nuevo = tabla.sum(axis=0)
     por_anterior = tabla.sum(axis=1)
     seg_n = {s["id"]: s for s in nueva["segmentos"]}
     seg_a = {s["id"]: s for s in anterior["segmentos"]}
     aparecidos = set()
+    # Cuánta gente reciente hay en la comparación: un segmento nuevo tiene que estar muy por encima de esa base.
+    base_reciente = sum(i in recientes for i in comunes) / len(comunes) if recientes else 0.0
+    umbral_reciente = base_reciente + (1 - base_reciente) / 2
+    novedad = {v["id"] for v in nueva.get("variables", []) if v.get("origen") == "novedad"}
     for b, sb in enumerate(ids_n):
         if por_nuevo[b] == 0:
             continue
@@ -90,7 +93,15 @@ def comparar(anterior: dict, nueva: dict, asig_anterior: dict[str, str], asig_nu
         miembros = [i for i in comunes if asig_nueva[i] == sb]
         cuota_reciente = sum(i in recientes for i in miembros) / len(miembros) if miembros else 0.0
         tasa = f", que convierte el {seg_n[sb]['tasa']:.0%}" if seg_n[sb].get("tasa") is not None else ""
-        if recientes and cuota_reciente >= 0.6:
+        # Lo define un tema que antes no existía como variable: es un segmento que apareció.
+        tema_nuevo = any(r["clave"].split("=", 1)[0] in novedad for r in seg_n[sb].get("rasgos", [])[:2])
+        if tema_nuevo:
+            de_donde = " y ".join(f"«{nombres_a[f]}»" for f in fuentes) or "otros segmentos"
+            cambios.append({"tipo": "aparecio", "segmento": sb,
+                            "texto": f"Apareció «{nombres_n[sb]}» ({seg_n[sb]['proporcion']:.0%} de las personas{tasa}): lo define "
+                                     f"un tema que antes no aparecía en los datos. Antes estas personas estaban en {de_donde}."})
+            aparecidos.add(sb)
+        elif recientes and cuota_reciente >= umbral_reciente:
             de_donde = " y ".join(f"«{nombres_a[f]}»" for f in fuentes) or "otros segmentos"
             cambios.append({"tipo": "aparecio", "segmento": sb,
                             "texto": f"Apareció «{nombres_n[sb]}» ({seg_n[sb]['proporcion']:.0%} de las personas{tasa}): el "

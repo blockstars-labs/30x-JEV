@@ -276,9 +276,10 @@ def perfilar(filas: list[dict], cliente, dataset: str, resultado: str | None = N
             if c.rol == "rasgo" and c.jev.get("resultado", 0) >= 0.5:
                 c.rol, c.motivo = "excluida", "Registra el resultado o una etapa del proceso: usarla sería hacer trampa."
 
-    # Columna de acción (el programa o producto): la elige JEV; su catálogo son todos sus valores.
+    # Columna de acción (el programa o producto): la elige JEV; su catálogo son todos sus valores. Solo aplica a
+    # conversión: en abandono el programa no es lo que se ofrece, es un rasgo más del alumno.
     candidatas = [c for c in columnas if c.rol == "rasgo" and c.tipo == "categoria"]
-    if accion is None and candidatas and ficha.resultado:
+    if accion is None and candidatas and ficha.resultado and ficha.tipo_resultado == "conversion":
         q = PreguntaDinamica(
             "accion", "choice",
             "Which column records the program or product the person bought, enrolled in or was offered in a sales "

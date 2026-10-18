@@ -33,7 +33,7 @@ def test_misma_politica_no_reporta_cambios_y_es_segura():
     assert an["cambios"] == []
     assert an["seguro"] and an["alertas"] == []
     assert "de cada 100" in an["titular"]
-    assert "simulado" in an["nota"]
+    assert "no vuelve a llamar a JEV" in an["nota"]
     assert [s["titulo"] for s in an["secciones"]] == [
         "Qué pasa con cada persona", "Quién llega a un asesor", "Qué contenido sale", "Qué tan confiable es"]
 

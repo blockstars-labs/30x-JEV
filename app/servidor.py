@@ -36,6 +36,7 @@ from app.personas import aplicar_evento, crear_persona, reevaluar
 from app.politica import ACCIONES, cargar_politica, explicar
 from app.preguntas import construir_estado
 from app.simulacion import medir
+from app.vista_descubrimiento import EstadoDescubrimiento
 
 RAIZ = Path(__file__).resolve().parent.parent
 WEB = RAIZ / "web"
@@ -47,7 +48,8 @@ cliente = crear_cliente()
 llm = crear_llm()
 NOMBRE = "mock" if cliente.__class__.__name__ == "JEVMock" else "live"
 politica = cargar_politica()
-personas_demo: dict = {}
+descubrimiento = EstadoDescubrimiento(llm)
+personas_vivo: dict = {}
 contador = itertools.count(1)
 candado = threading.Lock()
 
@@ -178,16 +180,16 @@ def inscribir(cuerpo: dict) -> dict:
     if not entrada:
         raise ValueError("Escribe al menos un campo de la inscripción.")
     with candado:
-        pid = f"DEMO-{next(contador):03d}"
+        pid = f"VIVO-{next(contador):03d}"
     perfil = {"id": pid, "canal": canal, "entrada": entrada, "temas": temas}
     p = crear_persona(perfil, date.today())
     reevaluar(p, date.today(), cliente, {"tipo": "inscripcion", "fecha": date.today()}, politica, llm)
-    personas_demo[pid] = p
+    personas_vivo[pid] = p
     return vista_persona(p, mensaje_para(p))
 
 
 def agregar_evento(cuerpo: dict) -> dict:
-    p = personas_demo.get(cuerpo.get("id"))
+    p = personas_vivo.get(cuerpo.get("id"))
     if p is None:
         raise ValueError("Esa persona ya no existe en el servidor; inscríbela de nuevo.")
     ultima = max([p.fecha_registro] + [m["fecha"] for m in p.mensajes] + [a["fecha"] for a in p.asistencias])
@@ -223,8 +225,24 @@ class Manejador(SimpleHTTPRequestHandler):
         self.wfile.write(datos_json)
 
     def do_GET(self):
-        if self.path == "/api/datos":
-            return self._json(datos())
+        try:
+            if self.path == "/api/datos":
+                return self._json(datos())
+            if self.path == "/api/descubrimiento":
+                return self._json(descubrimiento.asegurar())
+            if self.path == "/api/alertas":
+                return self._json(descubrimiento.alertas(cliente, politica))
+            if self.path == "/api/descubrimiento/reporte.md":
+                texto = descubrimiento.markdown().encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/markdown; charset=utf-8")
+                self.send_header("Content-Disposition", 'attachment; filename="reporte-clusterizacion-dinamica.md"')
+                self.send_header("Content-Length", str(len(texto)))
+                self.end_headers()
+                self.wfile.write(texto)
+                return None
+        except ValueError as e:
+            return self._json({"error": str(e)}, 400)
         return super().do_GET()
 
     def do_POST(self):
@@ -241,6 +259,12 @@ class Manejador(SimpleHTTPRequestHandler):
                 return self._json(guardrail(cuerpo))
             if self.path == "/api/perfiles":
                 return self._json(clasificar_lote(cuerpo.get("filas") or [], politica))
+            if self.path == "/api/descubrimiento/generar":
+                return self._json(descubrimiento.generar(forzar=True))
+            if self.path == "/api/descubrimiento/ajustar":
+                return self._json(descubrimiento.ajustar(cuerpo.get("riesgo"), cuerpo.get("vetar"), bool(cuerpo.get("quitar_vetos"))))
+            if self.path == "/api/descubrimiento/asignar":
+                return self._json(descubrimiento.asignar(cuerpo.get("fila") or {}))
             return self._json({"error": "Ruta desconocida"}, 404)
         except ValueError as e:
             return self._json({"error": str(e)}, 400)
@@ -253,7 +277,7 @@ class Manejador(SimpleHTTPRequestHandler):
 def main() -> None:
     asegurar_reportes()
     servidor = ThreadingHTTPServer(("127.0.0.1", PUERTO), Manejador)
-    print(f"Vista del prototipo en http://localhost:{PUERTO}  (JEV: {NOMBRE}, LLM: {datos()['llm']})")
+    print(f"Pálpito en http://localhost:{PUERTO}  (JEV: {NOMBRE}, LLM: {datos()['llm']})")
     servidor.serve_forever()
 
 

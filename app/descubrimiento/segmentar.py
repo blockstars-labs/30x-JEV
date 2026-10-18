@@ -245,7 +245,7 @@ def _nombre_plantilla(s: dict) -> str:
     """Nombre sin LLM: los dos rasgos que más lo distinguen, en una frase corta."""
     partes = []
     for r in s["rasgos"]:
-        texto = f"hablan de «{r['corta']}»" if r["fuente"] == "jev" else (r["corta"] if r["proporcion"] else f"más {r['corta']}")
+        texto = f"hablan de “{r['corta']}”" if r["fuente"] == "jev" else (r["corta"] if r["proporcion"] else f"más {r['corta']}")
         if texto not in partes:
             partes.append(texto)
         if len(partes) == 2:

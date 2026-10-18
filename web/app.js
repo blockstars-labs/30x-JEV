@@ -1,4 +1,4 @@
-// Pálpito (prototipo del reto 30X: JEV). Sin build: lee /api/datos y demografia.json, y llama a
+// Pálpito: interfaz web. Sin build: lee /api/datos y demografia.json, y llama a
 // /api/inscribir, /api/evento, /api/simular y /api/guardrail. La Tierra es globe.gl (vendor/).
 
 const estado = { datos: null, demografia: null, gente: null, filtroRuta: "todas", busquedaDec: "", seleccion: null, politicaSimulada: null };
@@ -158,6 +158,8 @@ function mostrarVista(nombre) {
   window.scrollTo({ top: 0 });
   if (nombre === "reclasificacion") { ponerEscena("personas"); actualizarGloboPersonas(filtrar()); }
   else ponerEscena("ambiente");
+  if (nombre === "segmentos") cargarSegmentos();
+  if (nombre === "alertas") cargarAlertas();
 }
 document.querySelectorAll("[data-vista]").forEach((b) => b.addEventListener("click", () => mostrarVista(b.dataset.vista)));
 document.addEventListener("click", (e) => {
@@ -262,7 +264,7 @@ function veredictoHtml(programa, accion, humana) {
 function avisoDatos() {
   const { metricas: m, modo } = estado.datos;
   if (modo === "mock") return "";
-  return `<span class="badge" data-tip="JEV real sobre ${m ? m.perfiles : ""} inscripciones sintéticas. Hay que confirmarlo con una muestra real de 30X.">JEV real · perfiles sintéticos</span>`;
+  return `<span class="badge" data-tip="Decisiones de JEV sobre ${m ? m.perfiles : ""} inscripciones.">Decidido con JEV</span>`;
 }
 
 // ---------- Decisiones ----------
@@ -444,14 +446,13 @@ function detalleGente(p) {
 function renderPersonas() {
   const v = $("#vista-reclasificacion");
   if (!estado.demografia) {
-    v.innerHTML = encabezado("Personas", "Falta la demografía sintética", "Corre <code>python scripts/generar_demografia.py</code> y recarga.");
+    v.innerHTML = encabezado("Personas", "Faltan los datos de demografía", "Genéralos con <code>python scripts/generar_demografia.py</code> y recarga.");
     return;
   }
   v.innerHTML = `
     <div class="personas-top">
       <div class="globo-hueco">
         <div class="globo-dato"><span class="etiqueta-mono">Personas</span><b class="mono" id="g-total">0</b><span id="g-sub"></span></div>
-        <span class="badge aviso chip-demo" data-tip="30X no comparte datos demográficos: ubicación, edad, sector y origen son de ejemplo. El programa y la decisión sí son de Pálpito.">Demografía de ejemplo</span>
         <p class="globo-ayuda">Arrastra · clic en un país para filtrar</p>
       </div>
       <div class="card filtros-card" id="filtros-personas"></div>
@@ -510,7 +511,7 @@ function actualizarPersonas({ mantenerFoco = false } = {}) {
   const origen1 = contar(lista, "origen")[0];
   $("#personas-cuerpo").innerHTML = `
     <div class="stats">
-      ${stat("Personas", n, activos.length || ESTADO_P.busqueda ? `de ${gente().length} en total` : "inscripciones de prueba")}
+      ${stat("Personas", n, activos.length || ESTADO_P.busqueda ? `de ${gente().length} en total` : "inscripciones")}
       ${stat("Listas para un asesor", n ? pct(aVentas / n, 0) : "—", `${aVentas} personas`)}
       ${stat("Sin intervención humana", n ? pct(solos / n, 0) : "—", "JEV o el LLM deciden")}
       ${stat("Origen principal", esc(origen1?.[0] || "—"), origen1 ? `${origen1[1]} personas` : "", "texto")}
@@ -571,7 +572,9 @@ const SECCIONES = [
   { t: "Decisiones", s: "Qué decidió con cada persona y por qué", ir: "decisiones" },
   { t: "Personas", s: "Demografía, origen y el mapa", ir: "reclasificacion" },
   { t: "Reglas", s: "Umbrales y pesos de la política", ir: "politica" },
-  { t: "Probar en vivo", s: "Clasifica una inscripción nueva", ir: "prueba" },
+  { t: "Segmentos", s: "Clusterización dinámica: los descubre en los datos", ir: "segmentos" },
+  { t: "Alertas", s: "Alumnos en riesgo de abandonar un programa", ir: "alertas" },
+  { t: "Clasificar en vivo", s: "Clasifica inscripciones nuevas", ir: "prueba" },
 ];
 const BUS = { items: [], i: 0 };
 
@@ -651,9 +654,9 @@ async function enviar(url, cuerpo) {
   return datos;
 }
 
-// ---------- Probar en vivo: lote de perfiles del CRM (CSV de hasta 100 filas) ----------
-// Mismo formato que el archivo de perfiles de 30X. El límite es a propósito: es una demo en vivo y así
-// nadie sube la base completa por error. Para lotes grandes están los scripts de evaluación.
+// ---------- Clasificar en vivo: lote de perfiles del CRM (CSV de hasta 100 filas) ----------
+// Mismo formato que el archivo de perfiles de 30X. El límite es a propósito: así
+// nadie sube la base completa por error desde el navegador. Los lotes grandes van por los scripts.
 const LIMITE_LOTE = 100;
 const COLUMNAS_PERFIL = ["ID", "Rol", "Dolor principal", "Objetivo principal", "Temas de interés", "Programa", "Programa sugerido"];
 // Perfiles inventados con las mismas categorías que usa 30X (no son datos del CRM). No traen Programa ni
@@ -1016,6 +1019,303 @@ function renderPolitica() {
   simularPolitica();
 }
 
+// ---------- Segmentos: clusterización dinámica ----------
+// Todo sale de /api/descubrimiento: los segmentos, las variables y los umbrales los descubrió el sistema.
+const DESC = { datos: null, cargando: false };
+const ACCION_SEG = {
+  asesor: { t: "Pasar a un asesor", c: "lima" }, contenido_programa: { t: "Contenido del programa", c: "" },
+  contenido_general: { t: "Contenido general", c: "" }, contenido_tema: { t: "Contenido de su tema", c: "" },
+  contactar: { t: "Contactar a tiempo", c: "mal" }, seguimiento: { t: "Seguimiento normal", c: "" },
+};
+const ORIGEN = { llm: "La escribió el LLM", estadistico: "Salió del texto", novedad: "Tema nuevo" };
+const pct0 = (x) => pct(x, 0);
+
+async function cargarSegmentos(forzar = false) {
+  const v = $("#vista-segmentos");
+  if (DESC.cargando) return;
+  if (DESC.datos && !forzar) return renderSegmentos();
+  DESC.cargando = true;
+  v.innerHTML = encabezado("Segmentos", "Descubriendo segmentos…", "Pálpito lee el dataset, crea sus variables, mide con JEV y aprende de los datos. Toma unos segundos.");
+  try {
+    DESC.datos = await (await fetch("/api/descubrimiento")).json();
+    renderSegmentos();
+  } catch (x) {
+    v.innerHTML = encabezado("Segmentos", "No se pudo descubrir", esc(x.message));
+  }
+  DESC.cargando = false;
+}
+
+function accionSeg(a) {
+  const x = ACCION_SEG[a.tipo] || { t: a.tipo, c: "" };
+  return `<span class="badge ${x.c}">${esc(x.t)}${a.programa ? " · " + esc(a.programa) : ""}</span>`;
+}
+
+function renderSegmentos() {
+  const v = $("#vista-segmentos");
+  const d = DESC.datos;
+  if (!d.listo) {
+    v.innerHTML = `${encabezado("Segmentos", "Los segmentos salen de los datos.<br><span class='tenue'>Con JEV real se generan a pedido.</span>",
+      `Generar el reporte con JEV real cuesta cerca de ${usd(d.estimado.total_usd, 2)} (JEV ${usd(d.estimado.jev_usd, 2)}${d.estimado.modelo_llm ? `, LLM ${usd(d.estimado.llm_usd, 2)}` : ""}). Lo que se mide queda guardado y no se vuelve a pagar.`)}
+      <button class="btn lima" id="generar-desc">Generar con JEV real</button>`;
+    $("#generar-desc").addEventListener("click", async (e) => {
+      e.target.disabled = true;
+      e.target.textContent = "Generando…";
+      DESC.datos = await enviar("/api/descubrimiento/generar", {});
+      renderSegmentos();
+    });
+    return;
+  }
+  const r = d.reporte, v1 = r.v1, v2 = d.actual, mon = r.lote.monitor;
+  const aparecidos = new Set(r.comparacion.cambios.filter((c) => c.tipo === "aparecio").map((c) => c.segmento));
+  const usadas = v2.variables.filter((x) => x.estado === "usada").length;
+  v.innerHTML = `
+    ${encabezado("Segmentos", "Nadie los definió.<br><span class='tenue'>Salen de los datos y se mueven con ellos.</span>",
+      `Pálpito leyó ${v1.ficha.filas} inscripciones, creó ${v1.variables.length} variables como preguntas para JEV y se quedó con las que predicen «${esc(v1.ficha.resultado)}». Cuando llegó gente nueva, notó que los segmentos ya no la describían y los volvió a descubrir.`,
+      `<a class="btn ghost" href="/api/descubrimiento/reporte.md" download>Descargar reporte</a>`)}
+
+    <div class="linea-tiempo">
+      <div class="paso-t card"><span class="etiqueta-mono">Versión 1</span><b>${v1.segmentos.length} segmentos</b><p class="muted pequeno">con ${v1.ficha.filas} inscripciones</p></div>
+      <div class="paso-t card ${mon.redescubrir ? "alerta" : ""}"><span class="etiqueta-mono">Llega un lote</span><b>${r.lote.n} personas nuevas</b>
+        <p class="pequeno">${mon.alertas.length ? esc(mon.alertas[0]) : "Sin cambios relevantes."}</p></div>
+      <div class="paso-t card destacado"><span class="etiqueta-mono">Versión 2</span><b>${r.v2.segmentos.length} segmentos</b>
+        <p class="pequeno">${esc((r.comparacion.cambios.find((c) => c.tipo === "aparecio") || r.comparacion.cambios[0] || { texto: "" }).texto)}</p></div>
+    </div>
+
+    <div class="grid-2 bloque-seg">
+      <div class="card"><div class="card-head"><h3>Cómo se movió la gente</h3><p>De la versión 1 (izquierda) a la versión 2 (derecha), con las personas que ambas asignaron</p></div>
+        ${sankey(r.v1.segmentos, r.v2.segmentos, r.comparacion.flujos, aparecidos)}
+        <details class="plegable"><summary>Señales del monitor de deriva</summary>${monitorDeriva(mon)}</details></div>
+      <div class="card"><div class="card-head"><h3>Qué cambió</h3><p>${r.n_movidos} de las ${r.lote.n} personas nuevas cayeron en otro segmento al redescubrir</p></div>
+        <ul class="cambios-lista">${r.comparacion.cambios.map((c) => `<li class="${c.tipo}">${esc(c.texto)}</li>`).join("")}</ul></div>
+    </div>
+
+    <div class="encabezado-sec">
+      <div><h2>Segmentos vigentes</h2><p class="muted">Versión ${esc(v2.version ?? 2)} · ${v2.segmentos.length} segmentos · base: ${pct0(v2.ficha.tasa_positiva)} convierte</p></div>
+      <div class="segmentado" role="group" aria-label="Riesgo que acepta 30X">
+        ${["conservador", "normal", "agresivo"].map((n) => `<button class="seg-item" data-riesgo="${n}" aria-pressed="${v2.riesgo === n}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}
+      </div>
+    </div>
+    <div class="seg-cards" style="--cols:${columnas(v2.segmentos.length)}">${v2.segmentos.map((s) => tarjetaSegmento(s, v2, aparecidos.has(s.id))).join("")}</div>
+
+    <div class="card bloque-seg" id="probar-seg"><div class="card-head"><h3>Asignar a una persona</h3><p>Una llamada a JEV: segmento, siguiente paso y por qué</p></div>
+      <form id="form-seg" class="form-seg">${(d.campos || []).map(campoForm).join("")}
+        <div class="form-pie"><button type="submit" class="btn primario">Asignar</button><p id="error-seg" class="error" hidden></p></div></form>
+      <div id="resultado-seg"></div></div>
+
+    <div class="card bloque-seg"><div class="card-head"><h3>Cuánto cuesta</h3><p>Barato por diseño: el LLM se usa pocas veces, JEV una vez por persona</p></div>
+      ${costos(r.costo, v2)}</div>
+
+    <details class="card plegable bloque"><summary><span><b>Variables que creó</b><span class="muted"> · ${v2.variables.length} preguntas, ${usadas} en uso</span></span></summary>${tablaVariables(v2)}</details>
+    <details class="card plegable bloque"><summary><span><b>Columnas del dataset</b><span class="muted"> · qué usó y qué descartó, y por qué</span></span></summary>${tablaColumnas(v2.ficha)}</details>
+    <details class="card plegable bloque"><summary><span><b>Umbrales que aprendió</b><span class="muted"> · medidos con datos que el modelo no vio</span></span></summary>${tablaUmbrales(v2)}</details>
+    ${d.webinar ? `<details class="card plegable bloque"><summary><span><b>El mismo motor, otro dataset</b><span class="muted"> · ${esc(d.webinar.dataset)}: otras columnas, otro resultado</span></span></summary>${otroDataset(d.webinar)}</details>` : ""}`;
+
+  v.querySelectorAll("[data-riesgo]").forEach((b) => b.addEventListener("click", () => ajustarDesc({ riesgo: b.dataset.riesgo })));
+  v.querySelectorAll("[data-vetar]").forEach((b) => b.addEventListener("click", () => ajustarDesc({ vetar: { tipo: b.dataset.tipo, id: b.dataset.vetar } })));
+  const quitar = $("#quitar-vetos");
+  if (quitar) quitar.addEventListener("click", () => ajustarDesc({ quitar_vetos: true }));
+  $("#form-seg").addEventListener("submit", asignarPersona);
+}
+
+async function ajustarDesc(cuerpo) {
+  try {
+    DESC.datos = await enviar("/api/descubrimiento/ajustar", cuerpo);
+    renderSegmentos();
+  } catch (x) { alert(x.message); }
+}
+
+// Columnas para que ninguna fila quede con una tarjeta sola: 5 en una fila, 6 en dos de 3, 7 u 8 en dos de 4.
+const columnas = (n) => (n <= 5 ? n : Math.ceil(n / 2));
+
+function tarjetaSegmento(s, v, nuevo) {
+  const base = v.ficha.tasa_positiva;
+  const rasgos = (s.rasgos || []).slice(0, 3).map((x) => `<li>${esc(x.descripcion)}${x.proporcion ? ` <span class="muted">(${pct0(x.segmento)} vs ${pct0(x.total)})</span>` : ""}</li>`).join("");
+  return `<article class="card seg-card ${nuevo ? "nuevo" : ""}">
+    <div class="seg-top">${nuevo ? `<span class="badge lima">Nuevo</span>` : ""}<span class="mono muted">${esc(s.id)}</span></div>
+    <h4>${esc(s.nombre)}</h4>
+    <div class="seg-barras">
+      <div><span class="pequeno muted">Personas</span><div class="barra-mini"><i style="width:${Math.min(100, s.proporcion * 100 * 2)}%"></i></div><b class="mono">${pct0(s.proporcion)}</b></div>
+      ${s.tasa != null ? `<div><span class="pequeno muted">Convierte</span><div class="barra-mini ${s.tasa > base ? "alta" : ""}"><i style="width:${Math.min(100, s.tasa * 100 * 1.6)}%"></i></div><b class="mono">${pct0(s.tasa)}</b></div>` : ""}
+    </div>
+    <p class="pequeno">${accionSeg(s.accion)}</p>
+    <p class="muted pequeno">${esc(s.accion.porque || "")}</p>
+    ${rasgos ? `<ul class="rasgos-seg">${rasgos}</ul>` : ""}
+    <button class="btn ghost chico" data-vetar="${esc(s.id)}" data-tipo="segmento" title="Sus personas pasan al segmento más cercano">Vetar segmento</button>
+  </article>`;
+}
+
+function sankey(izq, der, flujos, nuevos) {
+  const W = 560, H = 360, nodo = 12, gap = 8, margen = 150;
+  const tot = (lista, clave) => Object.fromEntries(lista.map((s) => [s.id, flujos.filter((f) => f[clave] === s.id).reduce((a, f) => a + f.n, 0)]));
+  const ti = tot(izq, "de"), td = tot(der, "a");
+  const total = Object.values(ti).reduce((a, b) => a + b, 0) || 1;
+  const escala = (H - gap * Math.max(izq.length, der.length)) / total;
+  const pos = (lista, t) => { let y = 0; const o = {}; lista.forEach((s) => { o[s.id] = { y, h: Math.max(2, t[s.id] * escala) }; y += o[s.id].h + gap; }); return o; };
+  const pi = pos(izq, ti), pd = pos(der, td);
+  const usoI = {}, usoD = {};
+  const x0 = margen, x1 = W - margen;
+  const bandas = flujos.slice().sort((a, b) => b.n - a.n).map((f) => {
+    const a = pi[f.de], b = pd[f.a];
+    if (!a || !b) return "";
+    const h = f.n * escala;
+    const ya = a.y + (usoI[f.de] || 0) + h / 2, yb = b.y + (usoD[f.a] || 0) + h / 2;
+    usoI[f.de] = (usoI[f.de] || 0) + h; usoD[f.a] = (usoD[f.a] || 0) + h;
+    const xm = (x0 + nodo + x1) / 2;
+    const color = nuevos.has(f.a) ? "var(--lima)" : "rgba(255,255,255,0.16)";
+    return `<path d="M${x0 + nodo},${ya} C${xm},${ya} ${xm},${yb} ${x1},${yb}" stroke="${color}" stroke-width="${Math.max(1, h)}" fill="none" opacity="${nuevos.has(f.a) ? 0.55 : 1}"
+      data-tip="${esc(`<b>${f.n} personas</b><br>${f.de_nombre}<br>→ ${f.a_nombre}`)}"></path>`;
+  }).join("");
+  const etq = (lista, p, x, ancla) => lista.map((s) => (!p[s.id] ? "" : `<rect x="${x}" y="${p[s.id].y}" width="${nodo}" height="${p[s.id].h}" rx="3" fill="${nuevos.has(s.id) ? "var(--lima)" : "rgba(255,255,255,0.55)"}"></rect>
+    <text x="${ancla === "end" ? x - 8 : x + nodo + 8}" y="${p[s.id].y + p[s.id].h / 2 + 4}" text-anchor="${ancla}" class="sk-txt">${esc(s.nombre.length > 24 ? s.nombre.slice(0, 23) + "…" : s.nombre)}</text>`)).join("");
+  return `<svg class="sankey" viewBox="0 0 ${W} ${H}" role="img" aria-label="Flujo de personas entre la versión 1 y la versión 2 de los segmentos">${bandas}${etq(izq, pi, x0, "end")}${etq(der, pd, x1, "start")}</svg>`;
+}
+
+function monitorDeriva(m) {
+  const s = m.senales || {};
+  if (!s.proporciones) return `<p class="muted pequeno">Aún no hay suficientes personas recientes.</p>`;
+  return `<ul class="lista-simple pequeno">
+    <li>No se parecen a ningún segmento: <b class="mono">${pct0(s.ninguno)}</b> <span class="muted">(línea base ${pct0(s.base_ninguno)}, margen ${pct0(s.margen_ninguno)})</span></li>
+    <li>Llegan con baja confianza: <b class="mono">${pct0(s.baja_confianza)}</b> <span class="muted">(línea base ${pct0(s.base_baja_confianza)}, margen ${pct0(s.margen_baja)})</span></li>
+    <li>Cambio de tamaño que dispara una alerta: 10 puntos o más</li></ul>
+    <p class="muted pequeno">Los márgenes salen de la variación esperada de la línea base, no se fijan a mano.</p>`;
+}
+
+function campoForm(c) {
+  const id = "f-" + c.nombre;
+  const t = c.nombre.replace(/_/g, " ");
+  const etiqueta = esc(t.charAt(0).toUpperCase() + t.slice(1));
+  if (c.tipo === "texto") return `<label class="ancho">${etiqueta}<textarea name="${esc(c.nombre)}" rows="2"></textarea></label>`;
+  if (c.tipo === "categoria") return `<label>${etiqueta}<select name="${esc(c.nombre)}"><option value=""></option>${c.opciones.map((o) => `<option>${esc(o)}</option>`).join("")}</select></label>`;
+  if (c.tipo === "multicategoria") return `<label>${etiqueta}<input name="${esc(c.nombre)}" placeholder="${esc(c.opciones.slice(0, 3).join(", "))}"></label>`;
+  return `<label>${etiqueta}<input name="${esc(c.nombre)}" type="${c.tipo === "numero" ? "number" : "text"}" id="${id}"></label>`;
+}
+
+async function asignarPersona(e) {
+  e.preventDefault();
+  const form = e.target, err = $("#error-seg"), caja = $("#resultado-seg");
+  const fila = Object.fromEntries(new FormData(form).entries());
+  err.hidden = true;
+  try {
+    const r = await enviar("/api/descubrimiento/asignar", { fila });
+    const ruta = r.ruta === "automatico" ? `<span class="badge ok">Decide solo</span>` : r.ruta === "revision" ? `<span class="badge aviso">Pide ayuda (LLM o persona)</span>` : `<span class="badge mal">Lo revisa una persona</span>`;
+    caja.innerHTML = `<div class="resultado-seg"><div class="detalle-head"><b>${esc(r.nombre)}</b><span class="mono muted">confianza ${r.confianza.toFixed(2)}</span></div>
+      <p>${accionSeg(r.accion)} ${ruta}</p><p class="pequeno">${esc(r.explicacion)}</p>
+      <p class="muted pequeno mono">${r.latencia_ms} ms · USD ${r.costo_usd.toFixed(6)}</p></div>`;
+    animar(caja);
+  } catch (x) { err.textContent = x.message; err.hidden = false; }
+}
+
+function costos(c, v) {
+  const e = c.estimado_live_v2;
+  return `<div class="stats">
+    ${stat("Descubrir los segmentos", usd(e.jev_usd, 3), "JEV, una vez por dataset")}
+    ${stat("Proponer variables y nombres", usd(e.llm_usd, 3), `${esc(e.modelo_llm)} · con Claude Haiku, ${usd(e.con_haiku_usd, 3)} en total`)}
+    ${stat("Asignar a una persona", usd(c.por_persona_usd, 6), "una llamada a JEV")}
+    ${stat("Asignar a 10.000 personas", usd(c.por_10000_usd, 2), "sin LLM: solo JEV")}</div>
+    <p class="muted pequeno">Muestra de ${v.muestra} filas, caché de lo ya preguntado y un tope de ${usd(0.5, 2)} por descubrimiento: si la estimación lo supera, se achica la muestra.</p>`;
+}
+
+function tablaVariables(v) {
+  const filas = v.variables.slice().sort((a, b) => (a.estado === "usada" ? -1 : 1) - (b.estado === "usada" ? -1 : 1) || b.relevancia - a.relevancia)
+    .map((x) => `<tr><td>${x.estado === "usada" ? `<span class="badge ok">En uso</span>` : `<span class="badge">Descartada</span>`}</td>
+      <td>${esc(x.descripcion)}<div class="muted pequeno mono">${esc(x.instrucciones)}</div></td>
+      <td class="pequeno">${esc(ORIGEN[x.origen] || x.origen)}${x.ronda > 1 ? " · ronda 2" : ""}</td>
+      <td class="mono">${x.relevancia.toFixed(2)}</td><td class="pequeno muted">${esc(x.motivo)}</td>
+      <td>${x.estado === "usada" ? `<button class="btn ghost chico" data-vetar="${esc(x.id)}" data-tipo="variable">Vetar</button>` : ""}</td></tr>`).join("");
+  const vetos = (v.vetos?.variables?.length || v.vetos?.segmentos?.length) ? `<p class="pequeno">Vetos activos: ${esc([...(v.vetos.variables || []), ...(v.vetos.segmentos || [])].join(", "))} <button class="btn ghost chico" id="quitar-vetos">Quitar vetos</button></p>` : "";
+  return `${vetos}<p class="muted pequeno">30X no define las variables, pero puede vetarlas: el modelo se recalcula al instante con lo ya medido, sin volver a llamar a JEV.</p>
+    <div class="tabla-scroll"><table class="tabla-simple"><thead><tr><th></th><th>Variable</th><th>Origen</th><th>Relevancia</th><th>Por qué</th><th></th></tr></thead><tbody>${filas}</tbody></table></div>`;
+}
+
+function tablaColumnas(f) {
+  const rol = { rasgo: "Rasgo", resultado: "Resultado", accion: "Programa", excluida: "Excluida" };
+  return `<div class="tabla-scroll"><table class="tabla-simple"><thead><tr><th>Columna</th><th>Tipo</th><th>Uso</th><th>Por qué</th></tr></thead><tbody>
+    ${f.columnas.map((c) => `<tr><td class="mono">${esc(c.nombre)}</td><td>${esc(c.tipo)}</td><td>${c.rol === "excluida" ? `<span class="badge">${rol[c.rol]}</span>` : `<span class="badge ok">${rol[c.rol] || c.rol}</span>`}</td><td class="pequeno muted">${esc(c.motivo)}</td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+
+function tablaUmbrales(v) {
+  const u = v.umbrales, a = u.asignacion || {};
+  const k = v.k_puntajes.filter((p) => p.valido).map((p) => `<tr><td class="mono">${p.k}</td><td class="mono">${p.estabilidad.toFixed(2)}</td><td class="mono">${p.silueta.toFixed(2)}</td><td class="mono">${p.distintos ?? "—"}</td></tr>`).join("");
+  return `<ul class="lista-simple">
+    <li>Asigna solo desde una confianza de <b class="mono">${(a.umbral ?? 0).toFixed(2)}</b>: cubre el ${pct0(a.cobertura)} y acierta el ${pct0(a.precision)} con personas que no vio. Por debajo, pide ayuda.</li>
+    ${u.asesor ? `<li>Pasar a un asesor exige <b class="mono">${u.asesor.umbral.toFixed(2)}</b> de confianza (meta de acierto ${pct0(u.nivel.precision_asignacion + 0.05)}).</li>` : ""}
+    ${u.propension ? `<li>Modelo individual: separa bien a quien convierte (AUC fuera de muestra <b class="mono">${u.propension.auc_fuera_de_muestra}</b>); desde <b class="mono">${pct0(u.propension.umbral)}</b> de probabilidad una persona va a un asesor aunque su segmento no lo haga.</li>` : ""}
+    <li>Regla fija: perfil genuino desde <b class="mono">${u.genuino_min}</b> (calibrado con JEV real); lo demás va a una persona.</li>
+    <li>Nivel de riesgo elegido: <b>${esc(v.riesgo)}</b>. Es lo único que fija 30X.</li></ul>
+    <p class="pequeno muted">Cuántos segmentos: con cada k se unen los vecinos que no se distinguen en conversión ni en el programa que eligen; gana el que deja más segmentos distintos y estables.</p>
+    <div class="tabla-scroll"><table class="tabla-simple"><thead><tr><th>k</th><th>Estabilidad</th><th>Silueta</th><th>Distintos</th></tr></thead><tbody>${k}</tbody></table></div>`;
+}
+
+function otroDataset(w) {
+  return `<p class="pequeno">Sin cambiar código: resultado «${esc(w.ficha.resultado)}» (${esc(w.ficha.valores_positivos.join(", "))}), ${w.variables.length} variables creadas, ${w.segmentos.length} segmentos.</p>
+    <div class="seg-cards">${w.segmentos.map((s) => `<article class="card seg-card"><h4>${esc(s.nombre)}</h4><p class="pequeno">${pct0(s.proporcion)} de las personas · convierte ${pct0(s.tasa)}</p><p class="pequeno">${accionSeg(s.accion)}</p></article>`).join("")}</div>`;
+}
+
+// ---------- Alertas de riesgo en programas ----------
+const ALERTAS = { datos: null, filtro: "todas", contactados: new Set() };
+
+async function cargarAlertas() {
+  const v = $("#vista-alertas");
+  if (!ALERTAS.datos) {
+    v.innerHTML = encabezado("Alertas", "Calculando riesgo…", "El código cuenta asistencia, entregas y actividad; JEV lee los mensajes.");
+    ALERTAS.datos = await (await fetch("/api/alertas")).json();
+  }
+  pintarContador();
+  renderAlertas();
+}
+
+function pintarContador() {
+  const c = $("#alertas-cuenta");
+  if (!ALERTAS.datos || !c) return;
+  c.textContent = ALERTAS.datos.altas;
+  c.hidden = !ALERTAS.datos.altas;
+}
+
+function renderAlertas() {
+  const v = $("#vista-alertas");
+  const d = ALERTAS.datos, m = d.modelo, alto = m.umbrales.alto;
+  const lista = d.alertas.filter((a) => ALERTAS.filtro === "todas" || a.nivel === ALERTAS.filtro);
+  v.innerHTML = `
+    ${encabezado("Alertas", `${d.altas} alumnos en riesgo alto.<br><span class='tenue'>Contáctalos antes de que se vayan.</span>`,
+      `Cohorte en curso, semana 5. El código cuenta asistencia, entregas y días sin actividad; JEV lee lo que escriben. El riesgo y los umbrales se aprendieron con ${d.entrenamiento.alumnos} alumnos de cohortes terminadas.`)}
+    <div class="stats">
+      ${stat("Riesgo alto", `<span class="mal">${d.altas}</span>`, alto ? `De este grupo, en cohortes anteriores abandonó el ${pct0(alto.tasa)}` : "")}
+      ${stat("Riesgo medio", `<span class="aviso-t">${d.medias}</span>`, `Base: abandona el ${pct0(m.tasa_base)}`)}
+      ${stat("Alumnos revisados", d.total, `Modelo con AUC ${m.auc_fuera_de_muestra} fuera de muestra`)}
+      ${stat("Costo de JEV", usd(d.costo_jev_usd, 4), "Leer mensajes y revisar cada mensaje sugerido")}
+    </div>
+    <div class="encabezado-sec">
+      <div><h2>A quién contactar</h2><p class="muted">Cada mensaje sugerido ya pasó por el guardrail de JEV: la última decisión antes de enviar.</p></div>
+      <div class="segmentado" role="group" aria-label="Filtrar por nivel">
+        ${[["todas", "Todas"], ["alto", "Alto"], ["medio", "Medio"]].map(([k, t]) => `<button class="seg-item" data-filtro="${k}" aria-pressed="${ALERTAS.filtro === k}">${t}</button>`).join("")}
+      </div>
+    </div>
+    <div class="alertas-grid">${lista.map(tarjetaAlerta).join("") || `<p class="muted">Sin alertas en este nivel.</p>`}</div>
+    <details class="card plegable bloque"><summary><span><b>Perfiles de riesgo que encontró</b><span class="muted"> · segmentos descubiertos en las cohortes terminadas</span></span></summary>
+      <div class="seg-cards">${m.perfiles.map((s) => `<article class="card seg-card"><h4>${esc(s.nombre)}</h4><p class="pequeno">${pct0(s.proporcion)} de los alumnos · abandona el ${pct0(s.tasa)}</p><p class="pequeno">${accionSeg({ tipo: s.accion })}</p></article>`).join("")}</div></details>`;
+  v.querySelectorAll("[data-filtro]").forEach((b) => b.addEventListener("click", () => { ALERTAS.filtro = b.dataset.filtro; renderAlertas(); }));
+  v.querySelectorAll("[data-contactado]").forEach((b) => b.addEventListener("click", () => {
+    const id = b.dataset.contactado;
+    ALERTAS.contactados.has(id) ? ALERTAS.contactados.delete(id) : ALERTAS.contactados.add(id);
+    renderAlertas();
+  }));
+}
+
+function tarjetaAlerta(a) {
+  const g = a.guardrail;
+  const hecho = ALERTAS.contactados.has(a.alumno);
+  const estadoG = !g ? "" : g.estado === "aprobado" ? `<span class="badge ok">JEV lo revisó: listo para enviar</span>` : g.estado === "revision" ? `<span class="badge aviso">Revisar antes de enviar</span>` : `<span class="badge mal">Bloqueado</span>`;
+  return `<article class="card alerta-card ${a.nivel} ${hecho ? "hecho" : ""}">
+    <div class="detalle-head"><span><b class="mono">${esc(a.alumno)}</b> <span class="muted">· ${esc(a.programa)}</span></span>
+      <span class="badge ${a.nivel === "alto" ? "mal" : "aviso"}">Riesgo ${a.nivel} · ${pct0(a.riesgo)}</span></div>
+    <ul class="razones-alerta">${a.razones.map((r) => `<li>${esc(r.texto)}</li>`).join("")}</ul>
+    <p class="accion-alerta"><b>${esc(a.accion)}</b></p>
+    <blockquote class="mensaje-sugerido">${esc(a.mensaje)}</blockquote>
+    <div class="pie-alerta">${estadoG}<button class="btn ${hecho ? "ghost" : "primario"} chico" data-contactado="${esc(a.alumno)}">${hecho ? "Contactado" : "Marcar contactado"}</button></div>
+  </article>`;
+}
+
 // ---------- Inicio ----------
 async function iniciar() {
   try {
@@ -1028,13 +1328,18 @@ async function iniciar() {
   if (estado.demografia) gente();
   const { modo, llm } = estado.datos;
   const m = $("#modo");
-  m.innerHTML = `<span class="punto" style="background:${modo === "mock" ? "var(--aviso)" : "var(--ok)"}"></span>${modo === "mock" ? "Simulado" : "JEV real"}`;
-  m.title = `JEV ${modo === "mock" ? "simulado" : "real"} · LLM ${llm === "off" ? "apagado" : llm === "mock" ? "simulado" : "real"}`;
+  m.innerHTML = `<span class="punto" style="background:${modo === "mock" ? "var(--aviso)" : "var(--ok)"}"></span>${modo === "mock" ? "Motor local" : "JEV conectado"}`;
+  m.title = `JEV ${modo === "mock" ? "sin conectar: decide el motor local" : "conectado"} · LLM ${llm === "off" ? "apagado" : llm === "mock" ? "local" : "conectado"}`;
   iniciarEscena();
   renderDecisiones();
   renderPersonas();
   renderPolitica();
   prepararLote();
   prepararGuardrail();
+  // El contador de alertas se llena en segundo plano: no frena el inicio.
+  fetch("/api/alertas").then((r) => r.json()).then((d) => { if (!d.error) { ALERTAS.datos = d; pintarContador(); } }).catch(() => {});
+  // Enlaces directos a una vista (p. ej. /#segmentos o /#alertas), útiles en la demo.
+  const destino = location.hash.slice(1);
+  if (destino && document.getElementById("vista-" + destino)) mostrarVista(destino);
 }
 iniciar();
