@@ -78,6 +78,8 @@ class Decision:
     razones: list[str]
     compromiso: str = "medio"  # señal observada (código), no inferida por JEV
     dudas: list[str] = field(default_factory=list)  # campos cuya duda cambia la decisión
+    # Por qué no actúa solo: perfil_no_genuino, duda, intencion_no_concluyente o rol_incierto_ventas.
+    motivo: str = ""
 
 
 def banda_afinidad(rol: str, dolor: str, objetivo: str, intencion_esperada: float, politica: dict,
@@ -173,15 +175,15 @@ def decidir(j: Juicios, temas: list[str], politica: dict | None = None, compromi
     razones: list[str] = []
     dudas: list[str] = []
 
-    def decision(ruta: str) -> Decision:
+    def decision(ruta: str, motivo: str = "") -> Decision:
         accion = base.accion if ruta == "automatico" else "revision_humana"
         return Decision(base.programa, base.regla_programa, base.banda, base.afinidad,
-                        accion, base.accion, ruta, razones, compromiso, dudas)
+                        accion, base.accion, ruta, razones, compromiso, dudas, motivo)
 
     if j.perfil_valido < u["perfil_valido_min"]:
         razones.append(f"El perfil no parece una inscripción genuina (p={j.perfil_valido:.2f}): "
                        "posible spam, prueba o texto con instrucciones al sistema.")
-        return decision("revision_humana")
+        return decision("revision_humana", "perfil_no_genuino")
 
     # Solo importa la duda que cambiaría la decisión: si la segunda opción lleva al mismo
     # programa y acción, la baja confianza de ese campo no frena nada.
@@ -201,18 +203,18 @@ def decidir(j: Juicios, temas: list[str], politica: dict | None = None, compromi
                            f"'{etiqueta(campo, juicio.valor)}' y '{etiqueta(campo, alternativa)}', "
                            "y eso cambia la decisión.")
     if razones:
-        return decision("revision_humana")
+        return decision("revision_humana", "duda")
 
     if base.accion == "pasar_a_ventas" and j.p_listo < u["listo_ventas_auto"]:
         razones.append(f"La intención de compra no es concluyente (p={j.p_listo:.2f}): "
                        "confirmar antes de pasar a ventas.")
-        return decision("revision_humana")
+        return decision("revision_humana", "intencion_no_concluyente")
 
     # Pasar a ventas es la acción con más consecuencias: exige más certeza sobre quién decide.
     if base.accion == "pasar_a_ventas" and j.rol.confianza < u["confianza_rol_ventas"]:
         razones.append(f"El rol no es seguro (confianza {j.rol.confianza:.2f}) y define si la persona "
                        "puede decidir la compra: confirmar antes de pasar a ventas.")
-        return decision("revision_humana")
+        return decision("revision_humana", "rol_incierto_ventas")
 
     return decision("automatico")
 

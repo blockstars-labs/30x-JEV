@@ -927,18 +927,35 @@ function seguridad(n) {
 // Este panel mide JEV + reglas sin el LLM: lo que no decide solo pide ayuda, al LLM o a una persona.
 const AYUDA = { revision_humana: "Pide ayuda (LLM o persona)" };
 
+// El análisis en palabras lo arma app/analisis.py con los mismos números de la simulación.
+function analisisPolitica(an) {
+  const alertas = an.alertas.map((x) => `<p class="analisis-alerta ${x.tono}">${esc(x.texto)}</p>`).join("");
+  const cambios = an.cambios.length
+    ? `<div class="seccion analisis-cambios"><h4>Frente a la configuración actual</h4><ul>${an.cambios.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>`
+    : "";
+  const secciones = an.secciones.filter((s) => s.frases.length)
+    .map((s) => `<div class="seccion analisis-seccion"><h4>${esc(s.titulo)}</h4>${s.frases.map((f) => `<p>${esc(f)}</p>`).join("")}</div>`)
+    .join("");
+  return `<p class="analisis-titular ${an.seguro ? "" : "riesgo"}">${esc(an.titular)}</p>${alertas}${cambios}${secciones}`;
+}
+
 function resultadosPolitica(r) {
   const a = r.actual, s = r.simulada;
   return `
-    <div class="card-head"><h3>Efecto en ${s.perfiles} inscripciones</h3><p>Al instante, sin llamar a JEV</p></div>
-    <div class="stats compactas">
-      ${stat("JEV decide solo", pct(s.automatizacion, 1), delta(s.automatizacion, a.automatizacion))}
-      ${stat("Precisión al actuar solo", pct(s.precision, 1), delta(s.precision, a.precision))}
-      ${stat("Pases indebidos a ventas", seguridad(s.pases_a_ventas_indebidos), `Política actual: ${a.pases_a_ventas_indebidos}`)}
-      ${stat("Perfiles trampa procesados solos", seguridad(s.invalidos_automaticos), `Política actual: ${a.invalidos_automaticos}`)}
-    </div>
-    <div class="seccion"><h4>Política actual</h4>${barraRutas(a.rutas, a.perfiles, AYUDA)}</div>
-    <div class="seccion"><h4>Con estos valores</h4>${barraRutas(s.rutas, s.perfiles, AYUDA)}</div>`;
+    <div class="card-head"><h3>Qué significa esta configuración</h3><p>Se reescribe al mover cualquier control, sin llamar a JEV</p></div>
+    ${analisisPolitica(r.analisis)}
+    <details class="plegable">
+      <summary>Ver las cifras</summary>
+      <div class="stats compactas">
+        ${stat("JEV decide solo", pct(s.automatizacion, 1), delta(s.automatizacion, a.automatizacion))}
+        ${stat("Precisión al actuar solo", pct(s.precision, 1), delta(s.precision, a.precision))}
+        ${stat("Pases indebidos a ventas", seguridad(s.pases_a_ventas_indebidos), `Política actual: ${a.pases_a_ventas_indebidos}`)}
+        ${stat("Perfiles trampa procesados solos", seguridad(s.invalidos_automaticos), `Política actual: ${a.invalidos_automaticos}`)}
+      </div>
+      <div class="seccion"><h4>Política actual</h4>${barraRutas(a.rutas, a.perfiles, AYUDA)}</div>
+      <div class="seccion"><h4>Con estos valores</h4>${barraRutas(s.rutas, s.perfiles, AYUDA)}</div>
+    </details>
+    <p class="analisis-nota">${esc(r.analisis.nota)}</p>`;
 }
 
 let temporizador = null;

@@ -340,9 +340,21 @@ input[type=range]::-webkit-slider-thumb:active { transform: scale(1.15); cursor:
 input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--lima); border: 0; cursor: grab; }
 .delta { font-size: 12.5px; color: var(--muted-fg); }
 .delta.bueno { color: var(--ok); }
-#resultado-politica { position: sticky; top: 78px; }
+#resultado-politica { position: sticky; top: 78px; max-height: calc(100vh - 96px); overflow-y: auto; scrollbar-width: thin; }
 #resultado-politica .seccion { margin-top: 18px; }
 #resultado-politica > p:last-child { margin-top: 16px; }
+
+/* Análisis en palabras de la configuración (app/analisis.py). El lima marca el titular: es lo único que importa. */
+.analisis-titular { font-size: 17px; line-height: 1.45; font-weight: 500; letter-spacing: -0.01em; padding-left: 14px; border-left: 2px solid var(--lima); }
+.analisis-titular.riesgo { border-left-color: var(--mal); }
+.analisis-alerta { margin-top: 12px; padding: 10px 12px; border-radius: var(--r-sm); font-size: 13.5px; border-left: 2px solid; }
+.analisis-alerta.mal { background: var(--mal-suave); border-left-color: var(--mal); }
+.analisis-alerta.aviso { background: var(--aviso-suave); border-left-color: var(--aviso); }
+.analisis-seccion p, .analisis-cambios li { font-size: 14px; color: rgba(244, 244, 239, 0.86); max-width: 64ch; }
+.analisis-seccion p + p { margin-top: 6px; }
+.analisis-cambios ul { margin: 0; padding-left: 18px; }
+.analisis-cambios li + li { margin-top: 4px; }
+.analisis-nota { font-size: 12.5px; color: var(--muted-fg); }
 
 /* ---------- Pestañas con subtítulo ---------- */
 .tabs button { flex-direction: column; align-items: flex-start; gap: 0; padding: 5px 13px; line-height: 1.25; }
@@ -407,7 +419,8 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 @media (max-width: 980px) {
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .maestro-detalle, .maestro-detalle.prueba, .maestro-detalle.politica, .grid-2, .dos, .personas-top { grid-template-columns: minmax(0, 1fr); }
-  .lista, .filtros-card, #resultado-politica { position: static; max-height: 360px; }
+  .lista, .filtros-card { position: static; max-height: 360px; }
+  #resultado-politica { position: static; max-height: none; overflow: visible; }
   .filtros-card { max-height: none; }
   .globo-hueco { height: 52vh; }
   .personas-top { min-height: 0; }

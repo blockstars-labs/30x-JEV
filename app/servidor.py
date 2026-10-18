@@ -25,6 +25,7 @@ from datetime import date, timedelta
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+from app.analisis import analizar
 from app.catalogo import DOLORES, INTENCION, OBJETIVOS, PROGRAMAS, ROLES, TEMAS, por_id
 from app.jev import crear_cliente, respuesta_desde_registro
 from app.llm import crear_llm
@@ -114,7 +115,9 @@ def simular(cuerpo: dict) -> dict:
             if not 0.0 <= valor <= 1.0:
                 raise ValueError(f"{clave} debe estar entre 0 y 1")
             destino[clave] = valor
-    return {"actual": _simulacion["actual"], "simulada": medir(perfiles, juicios, nueva), "politica": nueva}
+    simulada = medir(perfiles, juicios, nueva)
+    return {"actual": _simulacion["actual"], "simulada": simulada, "politica": nueva,
+            "analisis": analizar(simulada, _simulacion["actual"], nueva, politica, NOMBRE)}
 
 
 def guardrail(cuerpo: dict) -> dict:
