@@ -1,140 +1,95 @@
-# 30X · JEV Router
+# Pálpito para 30X
 
-Prototipo para el reto **30X: JEV**. Cada persona que se inscribe a un evento de 30X queda clasificada
-en milisegundos: qué rol tiene, qué le duele, qué quiere lograr y qué tan lista está para comprar.
-Con eso el sistema sugiere un programa de 30X y decide la siguiente acción, o la pasa a una persona
-cuando no está seguro.
+La última decisión antes de enviar. 30X ya genera contenido, mensajes y propuestas con IA; Pálpito decide, persona
+por persona, qué se envía, a quién y cuándo, y qué necesita una mirada humana. Barato para hacerlo miles de veces al
+día y controlado con reglas que el equipo ajusta sin tocar código.
 
-JEV (TypeSafe AI) toma los juicios rápidos; el código toma las decisiones con reglas explícitas.
+**JEV mide, el código decide.** JEV (TypeSafe AI) responde preguntas tipadas en milisegundos y por fracciones de
+centavo; el código combina esas respuestas con reglas explícitas y umbrales aprendidos de los datos. Un LLM entra
+solo donde JEV no alcanza.
 
-> **¿Nuevo en el proyecto?** Lee primero [docs/ESTADO_DEL_PROYECTO.md](docs/ESTADO_DEL_PROYECTO.md):
-> qué se ha hecho, decisiones tomadas, resultados, acceso a JEV y pendientes.
->
-> **Playbook (entregable):** [docs/PLAYBOOK.md](docs/PLAYBOOK.md): la propuesta, cómo decide, umbrales, quién lo opera y cómo se mide, con los resultados de JEV real.
+## Qué hace
 
-## Cómo funciona
+| Capacidad | Resultado |
+|---|---|
+| Decidir antes de enviar | Cada inscripción recibe programa, acción y mensaje, o pasa a una persona con el motivo. Cada mensaje pasa por el guardrail de JEV antes de salir |
+| Segmentos que se descubren solos | Con cualquier dataset, el sistema crea sus variables, aprende sus umbrales y forma sus segmentos. Cuando llega gente nueva que no encaja, los redescubre y explica qué cambió |
+| Alertas de riesgo | Con asistencia, entregas y actividad, estima qué alumno puede abandonar, por qué y qué hacer esta semana |
+
+## Vistas
+
+| Vista | Qué muestra |
+|---|---|
+| Personas | De dónde llegan las personas, con filtros, búsqueda y la ficha de cada una con su historia |
+| Decisiones | Cada decisión con su porqué, lo que escribió la persona y la confianza de JEV |
+| Reglas | Umbrales y pesos que recalculan todas las decisiones al instante, con un análisis en lenguaje natural de lo que produce la configuración |
+| Segmentos | El reporte de segmentación dinámica: versión 1, llegada de un lote, versión 2, flujo de personas, segmentos vigentes con nivel de riesgo y vetos, asignación de una persona y costos |
+| Alertas | Alumnos en riesgo alto y medio, con razones, siguiente paso y mensaje revisado |
+| Clasificar en vivo | Un lote de perfiles del CRM (CSV de hasta 100 filas) y el guardrail sobre mensajes |
+
+Búsqueda global con ⌘K (o `/`).
+
+## Cómo decide
 
 ```
-Inscripción (formulario de Luma, correo o mensaje)
-  → JEV responde 5 preguntas tipadas en una sola llamada
-      rol (Choice) · dolor (Choice) · objetivo (Choice) · intención (Score) · perfil válido (Noul)
-  → app/politica.py combina las respuestas
-      afinidad compuesta (pesos en config) → programa sugerido (reglas) → acción
-  → umbrales de confianza
-      actúa solo | duda que cambia la decisión → LLM | revisión humana (con el motivo)
-  → LLM (System Two, app/llm.py), solo donde JEV no alcanza
-      revisa la duda y elige entre las opciones que dejó JEV, o dice "no seguro" → persona
-      redacta el mensaje de la acción (nota al asesor o correo)
+Inscripción (Luma, correo o mensaje)
+  → JEV responde las preguntas tipadas en una sola llamada (rol, dolor, objetivo, intención, perfil genuino)
+  → la política combina las respuestas: programa, acción y ruta
+      actúa sola | duda que cambia la decisión → LLM | persona (con el motivo)
+  → el mensaje pasa por el guardrail de JEV: aprobado, revisión humana o bloqueado
   → registro con la explicación de cada decisión
 ```
 
-Guardrail (`app/guardrail.py`): antes de enviar un mensaje del LLM, JEV lo revisa con cuatro preguntas sí/no
-(promesas sin respaldo, tono, coherencia con el programa, instrucciones coladas) y el código busca correos y
-teléfonos. Resultado: aprobado, revisión humana o bloqueado. `scripts/evaluar_guardrail.py` lo mide sobre
-20 mensajes etiquetados a mano (`data/mensajes_guardrail.json`).
+Límites fijos: un perfil no genuino nunca recibe una acción automática, el LLM nunca autoriza un pase a ventas y
+ningún mensaje sale sin revisión. Detalle en [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md).
 
-Límites del LLM: nunca revisa perfiles marcados como no genuinos y nunca autoriza por su cuenta
-pasar a alguien a ventas; esos casos siempre los confirma una persona. Modelo: Claude Opus 5.5,
-con reintento automático en otro modelo si declina (`fallbacks`).
+## Puesta en marcha
 
-### Clusterización dinámica
+```bash
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt     # Windows: .venv\Scripts\python
+cp .env.example .env                                      # llaves y modo de JEV
+.venv/bin/python -m app.servidor                          # http://localhost:8030
+.venv/bin/python -m pytest -q
+```
 
-El segmento de una persona (programa sugerido + acción) no se calcula una sola vez: se recalcula
-con cada cosa que pasa después de inscribirse (`app/personas.py`).
+Paso a paso con JEV conectado: [docs/PUESTA_EN_MARCHA.md](docs/PUESTA_EN_MARCHA.md). Sin llave, Pálpito corre con
+el motor local (sin costo) y lo indica arriba a la derecha.
 
-| Evento | Qué hace el sistema |
+## Datos incluidos
+
+Todos los datos del repositorio son generados y no corresponden a personas reales (correos en `example.com`):
+
+- `data/perfiles_sinteticos.json` y `data/eventos_sinteticos.json`: inscripciones y su historia de eventos.
+- `data/descubrimiento/`: inscripciones a eventos, un lote posterior con un grupo nuevo y un registro a webinar.
+- `data/alumnos/`: alumnos, asistencias, entregas y actividad de cuatro cohortes.
+- `data/distribuciones.json`: conteos agregados del archivo de perfiles de 30X, sin filas ni personas.
+
+El motor de segmentos acepta cualquier CSV o XLSX con el mismo tipo de columnas. Los archivos de 30X no se guardan en
+el repositorio (`*.xlsx` y `data/privado/` están ignorados).
+
+## Evaluación
+
+| Script | Qué mide |
 |---|---|
-| Responde un correo, contesta la encuesta post-evento o actualiza su cargo | Vuelve a llamar a JEV con el texto nuevo |
-| Asiste a un evento | Recalcula el compromiso en código (sin llamar a JEV, sin costo) |
-| La última inferencia tiene más de 30 días | Vuelve a llamar a JEV antes de actuar |
+| `scripts/evaluar.py` | Decisión al inscribirse: precisión por pregunta, automatización, pases indebidos (deben ser 0), latencia y costo por 1.000 |
+| `scripts/evaluar_dinamica.py` | Reclasificación con eventos: cambios de segmento detectados y costo |
+| `scripts/calibrar.py` | Umbrales: prueba 180 combinaciones sin volver a llamar a JEV y propone la mejor en `config/politica_calibrada.json` |
+| `scripts/evaluar_guardrail.py` | Guardrail sobre mensajes etiquetados |
+| `scripts/evaluar_descubrimiento.py` | Segmentos y alertas: calidad (ARI), estabilidad, deriva, reglas fijas, otro dataset, precisión y cobertura |
 
-- **Observado vs. inferido:** los hechos (eventos, fechas, cargo) se guardan tal cual; lo que infiere JEV
-  guarda su fecha y caduca.
-- **Compromiso:** eventos asistidos en 90 días y días desde la última interacción, calculados en código.
-- **Historial:** cada reevaluación queda registrada con el evento que la causó, qué cambió
-  (por ejemplo, `intención: Evaluando → Listo para conversar; acción: contenido → pasar a ventas`) y la explicación.
+Los resultados quedan en `reportes/`.
 
-Principios, tomados de la documentación de TypeSafe:
+## Documentación
 
-- Una pregunta simple por juicio; la combinación va en código.
-- Conteos, cálculos y fechas en código, nunca en JEV.
-- Opción "sin dato / ninguno / otro" en cada Choice.
-- Solo importa la duda que cambia la decisión: si la segunda opción de JEV lleva a la misma acción, no se frena.
-- Los umbrales se calibran con datos etiquetados (`scripts/evaluar.py`), no se inventan.
+- [docs/PLAYBOOK.md](docs/PLAYBOOK.md): la propuesta para 30X, cómo decide, quién lo opera y cómo se mide.
+- [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md): módulos, motor de descubrimiento, API, modos y costos.
+- [docs/PUESTA_EN_MARCHA.md](docs/PUESTA_EN_MARCHA.md): llaves y ejecución con JEV conectado.
+- [docs/ESTADO_DEL_PROYECTO.md](docs/ESTADO_DEL_PROYECTO.md): historia del proyecto y decisiones tomadas.
+- [docs/marca/MARCA.md](docs/marca/MARCA.md): marca y uso del logo.
 
-## Vista del prototipo
+## Por validar con 30X
 
-```bash
-.venv/Scripts/python -m app.servidor   # abre http://localhost:8030
-```
-
-Servidor local sin dependencias extra (`app/servidor.py` + `web/`). Si faltan los reportes, corre las
-evaluaciones al arrancar. Las llaves se quedan en el servidor; el navegador nunca las ve.
-
-| Vista | Qué muestra |
-| --- | --- |
-| Personas (inicio) | La Tierra con los países y ciudades de donde llegan las personas; filtros por origen (Luma, campañas, orgánico), país, programa, edad, sector y tamaño de empresa; búsqueda y ficha de cada persona con su historia de eventos. País, ciudad, edad y origen son **sintéticos** (`scripts/generar_demografia.py`) y solo sirven para la visualización |
-| Decisiones | Las 300 inscripciones con filtro por ruta y búsqueda; al elegir una: la decisión, el porqué, lo que escribió, las probabilidades de JEV y si acertó frente a la respuesta correcta |
-| Reglas | Controles de umbrales y pesos: recalcula las 300 decisiones al instante, sin llamar a JEV, y muestra el efecto en automatización, precisión y seguridad. Descarga la configuración propuesta |
-| Probar en vivo | Subir un CSV de hasta 100 perfiles con el formato del archivo de 30X (ID, Rol, Dolor principal, Objetivo principal, Temas de interés; opcionales Intención, Programa y Programa sugerido). Como ya vienen categorizados, no pasan por JEV: se les aplica la política (`app/lote.py`, `POST /api/perfiles`) y se comparan con el programa del CRM y el sugerido por 30X. Incluye perfiles de ejemplo, plantilla y descarga de resultados. Abajo, el guardrail de JEV sobre mensajes |
-
-Búsqueda global con ⌘K (o `/`). Marca y uso del logo: [docs/marca/MARCA.md](docs/marca/MARCA.md).
-
-## Datos
-
-- `data/perfiles_sinteticos.json`: 300 inscripciones **inventadas** (nombres, empresas y correos ficticios
-  en `example.com`), con su respuesta correcta para evaluar. Incluyen casos trampa: spam y textos que
-  intentan darle instrucciones al sistema.
-- `data/eventos_sinteticos.json`: líneas de tiempo de ~100 de esas personas (asistencias, correos, encuestas,
-  cambios de cargo), con la verdad actualizada después de cada evento.
-- `data/distribuciones.json`: conteos agregados de la muestra de demo de 30X (sin filas ni personas),
-  para que los perfiles sintéticos tengan proporciones realistas.
-- El archivo de demo de 30X **no está en el repo** y no debe subirse.
-
-## Uso
-
-```bash
-python -m venv .venv
-.venv/Scripts/python -m pip install -r requirements.txt   # en Linux/Mac: .venv/bin/python
-cp .env.example .env                                      # JEV_MODO=mock o live
-.venv/Scripts/python scripts/generar_perfiles.py          # 300 perfiles, semilla 30
-.venv/Scripts/python scripts/evaluar.py                   # clasificación al inscribirse → reportes/
-.venv/Scripts/python scripts/evaluar_dinamica.py          # reclasificación con eventos → reportes/
-.venv/Scripts/python scripts/calibrar.py live 0.9         # umbrales sugeridos → config/politica_calibrada.json
-.venv/Scripts/python scripts/evaluar_guardrail.py        # guardrail sobre mensajes etiquetados
-.venv/Scripts/python -m pytest -q
-```
-
-- `JEV_MODO=mock`: JEV simulado, sin llave ni costo. Sirve para probar el flujo; **sus métricas no miden a JEV**.
-- `JEV_MODO=live`: JEV real. Requiere `TYPESAFE_API_KEY` en `.env` (nunca en el código).
-- `LLM_MODO=mock | live | off`: el revisor y redactor. `live` usa Claude y requiere `ANTHROPIC_API_KEY`;
-  `off` desactiva el LLM y todas las dudas van a personas.
-
-## Métricas
-
-`scripts/evaluar.py` reporta:
-
-- Precisión por pregunta, comparada con la clasificación actual de 30X (rol 81 %, dolor 55 %, objetivo 55 %).
-- Tasa de automatización y precisión cuando el sistema actúa solo.
-- Pases a ventas indebidos y perfiles inválidos procesados sin revisión (deben ser 0).
-- Calibración: precisión por rango de confianza.
-- Latencia p50/p95 y costo por cada 1.000 decisiones.
-- Rutas (automático / resuelto por el LLM / revisión humana), precisión de los casos que resolvió el LLM,
-  costo del LLM y cuánto costaría clasificar todo con un LLM en vez de JEV.
-
-`scripts/evaluar_dinamica.py` reporta, después de cada evento:
-
-- Precisión de la decisión y pases a ventas indebidos.
-- Cambios de segmento reales frente a detectados (recall y precisión).
-- Cuántos eventos se resolvieron sin llamar a JEV y el costo total.
-
-`scripts/calibrar.py` pide a JEV las respuestas una sola vez y prueba 180 combinaciones de umbrales
-sin volver a llamarlo. Descarta las que pasan a ventas a alguien indebidamente o dejan pasar perfiles
-no genuinos, muestra la frontera automatización ↔ precisión y deja la combinación recomendada en
-`config/politica_calibrada.json` para que una persona la revise antes de aplicarla.
-
-## Pendiente de validar con 30X
-
-- Descripción de cada programa sugerido (hoy inferida de los datos) y las reglas de asignación.
-- Achievers no tiene regla automática todavía.
-- Umbrales de `config/politica.json`, que se ajustan con los resultados del JEV real.
+- Descripción de cada programa y reglas de asignación (hoy inferidas de los datos).
+- Achievers todavía no tiene regla automática.
+- Umbrales de `config/politica.json` con una muestra real de 30X.
